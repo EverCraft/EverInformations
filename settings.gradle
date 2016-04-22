@@ -1,0 +1,4 @@
+rootProject.name = "EverInformations"
+include ':EverAPI'
+
+project(':EverAPI').projectDir = new File( '../EverAPI' )
