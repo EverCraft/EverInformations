@@ -14,20 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.service;
+package fr.evercraft.everinformations.automessage;
+
+import org.spongepowered.api.scheduler.Task;
 
 import fr.evercraft.everinformations.EverInformations;
 
-public class EInformationsService {
+public abstract class AutoMessages {
 	
-	private final EverInformations plugin;
+	protected final EverInformations plugin;
 	
-	public EInformationsService(final EverInformations plugin) {
+	protected Task task;
+	protected boolean running;
+	
+	protected boolean enable;
+	protected int numero;
+	
+	public AutoMessages(final EverInformations plugin){
 		this.plugin = plugin;
-	}
-
-	public void reload() {
-		// TODO Auto-generated method stub
 		
+		this.running = false;
+		
+		this.enable = false;
+		this.numero = 0;
 	}
+	
+	protected abstract void reload();
+	protected abstract void init();
+	
+	protected abstract void start();
+	protected abstract void stop();
+	
+	protected abstract void next();
+	protected abstract void view();
 }

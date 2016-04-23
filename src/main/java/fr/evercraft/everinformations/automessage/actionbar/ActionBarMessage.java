@@ -14,20 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.service;
+package fr.evercraft.everinformations.automessage.actionbar;
 
-import fr.evercraft.everinformations.EverInformations;
+public class ActionBarMessage  {
+	private final int stay;
+	private final int next;
+	
+	private final String message;
 
-public class EInformationsService {
-	
-	private final EverInformations plugin;
-	
-	public EInformationsService(final EverInformations plugin) {
-		this.plugin = plugin;
+	public ActionBarMessage(final int stay, int next, String message) {
+		this.stay = stay;
+		this.next = next;
+		this.message = message;
 	}
 
-	public void reload() {
-		// TODO Auto-generated method stub
-		
+	public int getStay() {
+		return stay;
+	}
+
+	public int getNext() {
+		return next;
+	}
+
+	public String getMessage() {
+		return message;
 	}
 }
