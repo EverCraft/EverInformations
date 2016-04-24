@@ -20,7 +20,9 @@ import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
 import fr.evercraft.everapi.plugin.EPlugin;
-import fr.evercraft.everinformations.automessage.chat.ChatAutoMessages;
+import fr.evercraft.everinformations.automessages.actionbar.ActionBarAutoMessages;
+import fr.evercraft.everinformations.automessages.chat.ChatAutoMessages;
+import fr.evercraft.everinformations.automessages.title.TitleAutoMessages;
 import fr.evercraft.everinformations.service.EInformationsService;
 
 @Plugin(id = "fr.evercraft.everinformations", 
@@ -41,6 +43,8 @@ public class EverInformations extends EPlugin {
 	private EInformationsService service;
 	
 	private ChatAutoMessages automessageChat;
+	private ActionBarAutoMessages automessageActionBar;
+	private TitleAutoMessages automessageTitle;
 	
 	@Override
 	protected void onPreEnable() {
@@ -58,8 +62,9 @@ public class EverInformations extends EPlugin {
 
 	@Override
 	protected void onEnable() {
-		
 		this.automessageChat = new ChatAutoMessages(this);
+		this.automessageActionBar = new ActionBarAutoMessages(this);
+		this.automessageTitle = new TitleAutoMessages(this);
 	}
 	
 	@Override
@@ -69,6 +74,11 @@ public class EverInformations extends EPlugin {
 
 	protected void onReload(){
 		this.reloadConfigurations();
+		
+		this.automessageChat.reload();
+		this.automessageActionBar.reload();
+		this.automessageTitle.reload();
+		
 		this.service.reload();
 	}
 	

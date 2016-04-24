@@ -14,21 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.automessage.actionbar;
+package fr.evercraft.everinformations.automessages.chat;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.spongepowered.api.text.Text;
-
-import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
 
-public class ActionBarConfig extends EConfig {
+public class ChatConfig extends EConfig {
 
-	public ActionBarConfig(final EverInformations plugin) {
-		super(plugin, "automessages_actionbar");
+	public ChatConfig(final EverInformations plugin) {
+		super(plugin, "automessages_chat");
 	}
 	
 	public void reload() {
@@ -39,8 +36,7 @@ public class ActionBarConfig extends EConfig {
 	public void loadDefault() {
 		addDefault("enable", true);
 		addDefault("interval", 300);
-		addDefault("stay", 300);
-		addDefault("update", 8);
+		addDefault("prefix", "&f[&4Ever&6&lNews&f] ");
 		addDefault("messages", Arrays.asList("&1[ARROW] Message 1 ......", "&bMessage 2 ......", "&cMessage 3 ......", "&aMessage 4 ......"));
 	}
 	
@@ -52,15 +48,11 @@ public class ActionBarConfig extends EConfig {
 		return this.get("interval").getInt(300);
 	}
 	
-	public int getUpdate() {
-		return this.get("update").getInt(8);
+	public String getPrefix() {
+		return this.plugin.getChat().replace(this.get("prefix").getString("&f[&4Ever&6&lNews&f] "));
 	}
 	
-	public Text getStay() {
-		return EChat.of(this.plugin.getChat().replace(this.get("prefix").getString("&f[&4Ever&6&lNews&f] ")));
-	}
-	
-	public List<ActionBarMessage> getMessages() {
-		return null;
+	public List<String> getMessages() {
+		return this.plugin.getChat().replace(this.getListString("messages"));
 	}
 }

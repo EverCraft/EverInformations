@@ -14,18 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.automessage.chat;
+package fr.evercraft.everinformations.automessages.actionbar;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import ninja.leaping.configurate.ConfigurationNode;
 
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
 
-public class ChatConfig extends EConfig {
+public class ActionBarConfig extends EConfig {
 
-	public ChatConfig(final EverInformations plugin) {
-		super(plugin, "automessages_chat");
+	public ActionBarConfig(final EverInformations plugin) {
+		super(plugin, "automessages_actionbar");
 	}
 	
 	public void reload() {
@@ -35,8 +38,8 @@ public class ChatConfig extends EConfig {
 	@Override
 	public void loadDefault() {
 		addDefault("enable", true);
-		addDefault("interval", 300);
-		addDefault("prefix", "&f[&4Ever&6&lNews&f] ");
+		addDefault("interval", 300000, "Millisecondes");
+		addDefault("stay", 20000, "Millisecondes");
 		addDefault("messages", Arrays.asList("&1[ARROW] Message 1 ......", "&bMessage 2 ......", "&cMessage 3 ......", "&aMessage 4 ......"));
 	}
 	
@@ -44,15 +47,26 @@ public class ChatConfig extends EConfig {
 		return this.get("enable").getBoolean(false);
 	}
 	
-	public int getInterval() {
-		return this.get("interval").getInt(300);
+	public long getInterval() {
+		return this.get("interval").getLong(300000);
 	}
 	
-	public String getPrefix() {
-		return this.plugin.getChat().replace(this.get("prefix").getString("&f[&4Ever&6&lNews&f] "));
+	public long getStay() {
+		return this.get("stay").getInt(20000);
 	}
 	
-	public List<String> getMessages() {
-		return this.plugin.getChat().replace(this.getListString("messages"));
+	public List<ActionBarMessage> getMessages() {
+		List<ActionBarMessage> messages = new ArrayList<ActionBarMessage>();
+		for(ConfigurationNode config : this.get("messages").getChildrenList()) {
+			if(config.getValue() instanceof String) {
+				messages.add(new ActionBarMessage(this.getStay(), this.getInterval(), config.getString("")));
+			} else {
+				long stay = config.getNode("stay").getLong(this.getStay());
+				long interval = config.getNode("next").getLong(this.getInterval());
+				String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
+				messages.add(new ActionBarMessage(stay, interval, message));
+			}
+		}
+		return messages;
 	}
 }

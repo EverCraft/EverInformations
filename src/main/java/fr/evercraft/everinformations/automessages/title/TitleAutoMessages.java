@@ -14,28 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.automessage.chat;
+package fr.evercraft.everinformations.automessages.title;
 
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.TimeUnit;
+
+import org.spongepowered.api.text.title.Title;
 
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
-import fr.evercraft.everinformations.automessage.AutoMessages;
+import fr.evercraft.everinformations.automessages.AutoMessages;
 
-public class ChatAutoMessages extends AutoMessages {
-	private final ChatConfig config;
+public class TitleAutoMessages extends AutoMessages {
+	private final TitleConfig config;
 	
-	private final CopyOnWriteArrayList<String> messages;
-	private String prefix;
-	
-	private long interval;
+	private final CopyOnWriteArrayList<TitleMessage> messages;
 
-	public ChatAutoMessages(final EverInformations plugin) {
+	public TitleAutoMessages(final EverInformations plugin) {
 		super(plugin);
 		
-		this.config = new ChatConfig(this.plugin);
-		this.messages = new CopyOnWriteArrayList<String>();
+		this.config = new TitleConfig(this.plugin);
+		this.messages = new CopyOnWriteArrayList<TitleMessage>();
 		
 		reload();
 	}
@@ -46,38 +44,26 @@ public class ChatAutoMessages extends AutoMessages {
 	}
 
 	protected void init() {
-		this.numero = -1;
+		this.numero = 0;
 		
 		this.enable = this.config.isEnable();
-		this.interval = this.config.getInterval();
-		this.prefix = this.config.getPrefix();
 		this.messages.clear();
 		this.messages.addAll(this.config.getMessages());
 		
 		if (this.messages.size() == 0 && this.enable) {
 			this.plugin.getLogger().warn("AutoMessagesChat : There is no message");
 			this.enable = false;
-			stop();
+			this.stop();
 		} else if (this.enable) {
-			start();
+			this.start();
 		} else {
-			stop();
+			this.stop();
 		}
 	}
 
 	public void start() {
-		if (this.running) {
-			stop();
-		}
-		
-		this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
-					.execute(() -> this.next())
-					.async()
-					.interval(this.interval, TimeUnit.SECONDS)
-					.delay(this.interval, TimeUnit.SECONDS)
-					.name("AutoMessage Chat")
-					.submit(this.plugin);
-		this.running = true;
+		this.stop();
+		this.task();
 	}
 
 	public void stop() {
@@ -85,35 +71,46 @@ public class ChatAutoMessages extends AutoMessages {
 			this.task.cancel();
 			this.task = null;
 		}
-		this.running = false;
 	}
 	
-	public void next(){
+	public void task() {
+		TitleMessage message = this.getMessage();
+		
+		this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
+						.execute(() -> this.next())
+						.async()
+						.delayTicks(message.getInterval() + message.getStay())
+						.name("AutoMessage ActionBar")
+						.submit(this.plugin);
+	}
+	
+	public void next() {		
 		this.numero++;
 		if(this.numero >= this.messages.size()){
 			this.numero = 0;
 		}
-		view();
-	}
-	
-	public void before(){
-		this.numero--;
-		if(this.numero < 0){
-			this.numero = this.messages.size() - 1;
-		}
-		view();
+		this.view();
+		this.task();
 	}
 
-	public String getMessage(){
-		return this.messages.get(this.numero);
-	}
-	
 	protected void view() {
-		if (this.enable) {
-			this.plugin.getLogger().debug("AutoMessagesChat (message='" + this.prefix + this.getMessage() + "')");
+		if(this.enable) {
+			TitleMessage message = this.getMessage();
+			this.plugin.getLogger().debug("AutoMessagesActionBar (" + message + ")");
+			
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				player.sendMessage(this.plugin.getChat().replaceAllVariables(player, this.prefix + this.getMessage()));
+				player.sendTitle(Title.builder()
+						.stay(message.getStay())
+						.fadeIn(message.getFadeIn())
+						.fadeOut(message.getFadeOut())
+						.title(this.plugin.getChat().replaceAllVariables(player, message.getTitle()))
+						.subtitle(this.plugin.getChat().replaceAllVariables(player, message.getSubTitle()))
+						.build());
 			}
 		}
+	}
+	
+	public TitleMessage getMessage() {
+		return this.messages.get(this.numero);
 	}
 }

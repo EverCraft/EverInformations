@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.automessage;
+package fr.evercraft.everinformations.automessages;
 
 import org.spongepowered.api.scheduler.Task;
 

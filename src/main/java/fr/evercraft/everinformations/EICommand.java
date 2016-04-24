@@ -39,7 +39,7 @@ public class EICommand extends ECommand<EverInformations> {
 	
 	@Override
 	public boolean testPermission(final CommandSource source) {
-		return source.hasPermission(this.plugin.getPermissions().get("EVERCHAT"));
+		return source.hasPermission(this.plugin.getPermissions().get("EVERINFORMATIONS"));
 	}
 	
 	@Override
