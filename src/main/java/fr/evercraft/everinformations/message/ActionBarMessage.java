@@ -16,6 +16,9 @@
  */
 package fr.evercraft.everinformations.message;
 
+import org.spongepowered.api.text.Text;
+
+import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.server.player.EPlayer;
 
 public class ActionBarMessage implements IMessage {
@@ -48,12 +51,21 @@ public class ActionBarMessage implements IMessage {
 
 	@Override
 	public boolean send(int priority, EPlayer player) {
-		player.sendActionBar(priority, this.getStay(), player.replaceVariable(this.message));
-		return true;
+		return player.sendActionBar(priority, this.getStay(), player.replaceVariable(this.message));
+	}
+	
+	@Override
+	public boolean send(int priority, EPlayer player, Text reason) {
+		return player.sendActionBar(priority, this.getStay(), player.replaceVariable(this.message.replaceAll("<reason>", EChat.serialize(reason))));
 	}
 
 	@Override
-	public void send(int priority, EPlayer player, EPlayer replace) {
-		player.sendActionBar(priority, this.getStay(), replace.replaceVariable(this.message));
+	public boolean send(int priority, EPlayer player, EPlayer replace) {
+		return player.sendActionBar(priority, this.getStay(), replace.replaceVariable(this.message));
+	}
+
+	@Override
+	public boolean send(int priority, EPlayer player, EPlayer replace, Text reason) {
+		return player.sendActionBar(priority, this.getStay(), replace.replaceVariable(this.message.replaceAll("<reason>", EChat.serialize(reason))));
 	}
 }

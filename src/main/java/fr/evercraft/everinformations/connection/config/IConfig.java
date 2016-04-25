@@ -14,25 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.message;
+package fr.evercraft.everinformations.connection.config;
 
-import org.spongepowered.api.text.Text;
+import java.util.List;
+import java.util.Map;
 
-import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everinformations.message.IMessage;
 
-public interface IMessage  {
+public interface IConfig<T extends IMessage> {
+	public boolean isPlayerEnable();
+	public Map<String, List<T>> getPlayerJoinMessages();
 	
-	/**
-	 * En Millisecondes
-	 * @return
-	 */
-	public long getNext();
-
-	public boolean send(int priority, EPlayer player);
-	
-	public boolean send(int priority, EPlayer player, Text reason);
-
-	public boolean send(int priority, EPlayer player, EPlayer replace);
-	
-	public boolean send(int priority, EPlayer player, EPlayer replace, Text reason);
+	public boolean isOthersEnable();
+	public Map<String, List<T>> getOthersJoinMessages();
+	public Map<String, List<T>> getOthersQuitMessages();
+	public Map<String, List<T>> getOthersKickMessages();
 }

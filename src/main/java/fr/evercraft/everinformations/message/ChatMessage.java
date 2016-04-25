@@ -18,9 +18,11 @@ package fr.evercraft.everinformations.message;
 
 import java.util.Optional;
 
+import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializer;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
+import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.server.player.EPlayer;
 
 public class ChatMessage implements IMessage {
@@ -64,7 +66,21 @@ public class ChatMessage implements IMessage {
 	}
 	
 	@Override
-	public void send(int priority, EPlayer player, EPlayer replace) {
+	public boolean send(int priority, EPlayer player, Text reason) {
+		if(this.type.equals(TextSerializers.FORMATTING_CODE)) {
+			player.sendMessageVariables((this.prefix.orElse("") + this.message).replaceAll("<reason>", EChat.serialize(reason)));
+		} else {
+			if(this.prefix.isPresent()) {
+				player.sendMessage(player.replaceVariable(this.prefix.get()).concat(this.type.deserialize(this.message)));
+			} else {
+				player.sendMessage(this.type.deserialize(this.message));
+			}
+		}
+		return true;
+	}
+	
+	@Override
+	public boolean send(int priority, EPlayer player, EPlayer replace) {
 		if(this.type.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessage(replace.replaceVariable(this.prefix.orElse("") + this.message));
 		} else {
@@ -74,6 +90,21 @@ public class ChatMessage implements IMessage {
 				player.sendMessage(this.type.deserialize(this.message));
 			}
 		}
+		return true;
+	}
+	
+	@Override
+	public boolean send(int priority, EPlayer player, EPlayer replace, Text reason) {
+		if(this.type.equals(TextSerializers.FORMATTING_CODE)) {
+			player.sendMessage(replace.replaceVariable((this.prefix.orElse("") + this.message).replaceAll("<reason>", EChat.serialize(reason))));
+		} else {
+			if(this.prefix.isPresent()) {
+				player.sendMessage(replace.replaceVariable(this.prefix.get()).concat(this.type.deserialize(this.message)));
+			} else {
+				player.sendMessage(this.type.deserialize(this.message));
+			}
+		}
+		return true;
 	}
 
 	@Override

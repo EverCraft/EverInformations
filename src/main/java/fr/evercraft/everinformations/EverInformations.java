@@ -21,6 +21,7 @@ import org.spongepowered.api.plugin.Plugin;
 
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everinformations.automessages.ManagerAutoMessages;
+import fr.evercraft.everinformations.connection.ManagerConnection;
 import fr.evercraft.everinformations.newbie.ManagerNewbie;
 
 @Plugin(id = "fr.evercraft.everinformations", 
@@ -40,6 +41,7 @@ public class EverInformations extends EPlugin {
 	
 	
 	private ManagerAutoMessages automessages;
+	private ManagerConnection connection;
 	private ManagerNewbie newbie;
 	
 	@Override
@@ -56,6 +58,7 @@ public class EverInformations extends EPlugin {
 	@Override
 	protected void onEnable() {
 		this.automessages = new ManagerAutoMessages(this);
+		this.connection = new ManagerConnection(this);
 		this.newbie = new ManagerNewbie(this);
 	}
 	
@@ -68,6 +71,7 @@ public class EverInformations extends EPlugin {
 		this.reloadConfigurations();
 		
 		this.automessages.reload();
+		this.connection.reload();
 		this.newbie.reload();
 	}
 	
@@ -93,6 +97,10 @@ public class EverInformations extends EPlugin {
 		return this.automessages;
 	}
 
+	public ManagerConnection getConnection() {
+		return this.connection;
+	}
+	
 	public ManagerNewbie getNewbie() {
 		return this.newbie;
 	}

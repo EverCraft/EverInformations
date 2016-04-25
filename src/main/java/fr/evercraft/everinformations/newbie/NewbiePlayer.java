@@ -92,8 +92,8 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 		private int numero;
 		private Task task;
 		
-		protected Player(final NewbiePlayer<T> chat, final EPlayer player) {
-			this.newbie = chat;
+		protected Player(final NewbiePlayer<T> newbie, final EPlayer player) {
+			this.newbie = newbie;
 			
 			this.player = player;
 			this.numero = -1;

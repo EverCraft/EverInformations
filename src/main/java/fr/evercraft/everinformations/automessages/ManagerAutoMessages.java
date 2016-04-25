@@ -46,4 +46,16 @@ public class ManagerAutoMessages {
 		this.actionbar.reload();
 		this.title.reload();
 	}
+	
+	public void start() {
+		this.chat.start();
+		this.actionbar.start();
+		this.title.start();
+	}
+
+	public void stop() {
+		this.chat.stop();
+		this.actionbar.stop();
+		this.title.stop();
+	}
 }

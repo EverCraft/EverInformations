@@ -16,8 +16,10 @@
  */
 package fr.evercraft.everinformations.message;
 
+import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.title.Title;
 
+import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.sponge.UtilsTick;
 
@@ -50,24 +52,45 @@ public class TitleMessage implements IMessage {
 	
 	@Override
 	public boolean send(int priority, EPlayer player) {
-		player.sendTitle(priority, Title.builder()
+		return player.sendTitle(priority, Title.builder()
 				.stay(UtilsTick.parseSeconds(this.stay))
 				.fadeIn(UtilsTick.parseSeconds(this.fadeIn))
 				.fadeOut(UtilsTick.parseSeconds(this.fadeOut))
 				.title(player.replaceVariable(this.title))
 				.subtitle(player.replaceVariable(this.subTitle))
 				.build());
-		return true;
 	}
 	
 	@Override
-	public void send(int priority, EPlayer player, EPlayer replace) {
-		player.sendTitle(priority, Title.builder()
+	public boolean send(int priority, EPlayer player, Text reason) {
+		return player.sendTitle(priority, Title.builder()
+				.stay(UtilsTick.parseSeconds(this.stay))
+				.fadeIn(UtilsTick.parseSeconds(this.fadeIn))
+				.fadeOut(UtilsTick.parseSeconds(this.fadeOut))
+				.title(player.replaceVariable(this.title.replaceAll("<reason>", EChat.serialize(reason))))
+				.subtitle(player.replaceVariable(this.subTitle.replaceAll("<reason>", EChat.serialize(reason))))
+				.build());
+	}
+	
+	@Override
+	public boolean send(int priority, EPlayer player, EPlayer replace) {
+		return player.sendTitle(priority, Title.builder()
 				.stay(UtilsTick.parseSeconds(this.stay))
 				.fadeIn(UtilsTick.parseSeconds(this.fadeIn))
 				.fadeOut(UtilsTick.parseSeconds(this.fadeOut))
 				.title(replace.replaceVariable(this.title))
 				.subtitle(replace.replaceVariable(this.subTitle))
+				.build());
+	}
+	
+	@Override
+	public boolean send(int priority, EPlayer player, EPlayer replace, Text reason) {
+		return player.sendTitle(priority, Title.builder()
+				.stay(UtilsTick.parseSeconds(this.stay))
+				.fadeIn(UtilsTick.parseSeconds(this.fadeIn))
+				.fadeOut(UtilsTick.parseSeconds(this.fadeOut))
+				.title(replace.replaceVariable(this.title.replaceAll("<reason>", EChat.serialize(reason))))
+				.subtitle(replace.replaceVariable(this.subTitle.replaceAll("<reason>", EChat.serialize(reason))))
 				.build());
 	}
 
