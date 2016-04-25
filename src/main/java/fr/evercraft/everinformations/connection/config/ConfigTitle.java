@@ -33,7 +33,7 @@ import fr.evercraft.everinformations.message.TitleMessage;
 public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 
 	public ConfigTitle(final EverInformations plugin) {
-		super(plugin, "connection_title");
+		super(plugin, "connection/connection_title");
 	}
 	
 	@Override

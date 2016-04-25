@@ -28,7 +28,7 @@ import fr.evercraft.everinformations.message.TitleMessage;
 public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 
 	public ConfigTitle(final EverInformations plugin) {
-		super(plugin, "automessages_title");
+		super(plugin, "automessages/automessages_title");
 	}
 	
 	@Override
@@ -64,26 +64,6 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 			this.get("messages").setValue(messages);
 		}
 	}
-
-	/*
-	 * Fonctions
-	 */
-	
-	private double getInterval() {
-		return this.get("interval").getDouble(200);
-	}
-	
-	private double getStay() {
-		return this.get("stay").getDouble(200);
-	}
-	
-	private double getFadeIn() {
-		return this.get("fadeIn").getDouble(1);
-	}
-	
-	private double getFadeOut() {
-		return this.get("fadeOut").getDouble(1);
-	}
 	
 	/*
 	 * Accesseurs
@@ -95,11 +75,17 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 	
 	public List<TitleMessage> getMessages() {
 		List<TitleMessage> messages = new ArrayList<TitleMessage>();
+		
+		double stay_default = this.get("stay").getDouble(360);
+		double interval_default = this.get("inverval").getDouble(20);
+		double fadeIn_default = this.get("fadeIn").getDouble(1);
+		double fadeOut_default = this.get("fadeOut").getDouble(1);
+		
 		for(ConfigurationNode config : this.get("messages").getChildrenList()) {
-			double stay = config.getNode("stay").getDouble(this.getStay());
-			double interval = config.getNode("next").getDouble(this.getInterval());
-			double fadeIn = config.getNode("fadeIn").getDouble(this.getFadeIn());
-			double fadeOut = config.getNode("fadeOut").getDouble(this.getFadeOut());
+			double stay = config.getNode("stay").getDouble(stay_default);
+			double interval = config.getNode("next").getDouble(interval_default);
+			double fadeIn = config.getNode("fadeIn").getDouble(fadeIn_default);
+			double fadeOut = config.getNode("fadeOut").getDouble(fadeOut_default);
 			String title = this.plugin.getChat().replace(config.getNode("title").getString(""));
 			String subTitle = this.plugin.getChat().replace(config.getNode("subTitle").getString(""));
 			messages.add(new TitleMessage(stay, interval, fadeIn, fadeOut, title, subTitle));

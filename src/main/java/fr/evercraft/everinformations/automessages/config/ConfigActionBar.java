@@ -28,7 +28,7 @@ import fr.evercraft.everinformations.message.ActionBarMessage;
 public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage>{
 
 	public ConfigActionBar(final EverInformations plugin) {
-		super(plugin, "automessages_actionbar");
+		super(plugin, "automessages/automessages_actionbar");
 	}
 	
 	@Override
@@ -37,18 +37,6 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 		addDefault("interval", 300, "Seconds");
 		addDefault("stay", 20, "Seconds");
 		addDefault("messages", Arrays.asList("&1[ARROW] Message 1 ......", "&bMessage 2 ......", "&cMessage 3 ......", "&aMessage 4 ......"));
-	}
-	
-	/*
-	 * Fonctions
-	 */
-	
-	private double getInterval() {
-		return this.get("interval").getDouble(300);
-	}
-	
-	private double getStay() {
-		return this.get("stay").getDouble(20);
 	}
 	
 	/*
@@ -61,12 +49,16 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 	
 	public List<ActionBarMessage> getMessages() {
 		List<ActionBarMessage> messages = new ArrayList<ActionBarMessage>();
+		
+		double stay_default = this.get("stay").getDouble(300);
+		double interval_default = this.get("inverval").getDouble(20);
+
 		for(ConfigurationNode config : this.get("messages").getChildrenList()) {
 			if(config.getValue() instanceof String) {
-				messages.add(new ActionBarMessage(this.getStay(), this.getInterval(), this.plugin.getChat().replace(config.getString(""))));
+				messages.add(new ActionBarMessage(stay_default, interval_default, this.plugin.getChat().replace(config.getString(""))));
 			} else {
-				double stay = config.getNode("stay").getDouble(this.getStay());
-				double interval = config.getNode("next").getDouble(this.getInterval());
+				double stay = config.getNode("stay").getDouble(stay_default);
+				double interval = config.getNode("next").getDouble(interval_default);
 				String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
 				messages.add(new ActionBarMessage(stay, interval, message));
 			}

@@ -171,7 +171,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 		
 		protected void view() {
 			T message = this.getMessage();
-			this.connection.plugin.getLogger().debug("Newbie (type='" + this.connection.type.name() + "';priority='" + this.connection.priority + ";player='" + player.getIdentifier() + "',message='" + message + "')");
+			this.connection.plugin.getLogger().debug("Connection (type='" + this.connection.type.name() + "';priority='" + this.connection.priority + ";player='" + player.getIdentifier() + "',message='" + message + "')");
 			
 			if(this.reason == null) {
 				if(this.connection.type.equals(Type.CHAT_OTHERS)) {

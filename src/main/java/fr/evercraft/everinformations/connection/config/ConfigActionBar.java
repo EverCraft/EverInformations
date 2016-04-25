@@ -33,7 +33,7 @@ import fr.evercraft.everinformations.message.ActionBarMessage;
 public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage> {
 
 	public ConfigActionBar(final EverInformations plugin) {
-		super(plugin, "connection_actionbar");
+		super(plugin, "connection/connection_actionbar");
 	}
 	
 	@Override

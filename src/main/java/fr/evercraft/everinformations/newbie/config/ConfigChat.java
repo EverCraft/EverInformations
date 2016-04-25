@@ -32,7 +32,7 @@ import fr.evercraft.everinformations.newbie.Newbie;
 
 public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 	public ConfigChat(final EverInformations plugin) {
-		super(plugin, "newbie_chat");
+		super(plugin, "newbie/newbie_chat");
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 		addDefault(Newbie.PLAYER + ".enable", true);
 		addDefault(Newbie.PLAYER + ".prefix", "");
 		addDefault(Newbie.PLAYER + ".interval", 2, "Seconds");
-		addDefault(Newbie.PLAYER + ".messages", Arrays.asList("&4Welcome &a<DISPLAYNAME_FORMAT> &4to the server!"));
+		addDefault(Newbie.PLAYER + ".message", "&4Welcome &a<DISPLAYNAME_FORMAT> &4to the server!");
 		
 		addDefault(Newbie.OTHERS + ".enable", true);
 		addDefault(Newbie.OTHERS + ".prefix", "");
@@ -75,36 +75,37 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 	private boolean isEnable(String prefix) {
 		return this.get(prefix + ".enable").getBoolean(false);
 	}
-	
-	private double getInterval(String prefix) {
-		return this.get(prefix + ".interval").getDouble(2);
-	}
-	
-	private String getPrefix(String prefix) {
-		return this.get("prefix").getString("");
-	}
-	
+
 	private List<ChatMessage> getMessages(String prefix) {
 		List<ChatMessage> messages = new ArrayList<ChatMessage>();
-		for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
-			if(config.getValue() instanceof String) {
-				String prefix_message = this.plugin.getChat().replace(this.getPrefix(prefix));
-				String message = this.plugin.getChat().replace(config.getString(""));
-				
-				messages.add(new ChatMessage(this.getInterval(prefix), TextSerializers.FORMATTING_CODE, prefix_message, message));
-			} else {
-				double interval = config.getNode("next").getDouble(this.getInterval(prefix));
-				String prefix_message = this.plugin.getChat().replace(config.getNode("prefix").getString(this.getPrefix(prefix)));
-				String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
-				
-				String type_string = config.getNode("type").getString("");
-				TextSerializer type = TextSerializers.FORMATTING_CODE;
-				if(type_string.equalsIgnoreCase("JSON")) {
-					type = TextSerializers.JSON;
-				} else if(type_string.equalsIgnoreCase("TEXT_XML")) {
-					type = TextSerializers.TEXT_XML;
+		
+		double interval_default = this.get(prefix + ".inverval").getDouble(2);
+		String prefix_default = this.get(prefix + ".prefix").getString("");
+		
+		if(!this.get(prefix + ".message").isVirtual()) {
+			String message = this.plugin.getChat().replace(this.get(prefix + ".message").getString(""));
+			messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_default, message));
+		} else {
+			for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
+				if(config.getValue() instanceof String) {
+					String prefix_message = this.plugin.getChat().replace(prefix_default);
+					String message = this.plugin.getChat().replace(config.getString(""));
+					
+					messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_message, message));
+				} else {
+					double interval = config.getNode("next").getDouble(interval_default);
+					String prefix_message = this.plugin.getChat().replace(config.getNode("prefix").getString(prefix_default));
+					String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
+					
+					String type_string = config.getNode("type").getString("");
+					TextSerializer type = TextSerializers.FORMATTING_CODE;
+					if(type_string.equalsIgnoreCase("JSON")) {
+						type = TextSerializers.JSON;
+					} else if(type_string.equalsIgnoreCase("TEXT_XML")) {
+						type = TextSerializers.TEXT_XML;
+					}
+					messages.add(new ChatMessage(interval, type, prefix_message, message));
 				}
-				messages.add(new ChatMessage(interval, type, prefix_message, message));
 			}
 		}
 		return messages;

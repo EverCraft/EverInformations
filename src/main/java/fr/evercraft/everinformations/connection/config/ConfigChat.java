@@ -36,7 +36,7 @@ import fr.evercraft.everinformations.message.ChatMessage;
 
 public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 	public ConfigChat(final EverInformations plugin) {
-		super(plugin, "connection_chat");
+		super(plugin, "connection/connection_chat");
 	}
 	
 	@Override

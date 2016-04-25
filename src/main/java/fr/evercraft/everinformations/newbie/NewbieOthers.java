@@ -120,7 +120,7 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 
 	@Override
 	public void removePlayer(EPlayer player) {
-		if(this.player.equals(player)) {
+		if(this.player != null && this.player.equals(player)) {
 			this.stop();
 		}
 	}

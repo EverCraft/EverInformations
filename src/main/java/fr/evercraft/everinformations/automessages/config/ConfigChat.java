@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.serializer.TextSerializer;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
@@ -33,7 +31,7 @@ import fr.evercraft.everinformations.message.ChatMessage;
 public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 
 	public ConfigChat(final EverInformations plugin) {
-		super(plugin, "automessages_chat");
+		super(plugin, "automessages/automessages_chat");
 	}
 	
 	@Override
@@ -42,21 +40,8 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 		addDefault("interval", 300, "Seconds");
 		addDefault("prefix", "&f[&4Ever&6&lNews&f] ");
 		addDefault("messages", Arrays.asList("&1[ARROW] Message 1 ......", "&bMessage 2 ......", "&cMessage 3 ......", "&aMessage 4 ......"));
-		addDefault("test", TextSerializers.JSON.serialize(Text.builder("Salut tout le monde").onHover(TextActions.showText(Text.of("Clique ici"))).build()));
 	}
-	
-	/*
-	 * Fonctions
-	 */
-	
-	private double getInterval() {
-		return this.get("interval").getDouble(300);
-	}
-	
-	private String getPrefix() {
-		return this.plugin.getChat().replace(this.get("prefix").getString("&f[&4Ever&6&lNews&f] "));
-	}
-	
+
 	/*
 	 * Accesseurs
 	 */
@@ -67,15 +52,19 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 	
 	public List<ChatMessage> getMessages() {
 		List<ChatMessage> messages = new ArrayList<ChatMessage>();
+		
+		double interval_default = this.get("interval").getDouble(300);
+		String prefix_default = this.plugin.getChat().replace(this.get("prefix").getString("&f[&4Ever&6&lNews&f] "));
+		
 		for(ConfigurationNode config : this.get("messages").getChildrenList()) {
 			if(config.getValue() instanceof String) {
-				String prefix_message = this.plugin.getChat().replace(this.getPrefix());
+				String prefix_message = this.plugin.getChat().replace(prefix_default);
 				String message = this.plugin.getChat().replace(config.getString(""));
 				
-				messages.add(new ChatMessage(this.getInterval(), TextSerializers.FORMATTING_CODE, prefix_message, message));
+				messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_message, message));
 			} else {
-				double interval = config.getNode("next").getDouble(this.getInterval());
-				String prefix = this.plugin.getChat().replace(config.getNode("prefix").getString(this.getPrefix()));
+				double interval = config.getNode("next").getDouble(interval_default);
+				String prefix = this.plugin.getChat().replace(config.getNode("prefix").getString(prefix_default));
 				String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
 				
 				String type_string = config.getNode("type").getString("");

@@ -29,14 +29,14 @@ import fr.evercraft.everinformations.newbie.Newbie;
 public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 
 	public ConfigTitle(final EverInformations plugin) {
-		super(plugin, "newbie_title");
+		super(plugin, "newbie/newbie_title");
 	}
 	
 	@Override
 	protected void loadDefault() {
 		addDefault(Newbie.PLAYER + ".enable", true);
 		addDefault(Newbie.PLAYER + "interval", 0, "Seconds");
-		addDefault(Newbie.PLAYER + "stay", 20, "Seconds");
+		addDefault(Newbie.PLAYER + "stay", 10, "Seconds");
 		addDefault(Newbie.PLAYER + "fadeIn", 1, "Seconds");
 		addDefault(Newbie.PLAYER + "fadeOut", 1, "Seconds");
 		
@@ -52,7 +52,7 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 		
 		addDefault(Newbie.OTHERS + ".enable", true);
 		addDefault(Newbie.OTHERS + ".interval", 0, "Seconds");
-		addDefault(Newbie.OTHERS + ".stay", 20, "Seconds");
+		addDefault(Newbie.OTHERS + ".stay", 10, "Seconds");
 		addDefault(Newbie.OTHERS + ".fadeIn", 1, "Seconds");
 		addDefault(Newbie.OTHERS + ".fadeOut", 1, "Seconds");
 		
@@ -95,30 +95,19 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 		return this.get(prefix + ".enable").getBoolean(false);
 	}
 	
-	private double getInterval(String prefix) {
-		return this.get(prefix + ".interval").getDouble(0);
-	}
-	
-	private double getStay(String prefix) {
-		return this.get(prefix + ".stay").getDouble(20);
-	}
-	
-	private double getFadeIn(String prefix) {
-		return this.get(prefix + ".fadeIn").getDouble(1);
-	}
-	
-	private double getFadeOut(String prefix) {
-		return this.get(prefix + ".fadeOut").getDouble(1);
-	}
-	
 	private List<TitleMessage> getMessages(String prefix) {
 		List<TitleMessage> messages = new ArrayList<TitleMessage>();
 		
+		double stay_default = this.get(prefix + ".stay").getDouble(10);
+		double interval_default = this.get(prefix + ".inverval").getDouble(0);
+		double fadeIn_default = this.get(prefix + ".fadeIn").getDouble(1);
+		double fadeOut_default = this.get(prefix + ".fadeOut").getDouble(1);
+		
 		for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
-			double stay = config.getNode("stay").getDouble(this.getStay(prefix));
-			double interval = config.getNode("next").getDouble(this.getInterval(prefix));
-			double fadeIn = config.getNode("fadeIn").getDouble(this.getFadeIn(prefix));
-			double fadeOut = config.getNode("fadeOut").getDouble(this.getFadeOut(prefix));
+			double stay = config.getNode("stay").getDouble(stay_default);
+			double interval = config.getNode("next").getDouble(interval_default);
+			double fadeIn = config.getNode("fadeIn").getDouble(fadeIn_default);
+			double fadeOut = config.getNode("fadeOut").getDouble(fadeOut_default);
 			
 			String title = this.plugin.getChat().replace(config.getNode("title").getString(""));
 			String subTitle = this.plugin.getChat().replace(config.getNode("subTitle").getString(""));

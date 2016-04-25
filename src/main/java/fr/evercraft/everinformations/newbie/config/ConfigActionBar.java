@@ -29,7 +29,7 @@ import fr.evercraft.everinformations.newbie.Newbie;
 public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage> {
 
 	public ConfigActionBar(final EverInformations plugin) {
-		super(plugin, "newbie_actionbar");
+		super(plugin, "newbie/newbie_actionbar");
 	}
 	
 	@Override
@@ -42,7 +42,7 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 		addDefault(Newbie.OTHERS + ".enable", true);
 		addDefault(Newbie.OTHERS + ".interval", 0, "Seconds");
 		addDefault(Newbie.OTHERS + ".stay", 20, "Seconds");
-		addDefault(Newbie.OTHERS + ".messages", Arrays.asList("&a<DISPLAYNAME_FORMAT> &4is a new player."));
+		addDefault(Newbie.OTHERS + ".message", "&a<DISPLAYNAME_FORMAT> &4is a new player.");
 	}
 	
 	/*
@@ -72,25 +72,26 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 	private boolean isEnable(String prefix) {
 		return this.get(prefix + ".enable").getBoolean(false);
 	}
-	
-	private double getInterval(String prefix) {
-		return this.get(prefix + ".interval").getDouble(0);
-	}
-	
-	private double getStay(String prefix) {
-		return this.get(prefix + ".stay").getDouble(20);
-	}
-	
+
 	private List<ActionBarMessage> getMessages(String prefix) {
 		List<ActionBarMessage> messages = new ArrayList<ActionBarMessage>();
-		for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
-			if(config.getValue() instanceof String) {
-				messages.add(new ActionBarMessage(this.getStay(prefix), this.getInterval(prefix), this.plugin.getChat().replace(config.getString(""))));
-			} else {
-				double stay = config.getNode("stay").getDouble(this.getStay(prefix));
-				double interval = config.getNode("next").getDouble(this.getInterval(prefix));
-				String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
-				messages.add(new ActionBarMessage(stay, interval, message));
+		
+		double stay_default = this.get(prefix + ".stay").getDouble(10);
+		double interval_default = this.get(prefix + ".inverval").getDouble(0);
+		
+		if(!this.get(prefix + ".message").isVirtual()) {
+			String message = this.plugin.getChat().replace(this.get(prefix + ".message").getString(""));
+			messages.add(new ActionBarMessage(stay_default, interval_default, message));
+		} else {
+			for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
+				if(config.getValue() instanceof String) {
+					messages.add(new ActionBarMessage(stay_default, interval_default, this.plugin.getChat().replace(config.getString(""))));
+				} else {
+					double stay = config.getNode("stay").getDouble(stay_default);
+					double interval = config.getNode("next").getDouble(interval_default);
+					String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
+					messages.add(new ActionBarMessage(stay, interval, message));
+				}
 			}
 		}
 		return messages;
