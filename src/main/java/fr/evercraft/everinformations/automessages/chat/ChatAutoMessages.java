@@ -17,67 +17,48 @@
 package fr.evercraft.everinformations.automessages.chat;
 
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.TimeUnit;
 
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.automessages.AutoMessages;
+import fr.evercraft.everinformations.message.ChatMessage;
 
 public class ChatAutoMessages extends AutoMessages {
 	private final ChatConfig config;
 	
-	private final CopyOnWriteArrayList<String> messages;
-	private String prefix;
-	
-	private long interval;
+	private final CopyOnWriteArrayList<ChatMessage> messages;
 
 	public ChatAutoMessages(final EverInformations plugin) {
 		super(plugin);
 		
 		this.config = new ChatConfig(this.plugin);
-		this.messages = new CopyOnWriteArrayList<String>();
+		this.messages = new CopyOnWriteArrayList<ChatMessage>();
 		
 		reload();
 	}
 
 	public void reload(){		
 		stop();
-		init();
-	}
-
-	protected void init() {
-		this.numero = -1;
+		
+		this.numero = 0;
 		
 		this.enable = this.config.isEnable();
-		this.interval = this.config.getInterval();
-		this.prefix = this.config.getPrefix();
 		this.messages.clear();
 		this.messages.addAll(this.config.getMessages());
 		
 		if (this.messages.size() == 0 && this.enable) {
-			this.plugin.getLogger().warn("AutoMessagesChat : There is no message");
+			this.plugin.getLogger().warn("ChatAutoMessages : There is no message");
 			this.enable = false;
 			stop();
 		} else if (this.enable) {
 			start();
-		} else {
-			stop();
 		}
 	}
 
 	public void start() {
-		if (this.running) {
-			stop();
-		}
-		
-		this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
-					.execute(() -> this.next())
-					.async()
-					.interval(this.interval, TimeUnit.SECONDS)
-					.delay(this.interval, TimeUnit.SECONDS)
-					.name("AutoMessage Chat")
-					.submit(this.plugin);
-		this.running = true;
+		this.stop();
+		this.view();
+		this.task();
 	}
 
 	public void stop() {
@@ -85,35 +66,45 @@ public class ChatAutoMessages extends AutoMessages {
 			this.task.cancel();
 			this.task = null;
 		}
-		this.running = false;
 	}
 	
-	public void next(){
+	public void task() {
+		ChatMessage message = this.getMessage();
+		
+		if(message.getNext() == 0) {
+			this.next();
+		} else {
+			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
+							.execute(() -> this.next())
+							.async()
+							.delayTicks(message.getNext())
+							.name("ChatAutoMessages")
+							.submit(this.plugin);
+		}
+	}
+	
+	public void next() {		
 		this.numero++;
 		if(this.numero >= this.messages.size()){
 			this.numero = 0;
 		}
-		view();
-	}
-	
-	public void before(){
-		this.numero--;
-		if(this.numero < 0){
-			this.numero = this.messages.size() - 1;
-		}
-		view();
+		this.view();
+		this.task();
 	}
 
-	public String getMessage(){
-		return this.messages.get(this.numero);
-	}
-	
 	protected void view() {
-		if (this.enable) {
-			this.plugin.getLogger().debug("AutoMessagesChat (message='" + this.prefix + this.getMessage() + "')");
+		if(this.enable) {
+			ChatMessage message = this.getMessage();
+			this.plugin.getLogger().debug("ChatAutoMessages (message='" + message + "')");
+
+			
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				player.sendMessage(this.plugin.getChat().replaceAllVariables(player, this.prefix + this.getMessage()));
+				message.send(player);
 			}
 		}
+	}
+	
+	public ChatMessage getMessage() {
+		return this.messages.get(this.numero);
 	}
 }

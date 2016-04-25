@@ -16,10 +16,41 @@
  */
 package fr.evercraft.everinformations;
 
+import java.util.Optional;
+
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.network.ClientConnectionEvent;
+
+import fr.evercraft.everapi.server.player.EPlayer;
+
 public class EIListener {
 	private EverInformations plugin;
 	
 	public EIListener(final EverInformations plugin) {
 		this.plugin = plugin;
+	}
+	
+	@Listener
+	public void onPlayerJoin(final ClientConnectionEvent.Join event) {
+		Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
+		
+		if(optPlayer.isPresent()) {
+			EPlayer player = optPlayer.get();
+			if(player.getFirstDatePlayed() == player.getLastDatePlayed()) {
+				this.plugin.getNewbie().addPlayer(player);
+			}
+		}
+	}
+	
+	@Listener
+	public void onPlayerJoin(final ClientConnectionEvent.Disconnect event) {
+		Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
+		
+		if(optPlayer.isPresent()) {
+			EPlayer player = optPlayer.get();
+			if(player.getFirstDatePlayed() == player.getLastDatePlayed()) {
+				this.plugin.getNewbie().removePlayer(player);
+			}
+		}
 	}
 }

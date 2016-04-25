@@ -21,9 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import ninja.leaping.configurate.ConfigurationNode;
-
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
+import fr.evercraft.everinformations.message.ActionBarMessage;
 
 public class ActionBarConfig extends EConfig {
 
@@ -38,8 +38,8 @@ public class ActionBarConfig extends EConfig {
 	@Override
 	public void loadDefault() {
 		addDefault("enable", true);
-		addDefault("interval", 300000, "Millisecondes");
-		addDefault("stay", 20000, "Millisecondes");
+		addDefault("interval", 3000, "Millisecondes");
+		addDefault("stay", 2000, "Millisecondes");
 		addDefault("messages", Arrays.asList("&1[ARROW] Message 1 ......", "&bMessage 2 ......", "&cMessage 3 ......", "&aMessage 4 ......"));
 	}
 	
@@ -59,7 +59,7 @@ public class ActionBarConfig extends EConfig {
 		List<ActionBarMessage> messages = new ArrayList<ActionBarMessage>();
 		for(ConfigurationNode config : this.get("messages").getChildrenList()) {
 			if(config.getValue() instanceof String) {
-				messages.add(new ActionBarMessage(this.getStay(), this.getInterval(), config.getString("")));
+				messages.add(new ActionBarMessage(this.getStay(), this.getInterval(), this.plugin.getChat().replace(config.getString(""))));
 			} else {
 				long stay = config.getNode("stay").getLong(this.getStay());
 				long interval = config.getNode("next").getLong(this.getInterval());

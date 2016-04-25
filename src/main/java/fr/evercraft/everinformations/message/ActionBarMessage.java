@@ -14,7 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.automessages.actionbar;
+package fr.evercraft.everinformations.message;
+
+import fr.evercraft.everapi.server.player.EPlayer;
 
 public class ActionBarMessage  {
 	private final long stay;
@@ -38,5 +40,20 @@ public class ActionBarMessage  {
 
 	public String getMessage() {
 		return this.message;
+	}
+
+	@Override
+	public String toString() {
+		return "ActionBarMessage [stay=" + stay + ", next=" + next
+				+ ", message=" + message + "]";
+	}
+
+	public boolean send(int priority, EPlayer player) {
+		player.sendActionBar(priority, this.stay, player.replaceVariable(this.message));
+		return true;
+	}
+
+	public void send(int priority, EPlayer player, EPlayer replace) {
+		player.sendActionBar(priority, this.stay, replace.replaceVariable(this.message));
 	}
 }

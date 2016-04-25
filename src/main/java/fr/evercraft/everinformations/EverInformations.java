@@ -20,15 +20,14 @@ import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
 import fr.evercraft.everapi.plugin.EPlugin;
-import fr.evercraft.everinformations.automessages.actionbar.ActionBarAutoMessages;
-import fr.evercraft.everinformations.automessages.chat.ChatAutoMessages;
-import fr.evercraft.everinformations.automessages.title.TitleAutoMessages;
+import fr.evercraft.everinformations.automessages.ManagerAutoMessages;
+import fr.evercraft.everinformations.newbie.ManagerNewbie;
 import fr.evercraft.everinformations.service.EInformationsService;
 
 @Plugin(id = "fr.evercraft.everinformations", 
 		name = "EverInformations", 
 		version = "1.0", 
-		description = "Manage information",
+		description = "Manage informations",
 		url = "http://evercraft.fr/",
 		authors = {"rexbut"},
 		dependencies = {
@@ -42,9 +41,8 @@ public class EverInformations extends EPlugin {
 	
 	private EInformationsService service;
 	
-	private ChatAutoMessages automessageChat;
-	private ActionBarAutoMessages automessageActionBar;
-	private TitleAutoMessages automessageTitle;
+	private ManagerAutoMessages automessages;
+	private ManagerNewbie newbie;
 	
 	@Override
 	protected void onPreEnable() {
@@ -62,9 +60,8 @@ public class EverInformations extends EPlugin {
 
 	@Override
 	protected void onEnable() {
-		this.automessageChat = new ChatAutoMessages(this);
-		this.automessageActionBar = new ActionBarAutoMessages(this);
-		this.automessageTitle = new TitleAutoMessages(this);
+		this.automessages = new ManagerAutoMessages(this);
+		this.newbie = new ManagerNewbie(this);
 	}
 	
 	@Override
@@ -75,9 +72,8 @@ public class EverInformations extends EPlugin {
 	protected void onReload(){
 		this.reloadConfigurations();
 		
-		this.automessageChat.reload();
-		this.automessageActionBar.reload();
-		this.automessageTitle.reload();
+		this.automessages.reload();
+		this.newbie.reload();
 		
 		this.service.reload();
 	}
@@ -102,5 +98,13 @@ public class EverInformations extends EPlugin {
 
 	public EInformationsService getService() {
 		return this.service;
+	}
+	
+	public ManagerAutoMessages getAutoMessages() {
+		return this.automessages;
+	}
+
+	public ManagerNewbie getNewbie() {
+		return this.newbie;
 	}
 }

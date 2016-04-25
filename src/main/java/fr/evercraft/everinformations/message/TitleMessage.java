@@ -14,7 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.automessages.title;
+package fr.evercraft.everinformations.message;
+
+import org.spongepowered.api.text.title.Title;
+
+import fr.evercraft.everapi.server.player.EPlayer;
 
 public class TitleMessage  {
 	private final int stay;
@@ -41,7 +45,7 @@ public class TitleMessage  {
 		return this.stay;
 	}
 
-	public int getInterval() {
+	public int getNext() {
 		return this.interval;
 	}
 	
@@ -59,6 +63,27 @@ public class TitleMessage  {
 	
 	public String getSubTitle() {
 		return this.subTitle;
+	}
+	
+	public boolean send(int priority, EPlayer player) {
+		player.sendTitle(priority, Title.builder()
+				.stay(this.stay)
+				.fadeIn(this.fadeIn)
+				.fadeOut(this.fadeOut)
+				.title(player.replaceVariable(this.title))
+				.subtitle(player.replaceVariable(this.subTitle))
+				.build());
+		return true;
+	}
+	
+	public void send(int priority, EPlayer player, EPlayer replace) {
+		player.sendTitle(priority, Title.builder()
+				.stay(this.stay)
+				.fadeIn(this.fadeIn)
+				.fadeOut(this.fadeOut)
+				.title(replace.replaceVariable(this.title))
+				.subtitle(replace.replaceVariable(this.subTitle))
+				.build());
 	}
 
 	@Override

@@ -14,34 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.automessages;
+package fr.evercraft.everinformations.newbie;
 
-import org.spongepowered.api.scheduler.Task;
-
+import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
 
-public abstract class AutoMessages {
-	public final static String IDENTIFIER = "everinformations.automessages";
+public abstract class Newbie {
+	public final static String PLAYER = "player";
+	public final static String OTHERS = "others";
+	
+	public final static String IDENTIFIER_PLAYER = "everinformations.newbie.player";
+	public final static String IDENTIFIER_OTHER = "everinformations.newbie.others";
 	
 	protected final EverInformations plugin;
-	
-	protected Task task;
-	
+
 	protected boolean enable;
-	protected int numero;
-	
-	public AutoMessages(final EverInformations plugin){
+
+	public Newbie(final EverInformations plugin) {	
 		this.plugin = plugin;
-				
-		this.enable = false;
-		this.numero = 0;
 	}
+
+	public abstract void reload();
 	
-	protected abstract void reload();
-	
-	protected abstract void start();
-	protected abstract void stop();
-	
-	protected abstract void next();
-	protected abstract void view();
+	public abstract void stop();
+
+	public abstract void addPlayer(EPlayer player);
+	public abstract void removePlayer(EPlayer player);
 }

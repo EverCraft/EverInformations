@@ -16,32 +16,29 @@
  */
 package fr.evercraft.everinformations.automessages;
 
-import org.spongepowered.api.scheduler.Task;
-
 import fr.evercraft.everinformations.EverInformations;
+import fr.evercraft.everinformations.automessages.actionbar.ActionBarAutoMessages;
+import fr.evercraft.everinformations.automessages.chat.ChatAutoMessages;
+import fr.evercraft.everinformations.automessages.title.TitleAutoMessages;
 
-public abstract class AutoMessages {
-	public final static String IDENTIFIER = "everinformations.automessages";
+public class ManagerAutoMessages {
+	private final EverInformations plugin;
 	
-	protected final EverInformations plugin;
+	private final ActionBarAutoMessages actionbar;
+	private final ChatAutoMessages chat;
+	private final TitleAutoMessages title;
 	
-	protected Task task;
-	
-	protected boolean enable;
-	protected int numero;
-	
-	public AutoMessages(final EverInformations plugin){
+	public ManagerAutoMessages(final EverInformations plugin) {
 		this.plugin = plugin;
-				
-		this.enable = false;
-		this.numero = 0;
+		
+		this.chat = new ChatAutoMessages(this.plugin);
+		this.actionbar = new ActionBarAutoMessages(this.plugin);
+		this.title = new TitleAutoMessages(this.plugin);
 	}
 	
-	protected abstract void reload();
-	
-	protected abstract void start();
-	protected abstract void stop();
-	
-	protected abstract void next();
-	protected abstract void view();
+	public void reload() {
+		this.chat.reload();
+		this.actionbar.reload();
+		this.title.reload();
+	}
 }

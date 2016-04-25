@@ -23,6 +23,7 @@ import java.util.List;
 import ninja.leaping.configurate.ConfigurationNode;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
+import fr.evercraft.everinformations.message.TitleMessage;
 
 public class TitleConfig extends EConfig {
 
@@ -49,16 +50,19 @@ public class TitleConfig extends EConfig {
 			message.put("subTitle", "&cSubTitle 1");
 			messages.add(message);
 			
-			message.put("title", "&aTitle 1");
-			message.put("subTitle", "&aSubTitle 1");
+			message = new HashMap<String, String>();
+			message.put("title", "&aTitle 2");
+			message.put("subTitle", "&aSubTitle 2");
 			messages.add(message);
 			
-			message.put("title", "&1Title 1");
-			message.put("subTitle", "&1SubTitle 1");
+			message = new HashMap<String, String>();
+			message.put("title", "&1Title 3");
+			message.put("subTitle", "&1SubTitle 3");
 			messages.add(message);
 			
-			message.put("title", "&2Title 1");
-			message.put("subTitle", "&2SubTitle 1");
+			message = new HashMap<String, String>();
+			message.put("title", "&2Title 4");
+			message.put("subTitle", "&2SubTitle 4");
 			messages.add(message);
 			
 			this.get("messages").setValue(messages);

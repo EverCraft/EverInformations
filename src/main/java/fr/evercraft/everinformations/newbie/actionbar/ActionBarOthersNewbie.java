@@ -14,25 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.automessages.actionbar;
+package fr.evercraft.everinformations.newbie.actionbar;
 
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.TimeUnit;
+
+import org.spongepowered.api.scheduler.Task;
 
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.priority.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
-import fr.evercraft.everinformations.automessages.AutoMessages;
 import fr.evercraft.everinformations.message.ActionBarMessage;
+import fr.evercraft.everinformations.newbie.Newbie;
 
-public class ActionBarAutoMessages extends AutoMessages {	
+public class ActionBarOthersNewbie extends Newbie {
 	private final ActionBarConfig config;
 	
 	private final CopyOnWriteArrayList<ActionBarMessage> messages;
-	
-	private int priority;
 
-	public ActionBarAutoMessages(final EverInformations plugin) {
+	private int priority;
+	
+	private EPlayer player;
+	private int numero;
+	private Task task;
+	
+	public ActionBarOthersNewbie(final EverInformations plugin) {
 		super(plugin);
 		
 		this.config = new ActionBarConfig(this.plugin);
@@ -43,29 +48,28 @@ public class ActionBarAutoMessages extends AutoMessages {
 
 	public void reload(){		
 		stop();
-
+		
 		this.numero = 0;
+		
 		if(this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getActionBar(IDENTIFIER);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(Newbie.IDENTIFIER_OTHER);
 		} else {
 			this.priority = PriorityService.DEFAULT;
 		}
 		
-		this.enable = this.config.isEnable();
+		this.enable = this.config.isOthersEnable();
 		this.messages.clear();
-		this.messages.addAll(this.config.getMessages());
+		this.messages.addAll(this.config.getOthersMessages());
 		
 		if (this.messages.size() == 0 && this.enable) {
-			this.plugin.getLogger().warn("ActionBarAutoMessages : There is no message");
+			this.plugin.getLogger().warn("ActionBarOthersNewbie : There is no message");
 			this.enable = false;
-			this.stop();
-		} else if (this.enable) {
-			this.start();
 		}
 	}
 
 	public void start() {
-		this.stop();
+		this.numero = 0;
+		
 		this.view();
 		this.task();
 	}
@@ -75,28 +79,36 @@ public class ActionBarAutoMessages extends AutoMessages {
 			this.task.cancel();
 			this.task = null;
 		}
+		this.player = null;
 	}
 	
 	public void task() {
 		ActionBarMessage message = this.getMessage();
 		
-		if(message.getNext() == 0) {
-			this.next();
-		} else {
-			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
-							.execute(() -> this.next())
-							.async()
-							.delay(message.getNext() + message.getStay(), TimeUnit.MILLISECONDS)
-							.name("ActionBarAutoMessages ActionBar")
-							.submit(this.plugin);
+		if(this.hasNext()) {
+			if(message.getNext() == 0) {
+				this.next();
+			} else {
+				this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
+								.execute(() -> this.next())
+								.async()
+								.delayTicks(message.getNext() + message.getStay())
+								.name("ActionBarOthersNewbie")
+								.submit(this.plugin);
+			}
 		}
 	}
 	
+	public ActionBarMessage getMessage() {
+		return this.messages.get(this.numero);
+	}
+	
+	private boolean hasNext() {
+		return this.numero < this.messages.size() - 1;
+	}
+
 	public void next() {		
 		this.numero++;
-		if(this.numero >= this.messages.size()){
-			this.numero = 0;
-		}
 		this.view();
 		this.task();
 	}
@@ -104,14 +116,27 @@ public class ActionBarAutoMessages extends AutoMessages {
 	protected void view() {
 		if(this.enable) {
 			ActionBarMessage message = this.getMessage();
-			this.plugin.getLogger().debug("ActionBarAutoMessages (priority='" + this.priority + "';actionBar='" + message + "')");
+			this.plugin.getLogger().debug("ActionBarOthersNewbie (priority='" + this.priority + "';title='" + message + "')");
+
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				message.send(this.priority, player);
+				if(!this.player.equals(player)) {
+					message.send(this.priority, player, this.player);
+				}
 			}
 		}
 	}
-	
-	public ActionBarMessage getMessage() {
-		return this.messages.get(this.numero);
+
+	@Override
+	public void addPlayer(EPlayer player) {
+		this.stop();
+		this.player = player;
+		this.start();
+	}
+
+	@Override
+	public void removePlayer(EPlayer player) {
+		if(this.player.equals(player)) {
+			this.stop();
+		}
 	}
 }
