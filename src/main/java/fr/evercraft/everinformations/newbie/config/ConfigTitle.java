@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.newbie.title;
+package fr.evercraft.everinformations.newbie.config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,23 +26,19 @@ import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.message.TitleMessage;
 import fr.evercraft.everinformations.newbie.Newbie;
 
-public class TitleConfig extends EConfig {
+public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 
-	public TitleConfig(final EverInformations plugin) {
+	public ConfigTitle(final EverInformations plugin) {
 		super(plugin, "newbie_title");
-	}
-	
-	public void reload() {
-		super.reload();
 	}
 	
 	@Override
 	protected void loadDefault() {
 		addDefault(Newbie.PLAYER + ".enable", true);
-		addDefault(Newbie.PLAYER + "interval", 200, "Ticks");
-		addDefault(Newbie.PLAYER + "stay", 200, "Ticks");
-		addDefault(Newbie.PLAYER + "fadeIn", 1, "Ticks");
-		addDefault(Newbie.PLAYER + "fadeOut", 1, "Ticks");
+		addDefault(Newbie.PLAYER + "interval", 0, "Seconds");
+		addDefault(Newbie.PLAYER + "stay", 20, "Seconds");
+		addDefault(Newbie.PLAYER + "fadeIn", 1, "Seconds");
+		addDefault(Newbie.PLAYER + "fadeOut", 1, "Seconds");
 		
 		if(this.get(Newbie.PLAYER + ".messages").isVirtual()) {
 			List<HashMap<String, String>> messages = new ArrayList<HashMap<String, String>>();
@@ -55,10 +51,10 @@ public class TitleConfig extends EConfig {
 		}
 		
 		addDefault(Newbie.OTHERS + ".enable", true);
-		addDefault(Newbie.OTHERS + ".interval", 200, "Ticks");
-		addDefault(Newbie.OTHERS + ".stay", 200, "Ticks");
-		addDefault(Newbie.OTHERS + ".fadeIn", 1, "Ticks");
-		addDefault(Newbie.OTHERS + ".fadeOut", 1, "Ticks");
+		addDefault(Newbie.OTHERS + ".interval", 0, "Seconds");
+		addDefault(Newbie.OTHERS + ".stay", 20, "Seconds");
+		addDefault(Newbie.OTHERS + ".fadeIn", 1, "Seconds");
+		addDefault(Newbie.OTHERS + ".fadeOut", 1, "Seconds");
 		
 		if(this.get(Newbie.OTHERS + ".messages").isVirtual()) {
 			List<HashMap<String, String>> messages = new ArrayList<HashMap<String, String>>();
@@ -70,6 +66,10 @@ public class TitleConfig extends EConfig {
 			this.get(Newbie.OTHERS + ".messages").setValue(messages);
 		}
 	}
+	
+	/*
+	 * Accesseurs
+	 */
 	
 	public boolean isPlayerEnable() {
 		return this.isEnable(Newbie.PLAYER);
@@ -95,30 +95,31 @@ public class TitleConfig extends EConfig {
 		return this.get(prefix + ".enable").getBoolean(false);
 	}
 	
-	private int getInterval(String prefix) {
-		return this.get(prefix + ".interval").getInt(200);
+	private double getInterval(String prefix) {
+		return this.get(prefix + ".interval").getDouble(0);
 	}
 	
-	private int getStay(String prefix) {
-		return this.get(prefix + ".stay").getInt(200);
+	private double getStay(String prefix) {
+		return this.get(prefix + ".stay").getDouble(20);
 	}
 	
-	private int getFadeIn(String prefix) {
-		return this.get(prefix + ".fadeIn").getInt(1);
+	private double getFadeIn(String prefix) {
+		return this.get(prefix + ".fadeIn").getDouble(1);
 	}
 	
-	private int getFadeOut(String prefix) {
-		return this.get(prefix + ".fadeOut").getInt(1);
+	private double getFadeOut(String prefix) {
+		return this.get(prefix + ".fadeOut").getDouble(1);
 	}
 	
 	private List<TitleMessage> getMessages(String prefix) {
 		List<TitleMessage> messages = new ArrayList<TitleMessage>();
 		
 		for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
-			int stay = config.getNode("stay").getInt(this.getStay(prefix));
-			int interval = config.getNode("next").getInt(this.getInterval(prefix));
-			int fadeIn = config.getNode("fadeIn").getInt(this.getFadeIn(prefix));
-			int fadeOut = config.getNode("fadeOut").getInt(this.getFadeOut(prefix));
+			double stay = config.getNode("stay").getDouble(this.getStay(prefix));
+			double interval = config.getNode("next").getDouble(this.getInterval(prefix));
+			double fadeIn = config.getNode("fadeIn").getDouble(this.getFadeIn(prefix));
+			double fadeOut = config.getNode("fadeOut").getDouble(this.getFadeOut(prefix));
+			
 			String title = this.plugin.getChat().replace(config.getNode("title").getString(""));
 			String subTitle = this.plugin.getChat().replace(config.getNode("subTitle").getString(""));
 			

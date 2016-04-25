@@ -23,15 +23,16 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import fr.evercraft.everapi.server.player.EPlayer;
 
-public class ChatMessage  {
-	private final long next;
+public class ChatMessage implements IMessage {
+	// En Secondes
+	private final double next;
 	
 	private final TextSerializer type;
 	
 	private final Optional<String> prefix;
 	private final String message;
 	
-	public ChatMessage(final long next, final TextSerializer type, final String prefix, final String message) {
+	public ChatMessage(final double next, final TextSerializer type, final String prefix, final String message) {
 		this.next = next;
 		this.type = type;
 		this.message = message;
@@ -43,15 +44,13 @@ public class ChatMessage  {
 		}
 	}
 
+	@Override
 	public long getNext() {
-		return this.next;
-	}
-
-	public String getMessage() {
-		return this.message;
+		return (long) (this.next * 1000);
 	}
 	
-	public boolean send(EPlayer player) {
+	@Override
+	public boolean send(int priority, EPlayer player) {
 		if(this.type.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessageVariables(this.prefix.orElse("") + this.message);
 		} else {
@@ -64,7 +63,8 @@ public class ChatMessage  {
 		return true;
 	}
 	
-	public void send(EPlayer player, EPlayer replace) {
+	@Override
+	public void send(int priority, EPlayer player, EPlayer replace) {
 		if(this.type.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessage(replace.replaceVariable(this.prefix.orElse("") + this.message));
 		} else {

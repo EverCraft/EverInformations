@@ -16,32 +16,128 @@
  */
 package fr.evercraft.everinformations.automessages;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
+
 import org.spongepowered.api.scheduler.Task;
 
+import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.priority.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
+import fr.evercraft.everinformations.automessages.AutoMessages;
+import fr.evercraft.everinformations.automessages.config.IConfig;
+import fr.evercraft.everinformations.message.IMessage;
 
-public abstract class AutoMessages {
+public class AutoMessages<T extends IMessage> {
+	public static enum Type {
+    	ACTION_BAR,
+    	TITLE,
+    	CHAT;
+    }
+	
 	public final static String IDENTIFIER = "everinformations.automessages";
 	
-	protected final EverInformations plugin;
+	private final EverInformations plugin;
 	
-	protected Task task;
+	private final Type type;
 	
-	protected boolean enable;
-	protected int numero;
+	private boolean enable;
+	private int numero;
 	
-	public AutoMessages(final EverInformations plugin){
+	private final IConfig<T> config;
+	private final CopyOnWriteArrayList<T> messages;
+	
+	private int priority;
+	private Task task;
+
+	public AutoMessages(final EverInformations plugin, IConfig<T> config, Type type) {
 		this.plugin = plugin;
-				
+		
 		this.enable = false;
 		this.numero = 0;
+		
+		this.type = type;
+		
+		this.config = config;
+		this.messages = new CopyOnWriteArrayList<T>();
+		
+		reload();
+	}
+
+	public void reload(){		
+		stop();
+
+		this.priority = PriorityService.DEFAULT;
+		if(this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
+			if(type.equals(Type.ACTION_BAR)) {
+				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getActionBar(IDENTIFIER);
+			} else if(type.equals(Type.TITLE)) {
+				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(IDENTIFIER);
+			}
+		}
+		
+		this.numero = 0;
+		this.enable = this.config.isEnable();
+		this.messages.clear();
+		this.messages.addAll(this.config.getMessages());
+		
+		if (this.messages.size() == 0 && this.enable) {
+			this.plugin.getLogger().warn("AutoMessages (type='" + this.type.name() + "') : There is no message");
+			this.enable = false;
+			this.stop();
+		} else if (this.enable) {
+			this.start();
+		}
+	}
+
+	public void start() {
+		this.stop();
+		this.view();
+		this.task();
+	}
+
+	public void stop() {
+		if (this.task != null) {
+			this.task.cancel();
+			this.task = null;
+		}
 	}
 	
-	protected abstract void reload();
+	public void task() {
+		T message = this.getMessage();
+		
+		if(message.getNext() == 0) {
+			this.next();
+		} else {
+			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
+							.execute(() -> this.next())
+							.async()
+							.delay(message.getNext(), TimeUnit.MILLISECONDS)
+							.name("AutoMessages (type='" + this.type.name() + "')")
+							.submit(this.plugin);
+		}
+	}
 	
-	protected abstract void start();
-	protected abstract void stop();
+	public void next() {		
+		this.numero++;
+		if(this.numero >= this.messages.size()){
+			this.numero = 0;
+		}
+		this.view();
+		this.task();
+	}
+
+	protected void view() {
+		if(this.enable) {
+			T message = this.getMessage();
+			this.plugin.getLogger().debug("AutoMessages (type='" + this.type.name() + "';priority='" + this.priority + "';actionBar='" + message + "')");
+			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+				message.send(this.priority, player);
+			}
+		}
+	}
 	
-	protected abstract void next();
-	protected abstract void view();
+	public T getMessage() {
+		return this.messages.get(this.numero);
+	}
 }

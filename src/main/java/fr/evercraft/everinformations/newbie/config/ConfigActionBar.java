@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.newbie.actionbar;
+package fr.evercraft.everinformations.newbie.config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,28 +26,28 @@ import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.message.ActionBarMessage;
 import fr.evercraft.everinformations.newbie.Newbie;
 
-public class ActionBarConfig extends EConfig {
+public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage> {
 
-	public ActionBarConfig(final EverInformations plugin) {
+	public ConfigActionBar(final EverInformations plugin) {
 		super(plugin, "newbie_actionbar");
-	}
-	
-	public void reload() {
-		super.reload();
 	}
 	
 	@Override
 	protected void loadDefault() {		
 		addDefault(Newbie.PLAYER + ".enable", true);
-		addDefault(Newbie.PLAYER + ".interval", 0, "Millisecondes");
-		addDefault(Newbie.PLAYER + ".stay", 200, "Millisecondes");
-		addDefault(Newbie.PLAYER + ".messages", Arrays.asList("&aWelcome &a<DISPLAYNAME_FORMAT> &4to the server!", "&4Welcome &a<DISPLAYNAME> &4to the server!"));
+		addDefault(Newbie.PLAYER + ".interval", 0, "Seconds");
+		addDefault(Newbie.PLAYER + ".stay", 20, "Seconds");
+		addDefault(Newbie.PLAYER + ".messages", Arrays.asList("&4Welcome &a<DISPLAYNAME_FORMAT> &4to the server!", "&4Welcome &a<DISPLAYNAME> &4to the server!"));
 		
 		addDefault(Newbie.OTHERS + ".enable", true);
-		addDefault(Newbie.OTHERS + ".interval", 0, "Millisecondes");
-		addDefault(Newbie.OTHERS + ".stay", 200, "Millisecondes");
+		addDefault(Newbie.OTHERS + ".interval", 0, "Seconds");
+		addDefault(Newbie.OTHERS + ".stay", 20, "Seconds");
 		addDefault(Newbie.OTHERS + ".messages", Arrays.asList("&a<DISPLAYNAME_FORMAT> &4is a new player."));
 	}
+	
+	/*
+	 * Accesseurs
+	 */
 	
 	public boolean isPlayerEnable() {
 		return this.isEnable(Newbie.PLAYER);
@@ -73,22 +73,22 @@ public class ActionBarConfig extends EConfig {
 		return this.get(prefix + ".enable").getBoolean(false);
 	}
 	
-	private int getInterval(String prefix) {
-		return this.get(prefix + ".interval").getInt(200);
+	private double getInterval(String prefix) {
+		return this.get(prefix + ".interval").getDouble(0);
 	}
 	
-	private int getStay(String prefix) {
-		return this.get(prefix + ".stay").getInt(200);
+	private double getStay(String prefix) {
+		return this.get(prefix + ".stay").getDouble(20);
 	}
 	
-	public List<ActionBarMessage> getMessages(String prefix) {
+	private List<ActionBarMessage> getMessages(String prefix) {
 		List<ActionBarMessage> messages = new ArrayList<ActionBarMessage>();
 		for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
 			if(config.getValue() instanceof String) {
 				messages.add(new ActionBarMessage(this.getStay(prefix), this.getInterval(prefix), this.plugin.getChat().replace(config.getString(""))));
 			} else {
-				long stay = config.getNode("stay").getLong(this.getStay(prefix));
-				long interval = config.getNode("next").getLong(this.getInterval(prefix));
+				double stay = config.getNode("stay").getDouble(this.getStay(prefix));
+				double interval = config.getNode("next").getDouble(this.getInterval(prefix));
 				String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
 				messages.add(new ActionBarMessage(stay, interval, message));
 			}

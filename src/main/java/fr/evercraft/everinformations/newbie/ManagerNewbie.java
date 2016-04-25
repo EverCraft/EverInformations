@@ -18,36 +18,41 @@ package fr.evercraft.everinformations.newbie;
 
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
-import fr.evercraft.everinformations.newbie.actionbar.ActionBarOthersNewbie;
-import fr.evercraft.everinformations.newbie.actionbar.ActionBarPlayerNewbie;
-import fr.evercraft.everinformations.newbie.chat.ChatOthersNewbie;
-import fr.evercraft.everinformations.newbie.chat.ChatPlayerNewbie;
-import fr.evercraft.everinformations.newbie.title.TitleOthersNewbie;
-import fr.evercraft.everinformations.newbie.title.TitlePlayerNewbie;
+import fr.evercraft.everinformations.message.ActionBarMessage;
+import fr.evercraft.everinformations.message.ChatMessage;
+import fr.evercraft.everinformations.message.TitleMessage;
+import fr.evercraft.everinformations.newbie.Newbie.Type;
+import fr.evercraft.everinformations.newbie.config.ConfigActionBar;
+import fr.evercraft.everinformations.newbie.config.ConfigChat;
+import fr.evercraft.everinformations.newbie.config.ConfigTitle;
+import fr.evercraft.everinformations.newbie.config.IConfig;
 
 public class ManagerNewbie {
 	private final EverInformations plugin;
 	
-	private final ChatPlayerNewbie chatPlayer;
-	private final ChatOthersNewbie chatOthers;
+	private final Newbie<ChatMessage> chatPlayer;
+	private final Newbie<ChatMessage> chatOthers;
 	
-	private final TitlePlayerNewbie titlePlayer;
-	private final TitleOthersNewbie titleOthers;
+	private final Newbie<TitleMessage> titlePlayer;
+	private final Newbie<TitleMessage> titleOthers;
 
-	private final ActionBarPlayerNewbie actionbarPlayer;
-	private final ActionBarOthersNewbie actionbarOthers;
+	private final Newbie<ActionBarMessage> actionbarPlayer;
+	private final Newbie<ActionBarMessage> actionbarOthers;
 	
 	public ManagerNewbie(final EverInformations plugin) {
 		this.plugin = plugin;
 		
-		this.chatPlayer = new ChatPlayerNewbie(this.plugin);
-		this.chatOthers = new ChatOthersNewbie(this.plugin);
+		IConfig<ChatMessage> config_chat = new ConfigChat(this.plugin);
+		this.chatPlayer = new NewbiePlayer<ChatMessage>(this.plugin, config_chat, Type.CHAT_PLAYER);
+		this.chatOthers = new NewbiePlayer<ChatMessage>(this.plugin, config_chat, Type.CHAT_OTHERS);
 		
-		this.titlePlayer = new TitlePlayerNewbie(this.plugin);
-		this.titleOthers = new TitleOthersNewbie(this.plugin);
+		IConfig<TitleMessage> config_title = new ConfigTitle(this.plugin);
+		this.titlePlayer = new NewbiePlayer<TitleMessage>(this.plugin, config_title, Type.TITLE_PLAYER);
+		this.titleOthers = new NewbieOthers<TitleMessage>(this.plugin, config_title, Type.TITLE_OTHERS);
 		
-		this.actionbarPlayer = new ActionBarPlayerNewbie(this.plugin);
-		this.actionbarOthers = new ActionBarOthersNewbie(this.plugin);
+		IConfig<ActionBarMessage> config_actionbar = new ConfigActionBar(this.plugin);
+		this.actionbarPlayer = new NewbiePlayer<ActionBarMessage>(this.plugin, config_actionbar, Type.ACTION_BAR_PLAYER);
+		this.actionbarOthers = new NewbieOthers<ActionBarMessage>(this.plugin, config_actionbar, Type.ACTION_BAR_OTHERS);
 	}
 	
 	public void reload() {

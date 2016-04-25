@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.automessages.title;
+package fr.evercraft.everinformations.automessages.config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,23 +25,19 @@ import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.message.TitleMessage;
 
-public class TitleConfig extends EConfig {
+public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 
-	public TitleConfig(final EverInformations plugin) {
+	public ConfigTitle(final EverInformations plugin) {
 		super(plugin, "automessages_title");
 	}
 	
-	public void reload() {
-		super.reload();
-	}
-	
 	@Override
-	public void loadDefault() {
+	protected void loadDefault() {
 		addDefault("enable", true);
-		addDefault("interval", 200, "Tick");
-		addDefault("stay", 200, "Tick");
-		addDefault("fadeIn", 1, "Tick");
-		addDefault("fadeOut", 1, "Tick");
+		addDefault("interval", 360, "Seconds");
+		addDefault("stay", 20, "Seconds");
+		addDefault("fadeIn", 1, "Seconds");
+		addDefault("fadeOut", 1, "Seconds");
 		
 		if(this.get("messages").isVirtual()) {
 			List<HashMap<String, String>> messages = new ArrayList<HashMap<String, String>>();
@@ -68,34 +64,42 @@ public class TitleConfig extends EConfig {
 			this.get("messages").setValue(messages);
 		}
 	}
+
+	/*
+	 * Fonctions
+	 */
+	
+	private double getInterval() {
+		return this.get("interval").getDouble(200);
+	}
+	
+	private double getStay() {
+		return this.get("stay").getDouble(200);
+	}
+	
+	private double getFadeIn() {
+		return this.get("fadeIn").getDouble(1);
+	}
+	
+	private double getFadeOut() {
+		return this.get("fadeOut").getDouble(1);
+	}
+	
+	/*
+	 * Accesseurs
+	 */
 	
 	public boolean isEnable() {
 		return this.get("enable").getBoolean(false);
 	}
 	
-	public int getInterval() {
-		return this.get("interval").getInt(200);
-	}
-	
-	public int getStay() {
-		return this.get("stay").getInt(200);
-	}
-	
-	public int getFadeIn() {
-		return this.get("fadeIn").getInt(1);
-	}
-	
-	public int getFadeOut() {
-		return this.get("fadeOut").getInt(1);
-	}
-	
 	public List<TitleMessage> getMessages() {
 		List<TitleMessage> messages = new ArrayList<TitleMessage>();
 		for(ConfigurationNode config : this.get("messages").getChildrenList()) {
-			int stay = config.getNode("stay").getInt(this.getStay());
-			int interval = config.getNode("next").getInt(this.getInterval());
-			int fadeIn = config.getNode("fadeIn").getInt(this.getFadeIn());
-			int fadeOut = config.getNode("fadeOut").getInt(this.getFadeOut());
+			double stay = config.getNode("stay").getDouble(this.getStay());
+			double interval = config.getNode("next").getDouble(this.getInterval());
+			double fadeIn = config.getNode("fadeIn").getDouble(this.getFadeIn());
+			double fadeOut = config.getNode("fadeOut").getDouble(this.getFadeOut());
 			String title = this.plugin.getChat().replace(config.getNode("title").getString(""));
 			String subTitle = this.plugin.getChat().replace(config.getNode("subTitle").getString(""));
 			messages.add(new TitleMessage(stay, interval, fadeIn, fadeOut, title, subTitle));

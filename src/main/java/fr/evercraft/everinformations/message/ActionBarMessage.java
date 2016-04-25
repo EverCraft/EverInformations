@@ -18,28 +18,26 @@ package fr.evercraft.everinformations.message;
 
 import fr.evercraft.everapi.server.player.EPlayer;
 
-public class ActionBarMessage  {
-	private final long stay;
-	private final long next;
+public class ActionBarMessage implements IMessage {
+	// En secondes
+	private final double stay;
+	private final double next;
 	
 	private final String message;
 
-	public ActionBarMessage(final long stay, long next, String message) {
+	public ActionBarMessage(final double stay, double next, String message) {
 		this.stay = stay;
 		this.next = next;
 		this.message = message;
 	}
-
+	
 	public long getStay() {
-		return this.stay;
+		return (long) (this.stay * 1000);
 	}
 
+	@Override
 	public long getNext() {
-		return this.next;
-	}
-
-	public String getMessage() {
-		return this.message;
+		return (long) ((this.next + this.stay) * 1000);
 	}
 
 	@Override
@@ -48,12 +46,14 @@ public class ActionBarMessage  {
 				+ ", message=" + message + "]";
 	}
 
+	@Override
 	public boolean send(int priority, EPlayer player) {
-		player.sendActionBar(priority, this.stay, player.replaceVariable(this.message));
+		player.sendActionBar(priority, this.getStay(), player.replaceVariable(this.message));
 		return true;
 	}
 
+	@Override
 	public void send(int priority, EPlayer player, EPlayer replace) {
-		player.sendActionBar(priority, this.stay, replace.replaceVariable(this.message));
+		player.sendActionBar(priority, this.getStay(), replace.replaceVariable(this.message));
 	}
 }

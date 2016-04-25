@@ -22,7 +22,6 @@ import org.spongepowered.api.plugin.Plugin;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everinformations.automessages.ManagerAutoMessages;
 import fr.evercraft.everinformations.newbie.ManagerNewbie;
-import fr.evercraft.everinformations.service.EInformationsService;
 
 @Plugin(id = "fr.evercraft.everinformations", 
 		name = "EverInformations", 
@@ -39,7 +38,6 @@ public class EverInformations extends EPlugin {
 	private EIMessage messages;
 	private EIPermission permissions;
 	
-	private EInformationsService service;
 	
 	private ManagerAutoMessages automessages;
 	private ManagerNewbie newbie;
@@ -53,9 +51,6 @@ public class EverInformations extends EPlugin {
 		this.messages = new EIMessage(this);
 		
 		this.getGame().getEventManager().registerListeners(this, new EIListener(this));
-		
-		this.service = new EInformationsService(this);
-		//this.getGame().getServiceManager().setProvider(this, InformationsService.class, this.service);
 	}
 
 	@Override
@@ -74,8 +69,6 @@ public class EverInformations extends EPlugin {
 		
 		this.automessages.reload();
 		this.newbie.reload();
-		
-		this.service.reload();
 	}
 	
 	protected void onDisable() {
@@ -96,10 +89,6 @@ public class EverInformations extends EPlugin {
 		return this.configs;
 	}
 
-	public EInformationsService getService() {
-		return this.service;
-	}
-	
 	public ManagerAutoMessages getAutoMessages() {
 		return this.automessages;
 	}

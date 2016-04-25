@@ -17,23 +17,28 @@
 package fr.evercraft.everinformations.automessages;
 
 import fr.evercraft.everinformations.EverInformations;
-import fr.evercraft.everinformations.automessages.actionbar.ActionBarAutoMessages;
-import fr.evercraft.everinformations.automessages.chat.ChatAutoMessages;
-import fr.evercraft.everinformations.automessages.title.TitleAutoMessages;
+import fr.evercraft.everinformations.automessages.AutoMessages.Type;
+import fr.evercraft.everinformations.automessages.config.ConfigActionBar;
+import fr.evercraft.everinformations.automessages.config.ConfigChat;
+import fr.evercraft.everinformations.automessages.config.ConfigTitle;
+import fr.evercraft.everinformations.message.ActionBarMessage;
+import fr.evercraft.everinformations.message.ChatMessage;
+import fr.evercraft.everinformations.message.TitleMessage;
 
 public class ManagerAutoMessages {
 	private final EverInformations plugin;
 	
-	private final ActionBarAutoMessages actionbar;
-	private final ChatAutoMessages chat;
-	private final TitleAutoMessages title;
+
+	private final AutoMessages<ChatMessage> chat;
+	private final AutoMessages<ActionBarMessage> actionbar;
+	private final AutoMessages<TitleMessage> title;
 	
 	public ManagerAutoMessages(final EverInformations plugin) {
 		this.plugin = plugin;
 		
-		this.chat = new ChatAutoMessages(this.plugin);
-		this.actionbar = new ActionBarAutoMessages(this.plugin);
-		this.title = new TitleAutoMessages(this.plugin);
+		this.chat = new AutoMessages<ChatMessage>(this.plugin, new ConfigChat(this.plugin), Type.CHAT);
+		this.actionbar = new AutoMessages<ActionBarMessage>(this.plugin, new ConfigActionBar(this.plugin), Type.ACTION_BAR);
+		this.title = new AutoMessages<TitleMessage>(this.plugin, new ConfigTitle(this.plugin), Type.TITLE);
 	}
 	
 	public void reload() {

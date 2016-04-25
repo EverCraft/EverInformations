@@ -19,20 +19,22 @@ package fr.evercraft.everinformations.message;
 import org.spongepowered.api.text.title.Title;
 
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.sponge.UtilsTick;
 
-public class TitleMessage  {
-	private final int stay;
-	private final int interval;
+public class TitleMessage implements IMessage {
 	
-	private final int fadeIn;
-	private final int fadeOut;
+	// En Secondes
+	private final double stay;
+	private final double next;
+	private final double fadeIn;
+	private final double fadeOut;
 	
 	private final String title;
 	private final String subTitle;
 
-	public TitleMessage(int stay, int interval, int fadeIn, int fadeOut, String title, String subTitle) {
+	public TitleMessage(double stay, double interval, double fadeIn, double fadeOut, String title, String subTitle) {
 		this.stay = stay;
-		this.interval = interval;
+		this.next = interval;
 		
 		this.fadeIn = fadeIn;
 		this.fadeOut = fadeOut;
@@ -41,46 +43,29 @@ public class TitleMessage  {
 		this.subTitle = subTitle;
 	}
 
-	public int getStay() {
-		return this.stay;
-	}
-
-	public int getNext() {
-		return this.interval;
+	@Override
+	public long getNext() {
+		return (long) ((this.next + this.stay) * 1000);
 	}
 	
-	public int getFadeIn() {
-		return this.fadeIn;
-	}
-
-	public int getFadeOut() {
-		return this.fadeOut;
-	}
-
-	public String getTitle() {
-		return this.title;
-	}
-	
-	public String getSubTitle() {
-		return this.subTitle;
-	}
-	
+	@Override
 	public boolean send(int priority, EPlayer player) {
 		player.sendTitle(priority, Title.builder()
-				.stay(this.stay)
-				.fadeIn(this.fadeIn)
-				.fadeOut(this.fadeOut)
+				.stay(UtilsTick.parseSeconds(this.stay))
+				.fadeIn(UtilsTick.parseSeconds(this.fadeIn))
+				.fadeOut(UtilsTick.parseSeconds(this.fadeOut))
 				.title(player.replaceVariable(this.title))
 				.subtitle(player.replaceVariable(this.subTitle))
 				.build());
 		return true;
 	}
 	
+	@Override
 	public void send(int priority, EPlayer player, EPlayer replace) {
 		player.sendTitle(priority, Title.builder()
-				.stay(this.stay)
-				.fadeIn(this.fadeIn)
-				.fadeOut(this.fadeOut)
+				.stay(UtilsTick.parseSeconds(this.stay))
+				.fadeIn(UtilsTick.parseSeconds(this.fadeIn))
+				.fadeOut(UtilsTick.parseSeconds(this.fadeOut))
 				.title(replace.replaceVariable(this.title))
 				.subtitle(replace.replaceVariable(this.subTitle))
 				.build());
@@ -88,7 +73,7 @@ public class TitleMessage  {
 
 	@Override
 	public String toString() {
-		return "TitleMessage [stay=" + stay + ", interval=" + interval
+		return "TitleMessage [stay=" + stay + ", next=" + next
 				+ ", fadeIn=" + fadeIn + ", fadeOut=" + fadeOut + ", title="
 				+ title + ", subTitle=" + subTitle + "]";
 	}

@@ -14,20 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.service;
+package fr.evercraft.everinformations.newbie.config;
 
-import fr.evercraft.everinformations.EverInformations;
+import java.util.List;
 
-public class EInformationsService {
+import fr.evercraft.everinformations.message.IMessage;
+
+public interface IConfig<T extends IMessage> {
+	public boolean isPlayerEnable();
+	public List<T> getPlayerMessages();
 	
-	private final EverInformations plugin;
-	
-	public EInformationsService(final EverInformations plugin) {
-		this.plugin = plugin;
-	}
-
-	public void reload() {
-		// TODO Auto-generated method stub
-		
-	}
+	public boolean isOthersEnable();
+	public List<T> getOthersMessages();
 }
