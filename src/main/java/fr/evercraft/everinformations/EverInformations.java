@@ -29,13 +29,13 @@ import fr.evercraft.everinformations.tablist.ManagerTabList;
 
 @Plugin(id = "fr.evercraft.everinformations", 
 		name = "EverInformations", 
-		version = "1.0", 
+		version = "1.1", 
 		description = "Manage informations",
 		url = "http://evercraft.fr/",
 		authors = {"rexbut"},
 		dependencies = {
-		    @Dependency(id = "fr.evercraft.everapi", version = "1.0"),
-		    @Dependency(id = "fr.evercraft.informations", version = "1.0", optional = true)
+		    @Dependency(id = "fr.evercraft.everapi", version = "1.1"),
+		    @Dependency(id = "fr.evercraft.informations", version = "1.1", optional = true)
 		})
 public class EverInformations extends EPlugin {
 	private EIConfig configs;
