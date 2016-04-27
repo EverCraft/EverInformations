@@ -33,7 +33,7 @@ public class ConfigList extends EConfig implements IConfig<ListObjective> {
 	@Override
 	protected void loadDefault() {
 		addDefault("enable", true);
-		addDefault("type", "HEALTH", "Type : HEALTH|DEATHS|PLAYER_KILLS|TOTAL_KILLS");
+		addDefault("type", "HEALTH", "Type : HEALTH|DEATHS|PLAYER_KILLS|TOTAL_KILLS|ONLINE_PLAYERS|BALANCE|PING|FOOD|LEVEL|XP");
 	}
 	
 	/*

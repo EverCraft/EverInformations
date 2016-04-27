@@ -51,6 +51,9 @@ public class EIListener {
 			
 			// NameTag
 			this.plugin.getNameTag().addPlayer(player);
+			
+			// TabList
+			this.plugin.getTabList().addPlayer(player);
 		}
 		
 		if(this.plugin.getGame().getServer().getOnlinePlayers().size() == 1) {
@@ -78,21 +81,24 @@ public class EIListener {
 			
 			// NameTag
 			this.plugin.getNameTag().removePlayer(player);
+			
+			// TabList
+			this.plugin.getTabList().removePlayer(player);
+		}
+		
+		if(this.plugin.getGame().getServer().getOnlinePlayers().size() == 1) {
+			this.plugin.getAutoMessages().stop();
 		}
 	}
 	
 	@Listener
-	public void onPlayerQuit(final KickPlayerEvent event) {
+	public void onPlayerKick(final KickPlayerEvent event) {
 		Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
 		
 		if(optPlayer.isPresent()) {
 			EPlayer player = optPlayer.get();
 			this.plugin.getConnection().kickPlayer(player, player.getGroup(), event.getMessage());
 			event.setMessageCancelled(true);
-		}
-		
-		if(this.plugin.getGame().getServer().getOnlinePlayers().size() == 1) {
-			this.plugin.getAutoMessages().stop();
 		}
 	}
 }

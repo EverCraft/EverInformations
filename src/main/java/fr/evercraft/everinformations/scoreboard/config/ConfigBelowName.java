@@ -36,7 +36,7 @@ public class ConfigBelowName extends EConfig implements IConfig<BelowNameObjecti
 	@Override
 	protected void loadDefault() {
 		addDefault("enable", true);
-		addDefault("type", "HEALTH", "Type : HEALTH|DEATHS|PLAYER_KILLS|TOTAL_KILLS");
+		addDefault("type", "HEALTH", "Type : HEALTH|DEATHS|PLAYER_KILLS|TOTAL_KILLS|ONLINE_PLAYERS|BALANCE|PING|FOOD|LEVEL|XP");
 		addDefault("name", "&4❤");
 	}
 	

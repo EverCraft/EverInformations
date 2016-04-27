@@ -34,11 +34,5 @@ public class EIConfig extends EConfig {
 	public void loadDefault() {
 		addDefault("debug", false, "Displays plugin performance in the logs");
 		addDefault("language", EMessage.ENGLISH, "Select language messages", "Examples : ", "  French : FR_fr", "  English : EN_en");
-		
-		addDefault("enable-format", true);
-	}
-	
-	public boolean enableIcons() {
-		return this.get("enable-icons").getBoolean(true);
 	}
 }

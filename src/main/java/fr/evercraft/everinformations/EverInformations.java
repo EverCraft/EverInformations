@@ -25,6 +25,7 @@ import fr.evercraft.everinformations.connection.ManagerConnection;
 import fr.evercraft.everinformations.nametag.ManagerNameTag;
 import fr.evercraft.everinformations.newbie.ManagerNewbie;
 import fr.evercraft.everinformations.scoreboard.ManagerScoreBoard;
+import fr.evercraft.everinformations.tablist.ManagerTabList;
 
 @Plugin(id = "fr.evercraft.everinformations", 
 		name = "EverInformations", 
@@ -49,6 +50,7 @@ public class EverInformations extends EPlugin {
 	
 	private ManagerScoreBoard scoreboard;
 	private ManagerNameTag nametag;
+	private ManagerTabList tablist;
 	
 	@Override
 	protected void onPreEnable() {
@@ -68,6 +70,7 @@ public class EverInformations extends EPlugin {
 		this.newbie = new ManagerNewbie(this);
 		
 		this.nametag = new ManagerNameTag(this);
+		this.tablist = new ManagerTabList(this);
 	}
 	
 	@Override
@@ -89,6 +92,7 @@ public class EverInformations extends EPlugin {
 		this.newbie.reload();
 		this.scoreboard.reload();
 		this.nametag.reload();
+		this.tablist.reload();
 	}
 	
 	protected void onDisable() {
@@ -127,5 +131,9 @@ public class EverInformations extends EPlugin {
 	
 	public ManagerNameTag getNameTag() {
 		return this.nametag;
+	}
+	
+	public ManagerTabList getTabList() {
+		return this.tablist;
 	}
 }

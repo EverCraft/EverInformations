@@ -26,8 +26,8 @@ import org.spongepowered.api.scoreboard.objective.displaymode.ObjectiveDisplayMo
 import fr.evercraft.everinformations.scoreboard.objective.score.Score.TypeScore;
 
 public enum ObjectiveType {
-	HEALTH(Criteria.HEALTH),
-	HEALTH_INTEGER(Criteria.HEALTH, ObjectiveDisplayModes.HEARTS),
+	HEALTH(Criteria.HEALTH, ObjectiveDisplayModes.HEARTS),
+	HEALTH_INTEGER(Criteria.HEALTH),
 	DEATHS(Criteria.DEATHS),
 	PLAYER_KILLS(Criteria.PLAYER_KILLS),
 	TOTAL_KILLS(Criteria.TOTAL_KILLS),
