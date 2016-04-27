@@ -85,7 +85,7 @@ public class AutoMessages<T extends IMessage> {
 			this.plugin.getLogger().warn("AutoMessages (type='" + this.type.name() + "') : There is no message");
 			this.enable = false;
 			this.stop();
-		} else if (this.enable) {
+		} else if (this.enable && !this.plugin.getGame().getServer().getOnlinePlayers().isEmpty()) {
 			this.start();
 		}
 	}

@@ -21,7 +21,6 @@ import java.util.Optional;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.living.humanoid.player.KickPlayerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
-
 import fr.evercraft.everapi.server.player.EPlayer;
 
 public class EIListener {
@@ -37,11 +36,21 @@ public class EIListener {
 		
 		if(optPlayer.isPresent()) {
 			EPlayer player = optPlayer.get();
+			
+			// Newbie
 			if(player.getFirstDatePlayed() == player.getLastDatePlayed()) {
 				this.plugin.getNewbie().addPlayer(player);
 			}
+			
+			// Connection
 			this.plugin.getConnection().joinPlayer(player, player.getGroup());
 			event.setMessageCancelled(true);
+
+			// ScoreBoard
+			this.plugin.getScoreBoard().addPlayer(player);
+			
+			// NameTag
+			this.plugin.getNameTag().addPlayer(player);
 		}
 		
 		if(this.plugin.getGame().getServer().getOnlinePlayers().size() == 1) {
@@ -55,11 +64,20 @@ public class EIListener {
 		
 		if(optPlayer.isPresent()) {
 			EPlayer player = optPlayer.get();
+			// Newbie
 			if(player.getFirstDatePlayed() == player.getLastDatePlayed()) {
 				this.plugin.getNewbie().removePlayer(player);
 			}
+			
+			// Connection
 			this.plugin.getConnection().quitPlayer(player, player.getGroup());
 			event.setMessageCancelled(true);
+			
+			// ScoreBoard
+			this.plugin.getScoreBoard().removePlayer(player);
+			
+			// NameTag
+			this.plugin.getNameTag().removePlayer(player);
 		}
 	}
 	

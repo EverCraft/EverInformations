@@ -22,7 +22,9 @@ import org.spongepowered.api.plugin.Plugin;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everinformations.automessages.ManagerAutoMessages;
 import fr.evercraft.everinformations.connection.ManagerConnection;
+import fr.evercraft.everinformations.nametag.ManagerNameTag;
 import fr.evercraft.everinformations.newbie.ManagerNewbie;
+import fr.evercraft.everinformations.scoreboard.ManagerScoreBoard;
 
 @Plugin(id = "fr.evercraft.everinformations", 
 		name = "EverInformations", 
@@ -31,7 +33,8 @@ import fr.evercraft.everinformations.newbie.ManagerNewbie;
 		url = "http://evercraft.fr/",
 		authors = {"rexbut"},
 		dependencies = {
-		    @Dependency(id = "fr.evercraft.everapi", version = "1.0")
+		    @Dependency(id = "fr.evercraft.everapi", version = "1.0"),
+		    @Dependency(id = "fr.evercraft.informations", version = "1.0", optional = true)
 		})
 public class EverInformations extends EPlugin {
 	private EIConfig configs;
@@ -43,6 +46,9 @@ public class EverInformations extends EPlugin {
 	private ManagerAutoMessages automessages;
 	private ManagerConnection connection;
 	private ManagerNewbie newbie;
+	
+	private ManagerScoreBoard scoreboard;
+	private ManagerNameTag nametag;
 	
 	@Override
 	protected void onPreEnable() {
@@ -60,12 +66,20 @@ public class EverInformations extends EPlugin {
 		this.automessages = new ManagerAutoMessages(this);
 		this.connection = new ManagerConnection(this);
 		this.newbie = new ManagerNewbie(this);
+		
+		this.nametag = new ManagerNameTag(this);
 	}
 	
 	@Override
 	protected void onCompleteEnable() {
 		new EICommand(this);
 	}
+	
+	@Override
+	protected void onStartServer() {
+		this.scoreboard = new ManagerScoreBoard(this);
+	}
+
 
 	protected void onReload(){
 		this.reloadConfigurations();
@@ -73,6 +87,8 @@ public class EverInformations extends EPlugin {
 		this.automessages.reload();
 		this.connection.reload();
 		this.newbie.reload();
+		this.scoreboard.reload();
+		this.nametag.reload();
 	}
 	
 	protected void onDisable() {
@@ -103,5 +119,13 @@ public class EverInformations extends EPlugin {
 	
 	public ManagerNewbie getNewbie() {
 		return this.newbie;
+	}
+	
+	public ManagerScoreBoard getScoreBoard() {
+		return this.scoreboard;
+	}
+	
+	public ManagerNameTag getNameTag() {
+		return this.nametag;
 	}
 }
