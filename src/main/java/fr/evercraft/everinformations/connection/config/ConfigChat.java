@@ -93,7 +93,7 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 				CommentedConfigurationNode config = group.getValue().getNode(connections.name());
 				List<ChatMessage> messages = new ArrayList<ChatMessage>();
 				
-				double interval_default = config.getNode("inverval").getDouble(0);
+				double interval_default = config.getNode("interval").getDouble(0);
 				String prefix_default = config.getNode("prefix").getString("");
 				
 				if(!config.getNode("message").isVirtual()) {

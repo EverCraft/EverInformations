@@ -53,8 +53,8 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 			message.put("type", Type.INFORMATIONS.name());
 			
 			HashMap<String, String> scores = new HashMap<String, String>();
-			scores.put("&aOnlines :", TypeScore.ONLINE_PLAYERS.name());
-			scores.put("&aEmerauds :", TypeScore.BALANCE.name());
+			scores.put("&aOnline :", TypeScore.ONLINE_PLAYERS.name());
+			scores.put("&aBalance :", TypeScore.BALANCE.name());
 			scores.put("&aPing :", TypeScore.PING.name());
 			scores.put("&aFood :", TypeScore.FOOD.name());
 			scores.put("&aHealth :", TypeScore.HEALTH.name());

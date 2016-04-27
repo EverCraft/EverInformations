@@ -91,7 +91,7 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 				List<TitleMessage> messages = new ArrayList<TitleMessage>();
 				
 				double stay_default = config.getNode("stay").getDouble(10);
-				double interval_default = config.getNode("inverval").getDouble(0);
+				double interval_default = config.getNode("interval").getDouble(0);
 				double fadeIn_default = config.getNode("fadeIn").getDouble(1);
 				double fadeOut_default = config.getNode("fadeOut").getDouble(1);
 				

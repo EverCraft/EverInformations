@@ -51,7 +51,7 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 		List<ActionBarMessage> messages = new ArrayList<ActionBarMessage>();
 		
 		double stay_default = this.get("stay").getDouble(300);
-		double interval_default = this.get("inverval").getDouble(20);
+		double interval_default = this.get("interval").getDouble(20);
 
 		for(ConfigurationNode config : this.get("messages").getChildrenList()) {
 			if(config.getValue() instanceof String) {

@@ -91,7 +91,7 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 				List<ActionBarMessage> messages = new ArrayList<ActionBarMessage>();
 				
 				double stay_default = config.getNode("stay").getDouble(10);
-				double interval_default = config.getNode("inverval").getDouble(0);
+				double interval_default = config.getNode("interval").getDouble(0);
 				
 				if(!config.getNode("message").isVirtual()) {
 					String message = this.plugin.getChat().replace(config.getNode("message").getString(""));

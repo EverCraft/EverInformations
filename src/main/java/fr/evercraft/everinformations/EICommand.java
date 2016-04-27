@@ -29,7 +29,6 @@ import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
-import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.pagination.ESubCommand;
 
 public class EICommand extends ECommand<EverInformations> {
@@ -99,18 +98,12 @@ public class EICommand extends ECommand<EverInformations> {
 				source.sendMessage(this.plugin.getPermissions().noPermission());
 			}
 		} else if(args.size() == 1) {
-			EPlayer player = (EPlayer)source;
 			if(args.get(0).equalsIgnoreCase("reload")) {
 				if(source.hasPermission(this.plugin.getPermissions().get("RELOAD"))) {
 					resultat = commandReload(source);
 				} else {
 					source.sendMessage(this.plugin.getPermissions().noPermission());
 				}
-			} else if(args.get(0).equalsIgnoreCase("add")) {
-				this.plugin.getScoreBoard().addPlayer(player);
-			} else if(args.get(0).equalsIgnoreCase("remove")) {
-				this.plugin.getScoreBoard().removePlayer(player);
-			} else if(args.get(0).equalsIgnoreCase("send")) {
 			} else {
 				source.sendMessage(help(source));
 			}
