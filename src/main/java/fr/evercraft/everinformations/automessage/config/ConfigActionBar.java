@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.automessages.config;
+package fr.evercraft.everinformations.automessage.config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +28,7 @@ import fr.evercraft.everinformations.message.ActionBarMessage;
 public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage>{
 
 	public ConfigActionBar(final EverInformations plugin) {
-		super(plugin, "automessages/automessages_actionbar");
+		super(plugin, "automessage/automessage_actionbar");
 	}
 	
 	@Override
@@ -36,7 +36,7 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 		addDefault("enable", true);
 		addDefault("interval", 300, "Seconds");
 		addDefault("stay", 20, "Seconds");
-		addDefault("messages", Arrays.asList("&1[ARROW] Message 1 ......", "&bMessage 2 ......", "&cMessage 3 ......", "&aMessage 4 ......"));
+		addDefault("messages", Arrays.asList("&1Message 1 ......", "&bMessage 2 ......", "&cMessage 3 ......", "&aMessage 4 ......"));
 	}
 	
 	/*
@@ -55,12 +55,19 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 
 		for(ConfigurationNode config : this.get("messages").getChildrenList()) {
 			if(config.getValue() instanceof String) {
-				messages.add(new ActionBarMessage(stay_default, interval_default, this.plugin.getChat().replace(config.getString(""))));
+				String message = this.plugin.getChat().replace(config.getString(""));
+				
+				if(!message.isEmpty()) {
+					messages.add(new ActionBarMessage(stay_default, interval_default, message));
+				}
 			} else {
 				double stay = config.getNode("stay").getDouble(stay_default);
 				double interval = config.getNode("next").getDouble(interval_default);
 				String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
-				messages.add(new ActionBarMessage(stay, interval, message));
+				
+				if(!message.isEmpty()) {
+					messages.add(new ActionBarMessage(stay, interval, message));
+				}
 			}
 		}
 		return messages;

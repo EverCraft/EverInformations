@@ -50,12 +50,24 @@ public class TitleMessage implements IMessage {
 		return (long) ((this.next + this.stay) * 1000);
 	}
 	
+	public int getStay() {
+		return UtilsTick.parseSeconds(this.stay);
+	}
+	
+	public int getFadeIn() {
+		return UtilsTick.parseSeconds(this.fadeIn);
+	}
+	
+	public int getFadeOut() {
+		return UtilsTick.parseSeconds(this.fadeOut);
+	}
+	
 	@Override
 	public boolean send(int priority, EPlayer player) {
 		return player.sendTitle(priority, Title.builder()
-				.stay(UtilsTick.parseSeconds(this.stay))
-				.fadeIn(UtilsTick.parseSeconds(this.fadeIn))
-				.fadeOut(UtilsTick.parseSeconds(this.fadeOut))
+				.stay(this.getStay())
+				.fadeIn(this.getFadeIn())
+				.fadeOut(this.getFadeOut())
 				.title(player.replaceVariable(this.title))
 				.subtitle(player.replaceVariable(this.subTitle))
 				.build());
@@ -64,9 +76,9 @@ public class TitleMessage implements IMessage {
 	@Override
 	public boolean send(int priority, EPlayer player, Text reason) {
 		return player.sendTitle(priority, Title.builder()
-				.stay(UtilsTick.parseSeconds(this.stay))
-				.fadeIn(UtilsTick.parseSeconds(this.fadeIn))
-				.fadeOut(UtilsTick.parseSeconds(this.fadeOut))
+				.stay(this.getStay())
+				.fadeIn(this.getFadeIn())
+				.fadeOut(this.getFadeOut())
 				.title(player.replaceVariable(this.title.replaceAll("<reason>", EChat.serialize(reason))))
 				.subtitle(player.replaceVariable(this.subTitle.replaceAll("<reason>", EChat.serialize(reason))))
 				.build());
@@ -75,9 +87,9 @@ public class TitleMessage implements IMessage {
 	@Override
 	public boolean send(int priority, EPlayer player, EPlayer replace) {
 		return player.sendTitle(priority, Title.builder()
-				.stay(UtilsTick.parseSeconds(this.stay))
-				.fadeIn(UtilsTick.parseSeconds(this.fadeIn))
-				.fadeOut(UtilsTick.parseSeconds(this.fadeOut))
+				.stay(this.getStay())
+				.fadeIn(this.getFadeIn())
+				.fadeOut(this.getFadeOut())
 				.title(replace.replaceVariable(this.title))
 				.subtitle(replace.replaceVariable(this.subTitle))
 				.build());
@@ -86,9 +98,9 @@ public class TitleMessage implements IMessage {
 	@Override
 	public boolean send(int priority, EPlayer player, EPlayer replace, Text reason) {
 		return player.sendTitle(priority, Title.builder()
-				.stay(UtilsTick.parseSeconds(this.stay))
-				.fadeIn(UtilsTick.parseSeconds(this.fadeIn))
-				.fadeOut(UtilsTick.parseSeconds(this.fadeOut))
+				.stay(this.getStay())
+				.fadeIn(this.getFadeIn())
+				.fadeOut(this.getFadeOut())
 				.title(replace.replaceVariable(this.title.replaceAll("<reason>", EChat.serialize(reason))))
 				.subtitle(replace.replaceVariable(this.subTitle.replaceAll("<reason>", EChat.serialize(reason))))
 				.build());

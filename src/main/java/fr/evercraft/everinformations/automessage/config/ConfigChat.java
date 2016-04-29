@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.automessages.config;
+package fr.evercraft.everinformations.automessage.config;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,15 +31,15 @@ import fr.evercraft.everinformations.message.ChatMessage;
 public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 
 	public ConfigChat(final EverInformations plugin) {
-		super(plugin, "automessages/automessages_chat");
+		super(plugin, "automessage/automessage_chat");
 	}
 	
 	@Override
 	protected void loadDefault() {
 		addDefault("enable", true);
-		addDefault("interval", 300, "Seconds");
+		addDefault("format", 300, "Seconds");
 		addDefault("prefix", "&f[&4Ever&6&lNews&f] ");
-		addDefault("messages", Arrays.asList("&1[ARROW] Message 1 ......", "&bMessage 2 ......", "&cMessage 3 ......", "&aMessage 4 ......"));
+		addDefault("messages", Arrays.asList("&1Message 1 ......", "&bMessage 2 ......", "&cMessage 3 ......", "&aMessage 4 ......"));
 	}
 
 	/*
@@ -61,20 +61,25 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 				String prefix_message = this.plugin.getChat().replace(prefix_default);
 				String message = this.plugin.getChat().replace(config.getString(""));
 				
-				messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_message, message));
+				if(!message.isEmpty()) {
+					messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_message, message));
+				}
 			} else {
 				double interval = config.getNode("next").getDouble(interval_default);
 				String prefix = this.plugin.getChat().replace(config.getNode("prefix").getString(prefix_default));
 				String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
 				
-				String type_string = config.getNode("type").getString("");
-				TextSerializer type = TextSerializers.FORMATTING_CODE;
-				if(type_string.equalsIgnoreCase("JSON")) {
-					type = TextSerializers.JSON;
-				} else if(type_string.equalsIgnoreCase("TEXT_XML")) {
-					type = TextSerializers.TEXT_XML;
+				String format_string = config.getNode("format").getString("");
+				TextSerializer format = TextSerializers.FORMATTING_CODE;
+				if(format_string.equalsIgnoreCase("JSON")) {
+					format = TextSerializers.JSON;
+				} else if(format_string.equalsIgnoreCase("TEXT_XML")) {
+					format = TextSerializers.TEXT_XML;
 				}
-				messages.add(new ChatMessage(interval, type, prefix, message));
+				
+				if(!message.isEmpty()) {
+					messages.add(new ChatMessage(interval, format, prefix, message));
+				}
 			}
 		}
 		return messages;

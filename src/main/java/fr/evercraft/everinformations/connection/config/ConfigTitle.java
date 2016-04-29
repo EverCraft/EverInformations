@@ -97,8 +97,11 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 				
 				if(!config.getNode("title").isVirtual() || !config.getNode("subTitle").isVirtual()) {
 					String title = this.plugin.getChat().replace(config.getNode("title").getString(""));
-					String subtitle = this.plugin.getChat().replace(config.getNode("subTitle").getString(""));
-					messages.add(new TitleMessage(stay_default, interval_default, fadeIn_default, fadeOut_default, title, subtitle));
+					String subTitle = this.plugin.getChat().replace(config.getNode("subTitle").getString(""));
+					
+					if(!title.isEmpty() || !subTitle.isEmpty()) {
+						messages.add(new TitleMessage(stay_default, interval_default, fadeIn_default, fadeOut_default, title, subTitle));
+					}
 				} else {
 					for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
 						double stay = config_messages.getNode("stay").getDouble(stay_default);
@@ -109,7 +112,9 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 						String title = this.plugin.getChat().replace(config_messages.getNode("title").getString(""));
 						String subTitle = this.plugin.getChat().replace(config_messages.getNode("subTitle").getString(""));
 						
-						messages.add(new TitleMessage(stay, interval, fadeIn, fadeOut, title, subTitle));
+						if(!title.isEmpty() || !subTitle.isEmpty()) {
+							messages.add(new TitleMessage(stay, interval, fadeIn, fadeOut, title, subTitle));
+						}
 					}
 				}
 				groups.put((String) group.getKey(), messages);

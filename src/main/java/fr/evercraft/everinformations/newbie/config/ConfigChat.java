@@ -82,7 +82,7 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 		double interval_default = this.get(prefix + ".inverval").getDouble(2);
 		String prefix_default = this.get(prefix + ".prefix").getString("");
 		
-		if(!this.get(prefix + ".message").isVirtual()) {
+		if(this.get(prefix + ".messages ").isVirtual()) {
 			String message = this.plugin.getChat().replace(this.get(prefix + ".message").getString(""));
 			messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_default, message));
 		} else {
@@ -91,7 +91,9 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 					String prefix_message = this.plugin.getChat().replace(prefix_default);
 					String message = this.plugin.getChat().replace(config.getString(""));
 					
-					messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_message, message));
+					if(!message.isEmpty()) {
+						messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_message, message));
+					}
 				} else {
 					double interval = config.getNode("next").getDouble(interval_default);
 					String prefix_message = this.plugin.getChat().replace(config.getNode("prefix").getString(prefix_default));
@@ -104,7 +106,10 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 					} else if(type_string.equalsIgnoreCase("TEXT_XML")) {
 						type = TextSerializers.TEXT_XML;
 					}
-					messages.add(new ChatMessage(interval, type, prefix_message, message));
+					
+					if(!message.isEmpty()) {
+						messages.add(new ChatMessage(interval, type, prefix_message, message));
+					}
 				}
 			}
 		}

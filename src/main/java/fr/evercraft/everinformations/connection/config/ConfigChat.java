@@ -98,7 +98,9 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 				
 				if(!config.getNode("message").isVirtual()) {
 					String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
-					messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_default, message));
+					if(!message.isEmpty()) {
+						messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_default, message));
+					}
 				} else {
 					for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
 						if(config_messages.getValue() instanceof String) {
@@ -115,7 +117,9 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 							} else if(type_string.equalsIgnoreCase("TEXT_XML")) {
 								type = TextSerializers.TEXT_XML;
 							}
-							messages.add(new ChatMessage(interval, type, prefix_message, message));
+							if(!message.isEmpty()) {
+								messages.add(new ChatMessage(interval, type, prefix_message, message));
+							}
 						}
 					}
 				}

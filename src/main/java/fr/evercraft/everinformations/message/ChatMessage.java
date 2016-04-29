@@ -29,14 +29,14 @@ public class ChatMessage implements IMessage {
 	// En Secondes
 	private final double next;
 	
-	private final TextSerializer type;
+	private final TextSerializer format;
 	
 	private final Optional<String> prefix;
 	private final String message;
 	
-	public ChatMessage(final double next, final TextSerializer type, final String prefix, final String message) {
+	public ChatMessage(final double next, final TextSerializer format, final String prefix, final String message) {
 		this.next = next;
-		this.type = type;
+		this.format = format;
 		this.message = message;
 		
 		if(prefix.isEmpty()) {
@@ -53,13 +53,13 @@ public class ChatMessage implements IMessage {
 	
 	@Override
 	public boolean send(int priority, EPlayer player) {
-		if(this.type.equals(TextSerializers.FORMATTING_CODE)) {
+		if(this.format.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessageVariables(this.prefix.orElse("") + this.message);
 		} else {
 			if(this.prefix.isPresent()) {
-				player.sendMessage(player.replaceVariable(this.prefix.get()).concat(this.type.deserialize(this.message)));
+				player.sendMessage(player.replaceVariable(this.prefix.get()).concat(this.format.deserialize(this.message)));
 			} else {
-				player.sendMessage(this.type.deserialize(this.message));
+				player.sendMessage(this.format.deserialize(this.message));
 			}
 		}
 		return true;
@@ -67,13 +67,13 @@ public class ChatMessage implements IMessage {
 	
 	@Override
 	public boolean send(int priority, EPlayer player, Text reason) {
-		if(this.type.equals(TextSerializers.FORMATTING_CODE)) {
+		if(this.format.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessageVariables((this.prefix.orElse("") + this.message).replaceAll("<reason>", EChat.serialize(reason)));
 		} else {
 			if(this.prefix.isPresent()) {
-				player.sendMessage(player.replaceVariable(this.prefix.get()).concat(this.type.deserialize(this.message)));
+				player.sendMessage(player.replaceVariable(this.prefix.get()).concat(this.format.deserialize(this.message)));
 			} else {
-				player.sendMessage(this.type.deserialize(this.message));
+				player.sendMessage(this.format.deserialize(this.message));
 			}
 		}
 		return true;
@@ -81,13 +81,13 @@ public class ChatMessage implements IMessage {
 	
 	@Override
 	public boolean send(int priority, EPlayer player, EPlayer replace) {
-		if(this.type.equals(TextSerializers.FORMATTING_CODE)) {
+		if(this.format.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessage(replace.replaceVariable(this.prefix.orElse("") + this.message));
 		} else {
 			if(this.prefix.isPresent()) {
-				player.sendMessage(replace.replaceVariable(this.prefix.get()).concat(this.type.deserialize(this.message)));
+				player.sendMessage(replace.replaceVariable(this.prefix.get()).concat(this.format.deserialize(this.message)));
 			} else {
-				player.sendMessage(this.type.deserialize(this.message));
+				player.sendMessage(this.format.deserialize(this.message));
 			}
 		}
 		return true;
@@ -95,13 +95,13 @@ public class ChatMessage implements IMessage {
 	
 	@Override
 	public boolean send(int priority, EPlayer player, EPlayer replace, Text reason) {
-		if(this.type.equals(TextSerializers.FORMATTING_CODE)) {
+		if(this.format.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessage(replace.replaceVariable((this.prefix.orElse("") + this.message).replaceAll("<reason>", EChat.serialize(reason))));
 		} else {
 			if(this.prefix.isPresent()) {
-				player.sendMessage(replace.replaceVariable(this.prefix.get()).concat(this.type.deserialize(this.message)));
+				player.sendMessage(replace.replaceVariable(this.prefix.get()).concat(this.format.deserialize(this.message)));
 			} else {
-				player.sendMessage(this.type.deserialize(this.message));
+				player.sendMessage(this.format.deserialize(this.message));
 			}
 		}
 		return true;

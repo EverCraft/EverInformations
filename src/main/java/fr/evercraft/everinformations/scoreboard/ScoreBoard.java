@@ -182,9 +182,9 @@ public class ScoreBoard<T extends EObjective> {
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				objective.add(this.priority, player);
 			}
-			
 			// Si l'Objective ne s'actualise pas tout seul
 			if(!objective.isUpdate()) {
+				this.stopUpdate();
 				this.task_update = this.plugin.getGame().getScheduler().createTaskBuilder()
 						.execute(() -> {
 							this.plugin.getLogger().debug("ScoreBoard Update (type='" + this.display.getName() + "';priority='" + this.priority + "';objective='" + objective + "')");

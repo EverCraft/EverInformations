@@ -95,7 +95,9 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 				
 				if(!config.getNode("message").isVirtual()) {
 					String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
-					messages.add(new ActionBarMessage(stay_default, interval_default, message));
+					if(!message.isEmpty()) {
+						messages.add(new ActionBarMessage(stay_default, interval_default, message));
+					}
 				} else {
 					for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
 						if(config_messages.getValue() instanceof String) {
@@ -104,7 +106,9 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 							double stay = config_messages.getNode("stay").getDouble(stay_default);
 							double interval = config_messages.getNode("next").getDouble(interval_default);
 							String message = this.plugin.getChat().replace(config_messages.getNode("message").getString(""));
-							messages.add(new ActionBarMessage(stay, interval, message));
+							if(!message.isEmpty()) {
+								messages.add(new ActionBarMessage(stay, interval, message));
+							}
 						}
 					}
 				}

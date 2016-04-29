@@ -20,7 +20,7 @@ import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
 import fr.evercraft.everapi.plugin.EPlugin;
-import fr.evercraft.everinformations.automessages.ManagerAutoMessages;
+import fr.evercraft.everinformations.automessage.ManagerAutoMessage;
 import fr.evercraft.everinformations.connection.ManagerConnection;
 import fr.evercraft.everinformations.nametag.ManagerNameTag;
 import fr.evercraft.everinformations.newbie.ManagerNewbie;
@@ -44,7 +44,7 @@ public class EverInformations extends EPlugin {
 	private EIPermission permissions;
 	
 	
-	private ManagerAutoMessages automessages;
+	private ManagerAutoMessage automessages;
 	private ManagerConnection connection;
 	private ManagerNewbie newbie;
 	
@@ -65,7 +65,7 @@ public class EverInformations extends EPlugin {
 
 	@Override
 	protected void onEnable() {
-		this.automessages = new ManagerAutoMessages(this);
+		this.automessages = new ManagerAutoMessage(this);
 		this.connection = new ManagerConnection(this);
 		this.newbie = new ManagerNewbie(this);
 		
@@ -113,7 +113,7 @@ public class EverInformations extends EPlugin {
 		return this.configs;
 	}
 
-	public ManagerAutoMessages getAutoMessages() {
+	public ManagerAutoMessage getAutoMessages() {
 		return this.automessages;
 	}
 

@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.automessages;
+package fr.evercraft.everinformations.automessage;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
@@ -24,11 +24,11 @@ import org.spongepowered.api.scheduler.Task;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.priority.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
-import fr.evercraft.everinformations.automessages.AutoMessages;
-import fr.evercraft.everinformations.automessages.config.IConfig;
+import fr.evercraft.everinformations.automessage.AutoMessage;
+import fr.evercraft.everinformations.automessage.config.IConfig;
 import fr.evercraft.everinformations.message.IMessage;
 
-public class AutoMessages<T extends IMessage> {
+public class AutoMessage<T extends IMessage> {
 	public static enum Type {
     	ACTION_BAR,
     	TITLE,
@@ -50,7 +50,7 @@ public class AutoMessages<T extends IMessage> {
 	private int priority;
 	private Task task;
 
-	public AutoMessages(final EverInformations plugin, IConfig<T> config, Type type) {
+	public AutoMessage(final EverInformations plugin, IConfig<T> config, Type type) {
 		this.plugin = plugin;
 		
 		this.enable = false;

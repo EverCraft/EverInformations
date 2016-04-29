@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.automessages.config;
+package fr.evercraft.everinformations.automessage.config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ import fr.evercraft.everinformations.message.TitleMessage;
 public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 
 	public ConfigTitle(final EverInformations plugin) {
-		super(plugin, "automessages/automessages_title");
+		super(plugin, "automessage/automessage_title");
 	}
 	
 	@Override
@@ -42,23 +42,16 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 		if(this.get("messages").isVirtual()) {
 			List<HashMap<String, String>> messages = new ArrayList<HashMap<String, String>>();
 			HashMap<String, String> message = new HashMap<String, String>();
-			message.put("title", "&cTitle 1");
-			message.put("subTitle", "&cSubTitle 1");
+			message.put("title", "&6✖ &1Title 1 &6✖");
+			message.put("subTitle", "&2SubTitle 1");
 			messages.add(message);
 			
 			message = new HashMap<String, String>();
-			message.put("title", "&aTitle 2");
-			message.put("subTitle", "&aSubTitle 2");
+			message.put("title", "&6✖ &1Title 2 &6✖");
 			messages.add(message);
 			
 			message = new HashMap<String, String>();
-			message.put("title", "&1Title 3");
-			message.put("subTitle", "&1SubTitle 3");
-			messages.add(message);
-			
-			message = new HashMap<String, String>();
-			message.put("title", "&2Title 4");
-			message.put("subTitle", "&2SubTitle 4");
+			message.put("subTitle", "&aSubTitle 3");
 			messages.add(message);
 			
 			this.get("messages").setValue(messages);
@@ -88,7 +81,10 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 			double fadeOut = config.getNode("fadeOut").getDouble(fadeOut_default);
 			String title = this.plugin.getChat().replace(config.getNode("title").getString(""));
 			String subTitle = this.plugin.getChat().replace(config.getNode("subTitle").getString(""));
-			messages.add(new TitleMessage(stay, interval, fadeIn, fadeOut, title, subTitle));
+			
+			if(!title.isEmpty() || !subTitle.isEmpty()) {
+				messages.add(new TitleMessage(stay, interval, fadeIn, fadeOut, title, subTitle));
+			}
 		}
 		return messages;
 	}

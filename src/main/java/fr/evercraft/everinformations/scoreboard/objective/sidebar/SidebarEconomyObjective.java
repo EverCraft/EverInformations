@@ -72,7 +72,7 @@ public class SidebarEconomyObjective extends SidebarObjective {
 
 	@Override
 	public void update() {
-		this.objective = Objective.builder()
+		Objective objective = Objective.builder()
 				.name(ScoreBoard.SIDEBAR_IDENTIFIER)
 				.displayName(this.titles.get(0).getTitle())
 				.criterion(Criteria.DUMMY)
@@ -83,10 +83,12 @@ public class SidebarEconomyObjective extends SidebarObjective {
 				Optional<User> user = this.plugin.getEServer().getUser(player.getKey());
 				// Si le User existe bien
 				if(user.isPresent()){
-					this.objective.getOrCreateScore(EChat.of(message.replaceAll("<player>",user.get().getName()))).setScore(player.getValue().intValue());
+					this.plugin.getLogger().warn("update : " + user.get().getName());
+					objective.getOrCreateScore(EChat.of(message.replaceAll("<player>",user.get().getName()))).setScore(player.getValue().intValue());
 				}
 			}
 		}
+		this.objective = objective;
 	}
 	
 	@Override

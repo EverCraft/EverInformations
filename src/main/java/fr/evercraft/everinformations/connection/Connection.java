@@ -122,4 +122,8 @@ public abstract class Connection<T extends IMessage> {
 		}
 		return Arrays.asList();
 	}
+
+	public boolean isEnable() {
+		return this.enable;
+	}
 }

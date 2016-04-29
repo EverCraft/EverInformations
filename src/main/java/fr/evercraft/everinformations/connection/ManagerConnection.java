@@ -102,4 +102,8 @@ public class ManagerConnection {
 		this.actionbarPlayer.kickPlayer(player, subject, reason);
 		this.actionbarOthers.kickPlayer(player, subject, reason);
 	}
+	
+	public boolean isEnableChat() {
+		return this.chatPlayer.isEnable() || this.chatPlayer.isEnable();
+	}
 }

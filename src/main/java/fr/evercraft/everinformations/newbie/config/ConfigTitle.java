@@ -103,18 +103,28 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 		double fadeIn_default = this.get(prefix + ".fadeIn").getDouble(1);
 		double fadeOut_default = this.get(prefix + ".fadeOut").getDouble(1);
 		
-		for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
-			double stay = config.getNode("stay").getDouble(stay_default);
-			double interval = config.getNode("next").getDouble(interval_default);
-			double fadeIn = config.getNode("fadeIn").getDouble(fadeIn_default);
-			double fadeOut = config.getNode("fadeOut").getDouble(fadeOut_default);
+		if(this.get(prefix + ".messages").isVirtual()) {
+			String title = this.plugin.getChat().replace(this.get(prefix + ".title").getString(""));
+			String subTitle = this.plugin.getChat().replace(this.get(prefix + ".subTitle").getString(""));
 			
-			String title = this.plugin.getChat().replace(config.getNode("title").getString(""));
-			String subTitle = this.plugin.getChat().replace(config.getNode("subTitle").getString(""));
-			
-			messages.add(new TitleMessage(stay, interval, fadeIn, fadeOut, title, subTitle));
+			if(!title.isEmpty() || !subTitle.isEmpty()) {
+				messages.add(new TitleMessage(stay_default, interval_default, fadeIn_default, fadeOut_default, title, subTitle));
+			}
+		} else {
+			for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
+				double stay = config.getNode("stay").getDouble(stay_default);
+				double interval = config.getNode("next").getDouble(interval_default);
+				double fadeIn = config.getNode("fadeIn").getDouble(fadeIn_default);
+				double fadeOut = config.getNode("fadeOut").getDouble(fadeOut_default);
+				
+				String title = this.plugin.getChat().replace(config.getNode("title").getString(""));
+				String subTitle = this.plugin.getChat().replace(config.getNode("subTitle").getString(""));
+				
+				if(!title.isEmpty() || !subTitle.isEmpty()) {
+					messages.add(new TitleMessage(stay, interval, fadeIn, fadeOut, title, subTitle));
+				}
+			}
 		}
-		
 		return messages;
 	}
 }

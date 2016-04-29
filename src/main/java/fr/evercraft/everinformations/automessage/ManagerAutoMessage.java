@@ -14,31 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.automessages;
+package fr.evercraft.everinformations.automessage;
 
 import fr.evercraft.everinformations.EverInformations;
-import fr.evercraft.everinformations.automessages.AutoMessages.Type;
-import fr.evercraft.everinformations.automessages.config.ConfigActionBar;
-import fr.evercraft.everinformations.automessages.config.ConfigChat;
-import fr.evercraft.everinformations.automessages.config.ConfigTitle;
+import fr.evercraft.everinformations.automessage.AutoMessage.Type;
+import fr.evercraft.everinformations.automessage.config.ConfigActionBar;
+import fr.evercraft.everinformations.automessage.config.ConfigChat;
+import fr.evercraft.everinformations.automessage.config.ConfigTitle;
 import fr.evercraft.everinformations.message.ActionBarMessage;
 import fr.evercraft.everinformations.message.ChatMessage;
 import fr.evercraft.everinformations.message.TitleMessage;
 
-public class ManagerAutoMessages {
+public class ManagerAutoMessage {
 	private final EverInformations plugin;
 	
 
-	private final AutoMessages<ChatMessage> chat;
-	private final AutoMessages<ActionBarMessage> actionbar;
-	private final AutoMessages<TitleMessage> title;
+	private final AutoMessage<ChatMessage> chat;
+	private final AutoMessage<ActionBarMessage> actionbar;
+	private final AutoMessage<TitleMessage> title;
 	
-	public ManagerAutoMessages(final EverInformations plugin) {
+	public ManagerAutoMessage(final EverInformations plugin) {
 		this.plugin = plugin;
 		
-		this.chat = new AutoMessages<ChatMessage>(this.plugin, new ConfigChat(this.plugin), Type.CHAT);
-		this.actionbar = new AutoMessages<ActionBarMessage>(this.plugin, new ConfigActionBar(this.plugin), Type.ACTION_BAR);
-		this.title = new AutoMessages<TitleMessage>(this.plugin, new ConfigTitle(this.plugin), Type.TITLE);
+		this.chat = new AutoMessage<ChatMessage>(this.plugin, new ConfigChat(this.plugin), Type.CHAT);
+		this.actionbar = new AutoMessage<ActionBarMessage>(this.plugin, new ConfigActionBar(this.plugin), Type.ACTION_BAR);
+		this.title = new AutoMessage<TitleMessage>(this.plugin, new ConfigTitle(this.plugin), Type.TITLE);
 	}
 	
 	public void reload() {

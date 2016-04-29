@@ -34,18 +34,28 @@ public class EIListener {
 	public void onPlayerJoin(final ClientConnectionEvent.Join event) {
 		Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
 		
+		// Chargement du EPlayer
 		if(optPlayer.isPresent()) {
 			EPlayer player = optPlayer.get();
 			
 			// Newbie
 			if(player.getFirstDatePlayed() == player.getLastDatePlayed()) {
 				this.plugin.getNewbie().addPlayer(player);
+				
+				if(this.plugin.getConfigs().isNewbieAndConnection()) {
+					// Connection
+					this.plugin.getConnection().joinPlayer(player, player.getGroup());
+				}
+			} else {
+				// Connection
+				this.plugin.getConnection().joinPlayer(player, player.getGroup());
 			}
 			
-			// Connection
-			this.plugin.getConnection().joinPlayer(player, player.getGroup());
-			event.setMessageCancelled(true);
-
+			// Supprime le message par défaut
+			if(this.plugin.getConnection().isEnableChat()) {
+				event.setMessageCancelled(true);
+			}
+			
 			// ScoreBoard
 			this.plugin.getScoreBoard().addPlayer(player);
 			
@@ -56,6 +66,7 @@ public class EIListener {
 			this.plugin.getTabList().addPlayer(player);
 		}
 		
+		// Active l'AutoMessage
 		if(this.plugin.getGame().getServer().getOnlinePlayers().size() == 1) {
 			this.plugin.getAutoMessages().start();
 		}
@@ -65,6 +76,7 @@ public class EIListener {
 	public void onPlayerQuit(final ClientConnectionEvent.Disconnect event) {		
 		Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
 		
+		// Chargement du EPlayer
 		if(optPlayer.isPresent()) {
 			EPlayer player = optPlayer.get();
 			// Newbie
@@ -74,7 +86,11 @@ public class EIListener {
 			
 			// Connection
 			this.plugin.getConnection().quitPlayer(player, player.getGroup());
-			event.setMessageCancelled(true);
+			
+			// Supprime le message par défaut
+			if(this.plugin.getConnection().isEnableChat()) {
+				event.setMessageCancelled(true);
+			}
 			
 			// ScoreBoard
 			this.plugin.getScoreBoard().removePlayer(player);
@@ -86,6 +102,7 @@ public class EIListener {
 			this.plugin.getTabList().removePlayer(player);
 		}
 		
+		// Désactive l'AutoMessage
 		if(this.plugin.getGame().getServer().getOnlinePlayers().size() == 1) {
 			this.plugin.getAutoMessages().stop();
 		}
@@ -95,10 +112,14 @@ public class EIListener {
 	public void onPlayerKick(final KickPlayerEvent event) {
 		Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
 		
+		// Chargement du EPlayer
 		if(optPlayer.isPresent()) {
 			EPlayer player = optPlayer.get();
 			this.plugin.getConnection().kickPlayer(player, player.getGroup(), event.getMessage());
-			event.setMessageCancelled(true);
+			
+			if(this.plugin.getConnection().isEnableChat()) {
+				event.setMessageCancelled(true);
+			}
 		}
 	}
 }

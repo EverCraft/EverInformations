@@ -34,5 +34,11 @@ public class EIConfig extends EConfig {
 	public void loadDefault() {
 		addDefault("debug", false, "Displays plugin performance in the logs");
 		addDefault("language", EMessage.ENGLISH, "Select language messages", "Examples : ", "  French : FR_fr", "  English : EN_en");
+		
+		addDefault("newbie-and-connection", true);
+	}
+	
+	public boolean isNewbieAndConnection() {
+		return this.get("player-newbie-and-connection").getBoolean(false);
 	}
 }
