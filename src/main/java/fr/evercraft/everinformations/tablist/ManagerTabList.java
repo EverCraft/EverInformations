@@ -22,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 import org.spongepowered.api.scheduler.Task;
 
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everapi.services.priority.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.tablist.config.ConfigTabList;
 
@@ -36,8 +35,6 @@ public class ManagerTabList {
 	
 	private final ConfigTabList config;
 	private final CopyOnWriteArrayList<TabListMessage> tablists;
-	
-	private int priority;
 	
 	private Task task;
 	private Task task_update;
@@ -57,8 +54,6 @@ public class ManagerTabList {
 
 	public void reload(){		
 		stop();
-
-		this.priority = PriorityService.DEFAULT;
 		
 		this.numero = 0;
 		this.enable = this.config.isEnable();
@@ -123,9 +118,8 @@ public class ManagerTabList {
 		if(this.enable) {
 			TabListMessage tablist = this.getTabList();
 			this.plugin.getLogger().debug("TabList add (player='" + player.getIdentifier() + "';"
-														+ "priority='" + this.priority + "';"
 														+ "tablist='" + tablist + "')");
-			tablist.add(this.priority, player);
+			tablist.add(0, player);
 		}
 	}
 	
@@ -133,7 +127,6 @@ public class ManagerTabList {
 		if(this.enable) {
 			TabListMessage tablist = this.getTabList();
 			this.plugin.getLogger().debug("TabList remove (player='" + player.getIdentifier() + "';"
-														+ "priority='" + this.priority + "';"
 														+ "tablist='" + tablist + "')");
 			tablist.remove(player);
 		}
@@ -142,7 +135,7 @@ public class ManagerTabList {
 	public void next() {
 		this.stopUpdate();
 		this.getTabList().stop();
-		
+
 		this.numero++;
 		if(this.numero >= this.tablists.size()){
 			this.numero = 0;
@@ -155,18 +148,14 @@ public class ManagerTabList {
 		if(this.enable) {
 			TabListMessage tablist = this.getTabList();
 			tablist.start();
-			this.plugin.getLogger().debug("TabList (priority='" + this.priority + "';objective='" + tablist + "')");
-			
-			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				tablist.add(this.priority, player);
-			}
-			
+			this.plugin.getLogger().debug("TabList (objective='" + tablist + "')");
+
 			this.stopUpdate();
 			// Si l'Objective ne s'actualise pas tout seul
 			if(!tablist.isUpdate()) {
 				this.task_update = this.plugin.getGame().getScheduler().createTaskBuilder()
 						.execute(() -> {
-							this.plugin.getLogger().debug("TabList Update (priority='" + this.priority + "';tablist='" + tablist + "')");
+							this.plugin.getLogger().debug("TabList Update (tablist='" + tablist + "')");
 							this.getTabList().update();
 						})
 						.async()

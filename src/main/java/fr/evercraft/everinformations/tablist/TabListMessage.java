@@ -17,7 +17,10 @@
 package fr.evercraft.everinformations.tablist;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+
+import com.google.common.collect.Sets;
 
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
@@ -25,7 +28,9 @@ import fr.evercraft.everapi.services.priority.PriorityService;
 import fr.evercraft.everinformations.scoreboard.objective.EObjective;
 import fr.evercraft.everinformations.scoreboard.objective.score.Score.TypeScore;
 
-public class TabListMessage  extends EObjective {
+public class TabListMessage extends EObjective {
+	
+	private final Set<TypeScore> scores;
 	
 	private final String header;
 	private final String footer;
@@ -35,61 +40,91 @@ public class TabListMessage  extends EObjective {
 
 		this.header = header;
 		this.footer = footer;
-	}
-	
-	/**
-	 * En Millisecondes
-	 * @return
-	 */
-	public long getNext() {
-		return (long) (this.stay * 1000);
-	}
-	
-	/**
-	 * En Millisecondes
-	 * @return
-	 */
-	public long getUpdate() {
-		return (long) (this.update * 1000);
-	}
-
-	public boolean add(int priority, EPlayer player) {
-		if(!this.header.isEmpty()) {
-			player.getTabList().setHeader(player.replaceVariable(this.header));
+		
+		this.scores = Sets.newConcurrentHashSet();
+		this.update = true;
+		
+		for(TypeScore score : TypeScore.values()) {
+			if(this.header.contains("<" + score.name() + ">") || this.footer.contains("<" + score.name() + ">")) {
+				this.scores.add(score);
+				if(!score.isUpdate()) {
+					this.update = false;
+				}
+			}
 		}
-		if(!this.footer.isEmpty()) {
-			player.getTabList().setFooter(player.replaceVariable(this.footer));
-		}
-		return true;
 	}
 	
-	public boolean remove(EPlayer player) {
-		player.getTabList().setHeaderAndFooter(null, null);
-		return true;
-	}
+	/*
+	 * Activation
+	 */
 
-	public boolean start() {
-		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-			this.add(PriorityService.DEFAULT, player);
+	@Override
+	public boolean start() {		
+		for(TypeScore type : this.scores) {
+			type.addListener(this.plugin, this);
 		}
 		return false;
 	}
 
-	public boolean stop() {
-		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-			this.remove(player);
+	@Override
+	public boolean stop() {		
+		for(TypeScore type : this.scores) {
+			type.removeListener(this.plugin, this);
+		}
+		
+		
+		return true;
+	}
+	
+	/*
+	 * Player
+	 */
+	
+	@Override
+	public boolean add(int priority, EPlayer player) {
+		return this.add(player);
+	}
+	
+	public boolean add(EPlayer player) {
+		if(player.sendTabList(ManagerTabList.IDENTIFIER)) {
+			if(this.header.isEmpty()) {
+				player.getTabList().setHeader(null);
+			} else {
+				player.getTabList().setHeader(player.replaceVariable(this.header));
+			}
+			
+			if(this.footer.isEmpty()) {
+				player.getTabList().setFooter(null);
+			} else {
+				player.getTabList().setFooter(player.replaceVariable(this.footer));
+			}
 		}
 		return true;
 	}
 	
+	@Override
+	public boolean remove(EPlayer player) {
+		player.getTabList().setHeaderAndFooter(null, null);
+		return true;
+	}
+	
+	/*
+	 * Update 
+	 */
+	
+	@Override
 	public void update() {
-		start();
+		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+			this.add(PriorityService.DEFAULT, player);
+		}
 	}
 
+	@Override
 	public void update(TypeScore score) {
-		start();
+		this.update();
 	}
 
+	@Override
 	public void update(UUID uuid, TypeScore score) {
 		Optional<EPlayer> player = this.plugin.getEServer().getEPlayer(uuid);
 		if(player.isPresent()) {
@@ -97,14 +132,11 @@ public class TabListMessage  extends EObjective {
 		}
 	}
 
-	public boolean isUpdate() {
-		return false;
-	}
-
 	@Override
 	public String toString() {
-		return "TabListMessage [stay=" + stay + ", update=" + update 
-				+ ", header=" + header + ", footer=" + footer + "]";
+		return "TabListMessage [scores=" + scores + ", header=" + header
+				+ ", footer=" + footer + ", stay=" + stay + ", update_time="
+				+ update_time + ", update=" + update + "]";
 	}
 	
 }

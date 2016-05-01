@@ -62,7 +62,7 @@ public class ManagerNameTag {
 				Text teamRepresentation = player.getTeamRepresentation();
 				
 				for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-					other.addNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
+					other.sendNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
 				}
 			}
 		}
@@ -84,9 +84,9 @@ public class ManagerNameTag {
 			
 			for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 				if(!player.equals(other)) {
-					other.addNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
+					other.sendNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
 				}
-				player.addNameTag(IDENTIFIER, other.getTeamRepresentation(), EChat.of(other.getOption(this.prefix).orElse("")), EChat.of(other.getOption(this.suffix).orElse("")));
+				player.sendNameTag(IDENTIFIER, other.getTeamRepresentation(), EChat.of(other.getOption(this.prefix).orElse("")), EChat.of(other.getOption(this.suffix).orElse("")));
 			}
 		}
 	}
