@@ -36,9 +36,19 @@ public class EIConfig extends EConfig {
 		addDefault("language", EMessage.ENGLISH, "Select language messages", "Examples : ", "  French : FR_fr", "  English : EN_en");
 		
 		addDefault("newbie-and-connection", true);
+		
+		addDefault("vanish-connection-fake", true);
 	}
 	
+	/**
+	 * Afficher les deux messages : première connexion et de connexion
+	 * @return True si on affiche les deux messages
+	 */
 	public boolean isNewbieAndConnection() {
 		return this.get("player-newbie-and-connection").getBoolean(false);
+	}
+
+	public boolean isVanishFake() {
+		return this.get("vanish-connection-fake").getBoolean(false);
 	}
 }

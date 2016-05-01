@@ -17,7 +17,6 @@
 package fr.evercraft.everinformations.newbie.config;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import ninja.leaping.configurate.ConfigurationNode;
@@ -39,13 +38,15 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 	protected void loadDefault() {
 		addDefault(Newbie.PLAYER + ".enable", true);
 		addDefault(Newbie.PLAYER + ".prefix", "");
-		addDefault(Newbie.PLAYER + ".interval", 2, "Seconds");
-		addDefault(Newbie.PLAYER + ".message", "&4Welcome &a<DISPLAYNAME_FORMAT> &4to the server!");
+		if(this.get(Newbie.PLAYER + ".messages").isVirtual()) {
+			addDefault(Newbie.PLAYER + ".message", "&4Welcome &a<DISPLAYNAME_FORMAT> &4to the server!");
+		}
 		
 		addDefault(Newbie.OTHERS + ".enable", true);
 		addDefault(Newbie.OTHERS + ".prefix", "");
-		addDefault(Newbie.OTHERS + ".interval", 2, "Seconds");
-		addDefault(Newbie.OTHERS + ".messages", Arrays.asList("&a<DISPLAYNAME_FORMAT> &4is a new player.", "&4Want to welcome &a<DISPLAYNAME_FORMAT>"));
+		if(this.get(Newbie.OTHERS + ".messages").isVirtual()) {
+			addDefault(Newbie.OTHERS + ".message", "&a<DISPLAYNAME_FORMAT> &4is a new player.");
+		}
 	}
 	
 	/*
@@ -82,9 +83,11 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 		double interval_default = this.get(prefix + ".inverval").getDouble(2);
 		String prefix_default = this.get(prefix + ".prefix").getString("");
 		
-		if(this.get(prefix + ".messages ").isVirtual()) {
+		if(this.get(prefix + ".messages").isVirtual()) {
 			String message = this.plugin.getChat().replace(this.get(prefix + ".message").getString(""));
-			messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_default, message));
+			if(!message.isEmpty()) {
+				messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_default, message));
+			}
 		} else {
 			for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
 				if(config.getValue() instanceof String) {

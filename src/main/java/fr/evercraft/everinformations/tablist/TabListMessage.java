@@ -22,24 +22,17 @@ import java.util.UUID;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.priority.PriorityService;
+import fr.evercraft.everinformations.scoreboard.objective.EObjective;
 import fr.evercraft.everinformations.scoreboard.objective.score.Score.TypeScore;
 
-public class TabListMessage  {
-	
-	private final EPlugin plugin;
-	
-	// En secondes
-	private final double stay;
-	private final double update;
+public class TabListMessage  extends EObjective {
 	
 	private final String header;
 	private final String footer;
 	
 	public TabListMessage(EPlugin plugin, double stay, double update, String header, String footer) {
-		this.plugin = plugin;
-		this.stay = stay;
-		this.update = update;
-		
+		super(plugin, stay, update);
+
 		this.header = header;
 		this.footer = footer;
 	}
@@ -107,4 +100,11 @@ public class TabListMessage  {
 	public boolean isUpdate() {
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "TabListMessage [stay=" + stay + ", update=" + update 
+				+ ", header=" + header + ", footer=" + footer + "]";
+	}
+	
 }

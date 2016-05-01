@@ -21,7 +21,10 @@ import java.util.Optional;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.living.humanoid.player.KickPlayerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
+
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.essentials.event.VanishEvent;
+import fr.evercraft.everapi.services.essentials.event.VanishEvent.Action;
 
 public class EIListener {
 	private EverInformations plugin;
@@ -108,6 +111,9 @@ public class EIListener {
 		}
 	}
 	
+	/*
+	 * Pas encore implementer
+	 */
 	@Listener
 	public void onPlayerKick(final KickPlayerEvent event) {
 		Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
@@ -119,6 +125,17 @@ public class EIListener {
 			
 			if(this.plugin.getConnection().isEnableChat()) {
 				event.setMessageCancelled(true);
+			}
+		}
+	}
+	
+	@Listener
+    public void vanishEvent(VanishEvent event) {
+		if(this.plugin.getConfigs().isVanishFake()) {
+			if(event.getAction().equals(Action.ADD)) {
+				this.plugin.getConnection().quitPlayer(event.getEPlayer(), event.getEPlayer().getGroup());
+			} else {
+				this.plugin.getConnection().joinPlayer(event.getEPlayer(), event.getEPlayer().getGroup());
 			}
 		}
 	}

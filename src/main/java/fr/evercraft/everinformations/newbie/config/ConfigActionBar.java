@@ -17,7 +17,6 @@
 package fr.evercraft.everinformations.newbie.config;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import ninja.leaping.configurate.ConfigurationNode;
@@ -35,14 +34,16 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 	@Override
 	protected void loadDefault() {		
 		addDefault(Newbie.PLAYER + ".enable", true);
-		addDefault(Newbie.PLAYER + ".interval", 0, "Seconds");
 		addDefault(Newbie.PLAYER + ".stay", 20, "Seconds");
-		addDefault(Newbie.PLAYER + ".messages", Arrays.asList("&4Welcome &a<DISPLAYNAME_FORMAT> &4to the server!", "&4Welcome &a<DISPLAYNAME> &4to the server!"));
+		if(this.get(Newbie.PLAYER + ".messages").isVirtual()) {
+			addDefault(Newbie.PLAYER + ".message", "&4Welcome &a<DISPLAYNAME_FORMAT> &4to the server!");
+		}
 		
 		addDefault(Newbie.OTHERS + ".enable", true);
-		addDefault(Newbie.OTHERS + ".interval", 0, "Seconds");
 		addDefault(Newbie.OTHERS + ".stay", 20, "Seconds");
-		addDefault(Newbie.OTHERS + ".message", "&a<DISPLAYNAME_FORMAT> &4is a new player.");
+		if(this.get(Newbie.OTHERS + ".messages").isVirtual()) {
+			addDefault(Newbie.OTHERS + ".message", "&a<DISPLAYNAME_FORMAT> &4is a new player.");
+		}
 	}
 	
 	/*
@@ -79,9 +80,11 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 		double stay_default = this.get(prefix + ".stay").getDouble(10);
 		double interval_default = this.get(prefix + ".inverval").getDouble(0);
 		
-		if(!this.get(prefix + ".message").isVirtual()) {
+		if(this.get(prefix + ".messages").isVirtual()) {
 			String message = this.plugin.getChat().replace(this.get(prefix + ".message").getString(""));
-			messages.add(new ActionBarMessage(stay_default, interval_default, message));
+			if(!message.isEmpty()) {
+				messages.add(new ActionBarMessage(stay_default, interval_default, message));
+			}
 		} else {
 			for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
 				if(config.getValue() instanceof String) {

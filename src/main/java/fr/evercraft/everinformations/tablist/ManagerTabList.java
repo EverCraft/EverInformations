@@ -83,6 +83,8 @@ public class ManagerTabList {
 	}
 
 	public void stop() {
+		this.stopUpdate();
+		
 		if (this.task != null) {
 			this.task.cancel();
 			this.task = null;
@@ -120,7 +122,7 @@ public class ManagerTabList {
 	public void addPlayer(EPlayer player) {
 		if(this.enable) {
 			TabListMessage tablist = this.getTabList();
-			this.plugin.getLogger().debug("ScoreBoard add (player='" + player.getIdentifier() + "';"
+			this.plugin.getLogger().debug("TabList add (player='" + player.getIdentifier() + "';"
 														+ "priority='" + this.priority + "';"
 														+ "tablist='" + tablist + "')");
 			tablist.add(this.priority, player);
@@ -130,7 +132,7 @@ public class ManagerTabList {
 	public void removePlayer(EPlayer player) {
 		if(this.enable) {
 			TabListMessage tablist = this.getTabList();
-			this.plugin.getLogger().debug("ScoreBoard remove (player='" + player.getIdentifier() + "';"
+			this.plugin.getLogger().debug("TabList remove (player='" + player.getIdentifier() + "';"
 														+ "priority='" + this.priority + "';"
 														+ "tablist='" + tablist + "')");
 			tablist.remove(player);
@@ -159,6 +161,7 @@ public class ManagerTabList {
 				tablist.add(this.priority, player);
 			}
 			
+			this.stopUpdate();
 			// Si l'Objective ne s'actualise pas tout seul
 			if(!tablist.isUpdate()) {
 				this.task_update = this.plugin.getGame().getScheduler().createTaskBuilder()

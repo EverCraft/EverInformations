@@ -39,7 +39,9 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 	@Override
 	protected void loadDefault() {		
 		addDefault(Connection.PLAYER + ".enable", true);
-		addDefault(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".subTitle", "&7&l[&2+&7&l] <DISPLAYNAME_FORMAT> &7joined the game");
+		if(this.get(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
+			addDefault(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".subTitle", "&7&l[&2+&7&l] <DISPLAYNAME_FORMAT> &7joined the game");
+		}
 		
 		addDefault(Connection.OTHERS + ".enable", true);
 		addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".subTitle", "&7&l[&2+&7&l] <DISPLAYNAME_FORMAT> &7joined the game");
@@ -95,7 +97,7 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 				double fadeIn_default = config.getNode("fadeIn").getDouble(1);
 				double fadeOut_default = config.getNode("fadeOut").getDouble(1);
 				
-				if(!config.getNode("title").isVirtual() || !config.getNode("subTitle").isVirtual()) {
+				if(config.getNode("messages").isVirtual()) {
 					String title = this.plugin.getChat().replace(config.getNode("title").getString(""));
 					String subTitle = this.plugin.getChat().replace(config.getNode("subTitle").getString(""));
 					

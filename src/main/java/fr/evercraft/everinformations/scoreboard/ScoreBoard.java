@@ -62,11 +62,11 @@ public class ScoreBoard<T extends EObjective> {
 		this.config = config;
 		this.objectives = new CopyOnWriteArrayList<T>();
 		
-		reload();
+		this.reload();
 	}
 
 	public void reload(){		
-		stop();
+		this.stop();
 
 		this.priority = PriorityService.DEFAULT;
 		if(this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
@@ -92,22 +92,29 @@ public class ScoreBoard<T extends EObjective> {
 		}
 	}
 
-	public void start() {
-		this.stop();
-		this.view();
-		
-		if(this.objectives.size() > 1) {
-			this.task();
+	public boolean start() {		
+		if(this.task == null) {
+			this.view();
+			
+			if(this.objectives.size() > 1) {
+				this.task();
+			}
+			return true;
 		}
+		return false;
 	}
 
-	public void stop() {
+	public void stop() {		
+		this.stopUpdate();
+		
+		if(!this.objectives.isEmpty()) {
+			this.getObjective().stop();
+		}
+		
 		if (this.task != null) {
 			this.task.cancel();
 			this.task = null;
 		}
-		
-		this.stopUpdate();
 		
 		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			Optional<Objective> objective = player.getScoreboard().getObjective(getIgentifier());
@@ -117,24 +124,27 @@ public class ScoreBoard<T extends EObjective> {
 		}
 	}
 	
-	public void stopUpdate() {
+	public void stopUpdate() {		
 		if (this.task_update != null) {
 			this.task_update.cancel();
 			this.task_update = null;
 		}
 	}
 	
-	public void task() {
+	public void task() {		
 		T objective = this.getObjective();
 		
 		if(objective.getNext() == 0) {
 			this.next();
 		} else {
 			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
-							.execute(() -> this.next())
+							.execute(() -> {
+								this.plugin.getLogger().debug("ScoreBoard Task (type='" + this.display.getName() + "';priority='" + this.priority + "')");
+								this.next();
+							})
 							.async()
 							.delay(objective.getNext(), TimeUnit.MILLISECONDS)
-							.name("ScoreBoard (type='" + this.display.getName() + "')")
+							.name("ScoreBoard (type='" + this.display.getName() + "') " + System.currentTimeMillis())
 							.submit(this.plugin);
 		}
 	}
@@ -161,7 +171,7 @@ public class ScoreBoard<T extends EObjective> {
 		}
 	}
 	
-	public void next() {
+	public void next() {		
 		this.stopUpdate();
 		this.getObjective().stop();
 		
@@ -174,26 +184,28 @@ public class ScoreBoard<T extends EObjective> {
 	}
 
 	protected void view() {
-		if(this.enable) {
+		if(this.enable) {			
 			T objective = this.getObjective();
 			objective.start();
 			this.plugin.getLogger().debug("ScoreBoard (type='" + this.display.getName() + "';priority='" + this.priority + "';objective='" + objective + "')");
 			
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+				this.plugin.getLogger().warn("view add = " + player.getName());
 				objective.add(this.priority, player);
 			}
+			
+			this.stopUpdate();
 			// Si l'Objective ne s'actualise pas tout seul
 			if(!objective.isUpdate()) {
-				this.stopUpdate();
 				this.task_update = this.plugin.getGame().getScheduler().createTaskBuilder()
 						.execute(() -> {
-							this.plugin.getLogger().debug("ScoreBoard Update (type='" + this.display.getName() + "';priority='" + this.priority + "';objective='" + objective + "')");
+							this.plugin.getLogger().debug("ScoreBoard Update (type='" + this.display.getName() + "';priority='" + this.priority + "';objective='" + this.getObjective() + "')");
 							this.getObjective().update();
 						})
 						.async()
 						.delay(objective.getUpdate(), TimeUnit.MILLISECONDS)
 						.interval(objective.getUpdate(), TimeUnit.MILLISECONDS)
-						.name("ScoreBoard Update (type='" + this.display.getName() + "')")
+						.name("ScoreBoard Update (type='" + this.display.getName() + "') " + System.currentTimeMillis())
 						.submit(this.plugin);
 			}
 		}

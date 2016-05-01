@@ -28,11 +28,15 @@ public class EIMessage extends EMessage {
 	public void loadDefault() {
 		// Prefix
 		addDefault("prefix", "[&4Ever&6&lInformations&f] ");
+		
+		addDefault("scoreboard.empty", "&aAucun joueur", "&aNo player");
 	}
 
 	@Override
 	public void loadConfig() {
 		// Prefix
 		addMessage("PREFIX", "prefix");
+		
+		addMessage("SCOREBOARD_EMPTY", "scoreboard.empty");
 	}
 }

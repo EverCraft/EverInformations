@@ -45,6 +45,8 @@ public abstract class SidebarObjective extends EObjective {
 
 	@Override
 	public String toString() {
-		return "SidebarObjective [type=" + type.name() + ", stay=" + stay + "]";
+		return "SidebarObjective [type=" + type + ", titles=" + titles
+				+ ", stay=" + stay + ", update=" + update + "]";
 	}
+
 }

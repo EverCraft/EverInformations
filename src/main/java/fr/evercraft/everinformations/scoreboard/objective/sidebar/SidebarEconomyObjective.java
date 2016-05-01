@@ -85,8 +85,16 @@ public class SidebarEconomyObjective extends SidebarObjective {
 				if(user.isPresent()){
 					this.plugin.getLogger().warn("update : " + user.get().getName());
 					objective.getOrCreateScore(EChat.of(message.replaceAll("<player>",user.get().getName()))).setScore(player.getValue().intValue());
+				} else {
+					this.plugin.getLogger().warn("no name : " + player.getKey());
 				}
 			}
+		} else {
+			this.plugin.getLogger().warn("no EverEconomy");
+		}
+		
+		if(objective.getScores().isEmpty()) {
+			objective.getOrCreateScore(this.plugin.getMessages().getText("SCOREBOARD_EMPTY")).setScore(0);
 		}
 		this.objective = objective;
 	}

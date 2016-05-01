@@ -24,6 +24,8 @@ import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.nametag.config.ConfigNameTag;
 
 public class ManagerNameTag {
+	private final static String IDENTIFIER = "everinformations";
+	
 	private final EverInformations plugin;
 	
 	private final ConfigNameTag config;
@@ -60,7 +62,7 @@ public class ManagerNameTag {
 				Text teamRepresentation = player.getTeamRepresentation();
 				
 				for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-					other.addNameTag(teamRepresentation, prefix, suffix);
+					other.addNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
 				}
 			}
 		}
@@ -69,9 +71,7 @@ public class ManagerNameTag {
 	public void stop() {
 		if(this.enable) {
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-					other.removeNameTag(player.getTeamRepresentation());
-				}
+				player.clearNameTag(IDENTIFIER);
 			}
 		}
 	}
@@ -84,9 +84,9 @@ public class ManagerNameTag {
 			
 			for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 				if(!player.equals(other)) {
-					other.addNameTag(teamRepresentation, prefix, suffix);
+					other.addNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
 				}
-				player.addNameTag(other.getTeamRepresentation(), EChat.of(other.getOption(this.prefix).orElse("")), EChat.of(other.getOption(this.suffix).orElse("")));
+				player.addNameTag(IDENTIFIER, other.getTeamRepresentation(), EChat.of(other.getOption(this.prefix).orElse("")), EChat.of(other.getOption(this.suffix).orElse("")));
 			}
 		}
 	}
@@ -95,8 +95,10 @@ public class ManagerNameTag {
 		if(this.enable) {
 			Text teamRepresentation = player.getTeamRepresentation();
 			for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-				other.removeNameTag(teamRepresentation);
+				other.removeNameTag(IDENTIFIER, teamRepresentation);
 			}
+			
+			player.clearNameTag(IDENTIFIER);
 		}
 	}
 }

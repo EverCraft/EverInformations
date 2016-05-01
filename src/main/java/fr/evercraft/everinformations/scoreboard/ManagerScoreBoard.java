@@ -32,43 +32,43 @@ public class ManagerScoreBoard {
 	
 	private final ScoreBoard<BelowNameObjective> below_name;
 	private final ScoreBoard<ListObjective> list;
-	private final ScoreBoard<SidebarObjective> title;
+	private final ScoreBoard<SidebarObjective> sidebar;
 	
 	public ManagerScoreBoard(final EverInformations plugin) {
 		this.plugin = plugin;
 		
 		this.below_name = new ScoreBoard<BelowNameObjective>(this.plugin, new ConfigBelowName(this.plugin), DisplaySlots.BELOW_NAME);
 		this.list = new ScoreBoard<ListObjective>(this.plugin, new ConfigList(this.plugin), DisplaySlots.LIST);
-		this.title = new ScoreBoard<SidebarObjective>(this.plugin, new ConfigSidebar(this.plugin), DisplaySlots.SIDEBAR);
+		this.sidebar = new ScoreBoard<SidebarObjective>(this.plugin, new ConfigSidebar(this.plugin), DisplaySlots.SIDEBAR);
 	}
 	
 	public void reload() {
 		this.below_name.reload();
 		this.list.reload();
-		this.title.reload();
+		this.sidebar.reload();
 	}
 	
 	public void start() {
 		this.below_name.start();
 		this.list.start();
-		this.title.start();
+		this.sidebar.start();
 	}
 
 	public void stop() {
 		this.below_name.stop();
 		this.list.stop();
-		this.title.stop();
+		this.sidebar.stop();
 	}
 
 	public void addPlayer(EPlayer player) {
 		this.below_name.addPlayer(player);
 		this.list.addPlayer(player);
-		this.title.addPlayer(player);
+		this.sidebar.addPlayer(player);
 	}
 
 	public void removePlayer(EPlayer player) {
 		this.below_name.removePlayer(player);
 		this.list.removePlayer(player);
-		this.title.removePlayer(player);
+		this.sidebar.removePlayer(player);
 	}
 }

@@ -17,7 +17,6 @@
 package fr.evercraft.everinformations.newbie.config;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import ninja.leaping.configurate.ConfigurationNode;
@@ -35,19 +34,13 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 	@Override
 	protected void loadDefault() {
 		addDefault(Newbie.PLAYER + ".enable", true);
-		addDefault(Newbie.PLAYER + "interval", 0, "Seconds");
-		addDefault(Newbie.PLAYER + "stay", 10, "Seconds");
-		addDefault(Newbie.PLAYER + "fadeIn", 1, "Seconds");
-		addDefault(Newbie.PLAYER + "fadeOut", 1, "Seconds");
-		
+		addDefault(Newbie.PLAYER + ".interval", 0, "Seconds");
+		addDefault(Newbie.PLAYER + ".stay", 10, "Seconds");
+		addDefault(Newbie.PLAYER + ".fadeIn", 1, "Seconds");
+		addDefault(Newbie.PLAYER + ".fadeOut", 1, "Seconds");
 		if(this.get(Newbie.PLAYER + ".messages").isVirtual()) {
-			List<HashMap<String, String>> messages = new ArrayList<HashMap<String, String>>();
-			HashMap<String, String> message = new HashMap<String, String>();
-			message.put("title", "&4Welcome");
-			message.put("subTitle", "&4Welcome &a<DISPLAYNAME_FORMAT> &4to the server!");
-			messages.add(message);
-			
-			this.get(Newbie.PLAYER + ".messages").setValue(messages);
+			addDefault(Newbie.PLAYER + ".title", "&4Welcome");
+			addDefault(Newbie.PLAYER + ".subTitle", "&4Welcome &a<DISPLAYNAME_FORMAT> &4to the server!");
 		}
 		
 		addDefault(Newbie.OTHERS + ".enable", true);
@@ -57,13 +50,8 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 		addDefault(Newbie.OTHERS + ".fadeOut", 1, "Seconds");
 		
 		if(this.get(Newbie.OTHERS + ".messages").isVirtual()) {
-			List<HashMap<String, String>> messages = new ArrayList<HashMap<String, String>>();
-			HashMap<String, String> message = new HashMap<String, String>();
-			message.put("title", "&4Title");
-			message.put("subTitle", "&a<DISPLAYNAME_FORMAT> &4is a new player.");
-			messages.add(message);
-			
-			this.get(Newbie.OTHERS + ".messages").setValue(messages);
+			addDefault(Newbie.PLAYER + ".title", "");
+			addDefault(Newbie.PLAYER + ".subTitle", "&a<DISPLAYNAME_FORMAT> &4is a new player.");
 		}
 	}
 	

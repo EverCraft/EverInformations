@@ -36,4 +36,11 @@ public class SidebarTitle  {
 	public Text getTitle() {
 		return this.title;
 	}
+
+	@Override
+	public String toString() {
+		return "SidebarTitle [stay=" + stay + ", title=" + title + "]";
+	}
+	
+	
 }
