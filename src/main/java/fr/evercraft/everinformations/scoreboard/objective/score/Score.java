@@ -25,7 +25,7 @@ import fr.evercraft.everinformations.scoreboard.objective.EObjective;
 public abstract class Score {
 	
 	public static enum TypeScore {
-		ONLINE_PLAYERS(new ScoreOnlinePlayer()),
+		ONLINE_PLAYERS(new ScoreOnlinePlayers()),
 		BALANCE(new ScoreBalance()),
 		PING(new ScorePing()),
 		HEALTH(new ScoreHealth()),

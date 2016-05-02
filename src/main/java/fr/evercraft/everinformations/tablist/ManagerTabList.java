@@ -149,6 +149,8 @@ public class ManagerTabList {
 			TabListMessage tablist = this.getTabList();
 			tablist.start();
 			this.plugin.getLogger().debug("TabList (objective='" + tablist + "')");
+			
+			tablist.update();
 
 			this.stopUpdate();
 			// Si l'Objective ne s'actualise pas tout seul

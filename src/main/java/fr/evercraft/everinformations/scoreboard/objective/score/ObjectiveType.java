@@ -72,6 +72,10 @@ public enum ObjectiveType {
 		return this.score;
 	}
 	
+	public Optional<TypeScore> getVariables() {
+		return this.score;
+	}
+	
 	public boolean isUpdate() {
 		if(this.score.isPresent()){
 			return this.score.get().isUpdate();

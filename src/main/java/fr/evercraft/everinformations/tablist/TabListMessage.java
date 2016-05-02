@@ -45,6 +45,7 @@ public class TabListMessage extends EObjective {
 		this.update = true;
 		
 		for(TypeScore score : TypeScore.values()) {
+			this.plugin.getLogger().warn("test : " + "<" + score.name() + ">");
 			if(this.header.contains("<" + score.name() + ">") || this.footer.contains("<" + score.name() + ">")) {
 				this.scores.add(score);
 				if(!score.isUpdate()) {
@@ -60,16 +61,17 @@ public class TabListMessage extends EObjective {
 
 	@Override
 	public boolean start() {		
-		for(TypeScore type : this.scores) {
-			type.addListener(this.plugin, this);
+		for(TypeScore score : this.scores) {
+			this.plugin.getLogger().warn("addListener : " + "<" + score.name() + ">");
+			score.addListener(this.plugin, this);
 		}
 		return false;
 	}
 
 	@Override
 	public boolean stop() {		
-		for(TypeScore type : this.scores) {
-			type.removeListener(this.plugin, this);
+		for(TypeScore score : this.scores) {
+			score.removeListener(this.plugin, this);
 		}
 		
 		
@@ -87,17 +89,7 @@ public class TabListMessage extends EObjective {
 	
 	public boolean add(EPlayer player) {
 		if(player.sendTabList(ManagerTabList.IDENTIFIER)) {
-			if(this.header.isEmpty()) {
-				player.getTabList().setHeader(null);
-			} else {
-				player.getTabList().setHeader(player.replaceVariable(this.header));
-			}
-			
-			if(this.footer.isEmpty()) {
-				player.getTabList().setFooter(null);
-			} else {
-				player.getTabList().setFooter(player.replaceVariable(this.footer));
-			}
+			player.getTabList().setHeaderAndFooter(player.replaceVariable(this.header), player.replaceVariable(this.footer));
 		}
 		return true;
 	}

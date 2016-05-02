@@ -16,15 +16,18 @@
  */
 package fr.evercraft.everinformations.scoreboard.objective.score;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.essentials.event.VanishEvent;
 import fr.evercraft.everinformations.scoreboard.objective.EObjective;
 
-public class ScoreOnlinePlayer extends Score {
+public class ScoreOnlinePlayers extends Score {
 	
 	@Override
 	public int getValue(EPlayer player) {
@@ -33,6 +36,7 @@ public class ScoreOnlinePlayer extends Score {
 	
 	@Listener
     public void joinEvent(ClientConnectionEvent.Join event) {
+		Sponge.getGame().getServer().getBroadcastChannel().send(Text.of(TextColors.RED, "Join"));
 		for(EObjective objective : this.objectives) {
 			objective.update(TypeScore.ONLINE_PLAYERS);
 		}
@@ -40,6 +44,7 @@ public class ScoreOnlinePlayer extends Score {
 	
 	@Listener(order=Order.POST)
     public void quitEvent(ClientConnectionEvent.Disconnect event) {
+		Sponge.getGame().getServer().getBroadcastChannel().send(Text.of(TextColors.RED, "Disconnect"));
 		for(EObjective objective : this.objectives) {
 			objective.update(TypeScore.ONLINE_PLAYERS);
 		}
@@ -47,6 +52,7 @@ public class ScoreOnlinePlayer extends Score {
 	
 	@Listener
     public void vanishEvent(VanishEvent event) {
+		Sponge.getGame().getServer().getBroadcastChannel().send(Text.of(TextColors.RED, "Vanish"));
 		for(EObjective objective : this.objectives) {
 			objective.update(TypeScore.ONLINE_PLAYERS);
 		}
