@@ -96,7 +96,7 @@ public class TabListMessage extends EObjective {
 	
 	@Override
 	public boolean remove(EPlayer player) {
-		player.getTabList().setHeaderAndFooter(null, null);
+		player.removeTabList(ManagerTabList.IDENTIFIER);
 		return true;
 	}
 	

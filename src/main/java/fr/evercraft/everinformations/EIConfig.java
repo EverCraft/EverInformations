@@ -48,6 +48,10 @@ public class EIConfig extends EConfig {
 		return this.get("player-newbie-and-connection").getBoolean(false);
 	}
 
+	/**
+	 * Afficher des faux messages lors qu'on active ou désactive le mode vanish
+	 * @return True si on affiche les messages
+	 */
 	public boolean isVanishFake() {
 		return this.get("vanish-connection-fake").getBoolean(false);
 	}
