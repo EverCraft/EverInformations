@@ -27,6 +27,7 @@ import org.spongepowered.api.text.LiteralText.Builder;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
+import fr.evercraft.everapi.EAMessage.EAMessages;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
 import fr.evercraft.everapi.services.pagination.ESubCommand;
@@ -95,14 +96,14 @@ public class EICommand extends ECommand<EverInformations> {
 			if(source.hasPermission(this.plugin.getPermissions().get("HELP"))) {
 				resultat = commandHelp(source);
 			} else {
-				source.sendMessage(this.plugin.getPermissions().noPermission());
+				source.sendMessage(EAMessages.NO_PERMISSION.getText());
 			}
 		} else if(args.size() == 1) {
 			if(args.get(0).equalsIgnoreCase("reload")) {
 				if(source.hasPermission(this.plugin.getPermissions().get("RELOAD"))) {
 					resultat = commandReload(source);
 				} else {
-					source.sendMessage(this.plugin.getPermissions().noPermission());
+					source.sendMessage(EAMessages.NO_PERMISSION.getText());
 				}
 			} else {
 				source.sendMessage(help(source));
