@@ -28,9 +28,9 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
-import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.ECommand;
 import fr.evercraft.everapi.services.pagination.ESubCommand;
+import fr.evercraft.everinformations.EIMessage.EIMessages;
 
 public class EICommand extends ECommand<EverInformations> {
 	
@@ -45,7 +45,7 @@ public class EICommand extends ECommand<EverInformations> {
 	
 	@Override
 	public Text description(final CommandSource source) {
-		return this.plugin.getMessages().getText("DESCRIPTION");
+		return EIMessages.DESCRIPTION.getText();
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class EICommand extends ECommand<EverInformations> {
 	private boolean commandHelp(final CommandSource source) {
 		LinkedHashMap<String, ESubCommand> commands = new LinkedHashMap<String, ESubCommand>();
 		if(source.hasPermission(this.plugin.getPermissions().get("RELOAD"))) {
-			commands.put(this.getName() + " reload", new ESubCommand(this.helpReload(source), this.plugin.getEverAPI().getMessages().getText("RELOAD_DESCRIPTION")));
+			commands.put(this.getName() + " reload", new ESubCommand(this.helpReload(source), EAMessages.RELOAD_DESCRIPTION.getText()));
 		}
 		this.plugin.getEverAPI().getManagerService().getEPagination().helpSubCommand(commands, source, this.plugin);
 		return true;
@@ -125,7 +125,7 @@ public class EICommand extends ECommand<EverInformations> {
 
 	private boolean commandReload(CommandSource player) {
 		this.plugin.reload();
-		player.sendMessage(EChat.of(this.plugin.getMessages().getMessage("PREFIX") + this.plugin.getEverAPI().getMessages().getMessage("RELOAD_COMMAND")));
+		player.sendMessage(EIMessages.PREFIX.getText().concat(EAMessages.RELOAD_COMMAND.getText()));
 		return true;
 	}
 }

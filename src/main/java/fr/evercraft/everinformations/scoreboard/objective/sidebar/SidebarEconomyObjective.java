@@ -30,6 +30,7 @@ import org.spongepowered.api.scoreboard.objective.Objective;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everinformations.EIMessage.EIMessages;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
 import fr.evercraft.everinformations.scoreboard.objective.score.Score.TypeScore;
@@ -94,7 +95,7 @@ public class SidebarEconomyObjective extends SidebarObjective {
 		}
 		
 		if(objective.getScores().isEmpty()) {
-			objective.getOrCreateScore(this.plugin.getMessages().getText("SCOREBOARD_EMPTY")).setScore(0);
+			objective.getOrCreateScore(EIMessages.SCOREBOARD_EMPTY.getText()).setScore(0);
 		}
 		this.objective = objective;
 	}
