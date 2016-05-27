@@ -40,7 +40,7 @@ public class EICommand extends ECommand<EverInformations> {
 	
 	@Override
 	public boolean testPermission(final CommandSource source) {
-		return source.hasPermission(this.plugin.getPermissions().get("EVERINFORMATIONS"));
+		return source.hasPermission(EIPermissions.EVERINFORMATIONS.get());
 	}
 	
 	@Override
@@ -50,8 +50,8 @@ public class EICommand extends ECommand<EverInformations> {
 
 	@Override
 	public Text help(final CommandSource source) {
-		boolean help = source.hasPermission(this.plugin.getPermissions().get("HELP"));
-		boolean reload = source.hasPermission(this.plugin.getPermissions().get("RELOAD"));
+		boolean help = source.hasPermission(EIPermissions.HELP.get());
+		boolean reload = source.hasPermission(EIPermissions.RELOAD.get());
 
 		Builder build;
 		if(help || reload){
@@ -83,7 +83,7 @@ public class EICommand extends ECommand<EverInformations> {
 	public List<String> tabCompleter(final CommandSource source, final List<String> args) throws CommandException {
 		List<String> suggests = new ArrayList<String>();
 		if(args.size() == 1) {
-			if(source.hasPermission(this.plugin.getPermissions().get("RELOAD"))) {
+			if(source.hasPermission(EIPermissions.RELOAD.get())) {
 				suggests.add("reload");
 			}
 		}
@@ -93,14 +93,14 @@ public class EICommand extends ECommand<EverInformations> {
 	public boolean execute(final CommandSource source, final List<String> args) throws CommandException {
 		boolean resultat = false;
 		if(args.size() == 0 || args.get(0).equalsIgnoreCase("help")) {
-			if(source.hasPermission(this.plugin.getPermissions().get("HELP"))) {
+			if(source.hasPermission(EIPermissions.HELP.get())) {
 				resultat = commandHelp(source);
 			} else {
 				source.sendMessage(EAMessages.NO_PERMISSION.getText());
 			}
 		} else if(args.size() == 1) {
 			if(args.get(0).equalsIgnoreCase("reload")) {
-				if(source.hasPermission(this.plugin.getPermissions().get("RELOAD"))) {
+				if(source.hasPermission(EIPermissions.RELOAD.get())) {
 					resultat = commandReload(source);
 				} else {
 					source.sendMessage(EAMessages.NO_PERMISSION.getText());
@@ -116,7 +116,7 @@ public class EICommand extends ECommand<EverInformations> {
 	
 	private boolean commandHelp(final CommandSource source) {
 		LinkedHashMap<String, ESubCommand> commands = new LinkedHashMap<String, ESubCommand>();
-		if(source.hasPermission(this.plugin.getPermissions().get("RELOAD"))) {
+		if(source.hasPermission(EIPermissions.RELOAD.get())) {
 			commands.put(this.getName() + " reload", new ESubCommand(this.helpReload(source), EAMessages.RELOAD_DESCRIPTION.getText()));
 		}
 		this.plugin.getEverAPI().getManagerService().getEPagination().helpSubCommand(commands, source, this.plugin);

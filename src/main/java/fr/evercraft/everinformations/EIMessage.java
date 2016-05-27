@@ -31,7 +31,7 @@ import fr.evercraft.everapi.plugin.file.EnumMessage;
 public class EIMessage extends EMessage {
 
 	public EIMessage(final EverInformations plugin) {
-		super(plugin);
+		super(plugin, EIMessages.values());
 	}
 	
 	public enum EIMessages implements EnumMessage {

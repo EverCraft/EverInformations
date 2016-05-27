@@ -40,9 +40,7 @@ import fr.evercraft.everinformations.tablist.ManagerTabList;
 public class EverInformations extends EPlugin {
 	private EIConfig configs;
 	
-	private EIMessage messages;
-	private EIPermission permissions;
-	
+	private EIMessage messages;	
 	
 	private ManagerAutoMessage automessages;
 	private ManagerConnection connection;
@@ -53,9 +51,7 @@ public class EverInformations extends EPlugin {
 	private ManagerTabList tablist;
 	
 	@Override
-	protected void onPreEnable() {
-		this.permissions = new EIPermission(this);
-		
+	protected void onPreEnable() {		
 		this.configs = new EIConfig(this);
 		
 		this.messages = new EIMessage(this);
@@ -100,11 +96,7 @@ public class EverInformations extends EPlugin {
 
 	/*
 	 * Accesseurs
-	 */
-	public EIPermission getPermissions() {
-		return this.permissions;
-	}
-	
+	 */	
 	public EIMessage getMessages(){
 		return this.messages;
 	}
