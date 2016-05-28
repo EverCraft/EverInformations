@@ -25,6 +25,9 @@ import org.spongepowered.api.event.network.ClientConnectionEvent;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.essentials.event.VanishEvent;
 import fr.evercraft.everapi.services.essentials.event.VanishEvent.Action;
+import fr.evercraft.everapi.services.permission.event.PermGroupEvent;
+import fr.evercraft.everapi.services.permission.event.PermSystemEvent;
+import fr.evercraft.everapi.services.permission.event.PermUserEvent;
 
 public class EIListener {
 	private EverInformations plugin;
@@ -137,6 +140,34 @@ public class EIListener {
 			} else {
 				this.plugin.getConnection().joinPlayer(event.getEPlayer(), event.getEPlayer().getGroup());
 			}
+		}
+	}
+	
+	@Listener
+    public void permUserEvent(PermUserEvent event) {
+		if(event.getEPlayer().isPresent() && (event.getAction().equals(PermUserEvent.Action.USER_OPTION_CHANGED) ||
+			event.getAction().equals(PermUserEvent.Action.USER_GROUP_CHANGED) ||
+			event.getAction().equals(PermUserEvent.Action.USER_SUBGROUP_CHANGED))) {
+			// NameTag
+			this.plugin.getNameTag().changePermission(event.getEPlayer().get());
+		}
+	}
+	
+	@Listener
+    public void permGroupEvent(PermGroupEvent event) {
+		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+			if(player.isChildOf(event.getSubject())) {
+				// NameTag
+				this.plugin.getNameTag().changePermission(player);
+			}
+		}
+	}
+	
+	@Listener
+    public void permSystemEvent(PermSystemEvent event) {
+		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+			// NameTag
+			this.plugin.getNameTag().changePermission(player);
 		}
 	}
 }

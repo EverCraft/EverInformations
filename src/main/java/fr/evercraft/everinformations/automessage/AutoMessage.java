@@ -87,6 +87,9 @@ public class AutoMessage<T extends IMessage> {
 			this.stop();
 		} else if (this.enable && !this.plugin.getGame().getServer().getOnlinePlayers().isEmpty()) {
 			this.start();
+			this.plugin.getLogger().debug("AutoMessages (type='" + this.type.name() + "') : Start (player='" + this.plugin.getGame().getServer().getOnlinePlayers().size() + "')");
+		} else {
+			this.plugin.getLogger().debug("AutoMessages (type='" + this.type.name() + "') : No start (player='0')");
 		}
 	}
 
@@ -97,6 +100,7 @@ public class AutoMessage<T extends IMessage> {
 	}
 
 	public void stop() {
+		// Si start
 		if (this.task != null) {
 			this.task.cancel();
 			this.task = null;
@@ -106,8 +110,10 @@ public class AutoMessage<T extends IMessage> {
 	public void task() {
 		T message = this.getMessage();
 		
+		// Si il n'y a pas de délai
 		if(message.getNext() == 0) {
 			this.next();
+		// Il y a un délai
 		} else {
 			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
 							.execute(() -> this.next())

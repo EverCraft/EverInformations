@@ -101,4 +101,9 @@ public class ManagerNameTag {
 			player.clearNameTag(IDENTIFIER);
 		}
 	}
+
+	public void changePermission(EPlayer player) {
+		this.removePlayer(player);
+		this.addPlayer(player);
+	}
 }
