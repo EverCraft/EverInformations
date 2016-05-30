@@ -28,6 +28,7 @@ import fr.evercraft.everapi.services.essentials.event.VanishEvent.Action;
 import fr.evercraft.everapi.services.permission.event.PermGroupEvent;
 import fr.evercraft.everapi.services.permission.event.PermSystemEvent;
 import fr.evercraft.everapi.services.permission.event.PermUserEvent;
+import fr.evercraft.everapi.services.scoreboard.event.ScoreBoardEvent;
 
 public class EIListener {
 	private EverInformations plugin;
@@ -168,6 +169,13 @@ public class EIListener {
 		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			// NameTag
 			this.plugin.getNameTag().changePermission(player);
+		}
+	}
+	
+	@Listener
+    public void scoreboardEvent(ScoreBoardEvent event) {
+		if(event.getAction().equals(ScoreBoardEvent.Action.REMOVE)) {
+			this.plugin.getScoreBoard().event(event);
 		}
 	}
 }

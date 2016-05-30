@@ -224,4 +224,8 @@ public class ScoreBoard<T extends EObjective> {
 		}
 		return "";
 	}
+	
+	public DisplaySlot getDisplaySlot() {
+		return this.display;
+	}
 }

@@ -19,6 +19,7 @@ package fr.evercraft.everinformations.scoreboard;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.scoreboard.event.ScoreBoardEvent;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.config.ConfigBelowName;
 import fr.evercraft.everinformations.scoreboard.config.ConfigList;
@@ -70,5 +71,21 @@ public class ManagerScoreBoard {
 		this.below_name.removePlayer(player);
 		this.list.removePlayer(player);
 		this.sidebar.removePlayer(player);
+	}
+
+	public void event(ScoreBoardEvent event) {
+		if(event.getDisplaySlot().equals(this.sidebar.getDisplaySlot())) {
+			if(!event.getScoreBoardObjective().getName().equals(ScoreBoard.SIDEBAR_IDENTIFIER)) {
+				this.sidebar.addPlayer(event.getEPlayer());
+			}
+		} else if(event.getDisplaySlot().equals(this.below_name.getDisplaySlot())) {
+			if(!event.getScoreBoardObjective().getName().equals(ScoreBoard.BELOW_NAME_IDENTIFIER)) {
+				this.below_name.addPlayer(event.getEPlayer());
+			}
+		} else if(event.getDisplaySlot().equals(this.list.getDisplaySlot())) {
+			if(!event.getScoreBoardObjective().getName().equals(ScoreBoard.LIST_IDENTIFIER)) {
+				this.list.addPlayer(event.getEPlayer());
+			}
+		}
 	}
 }
