@@ -118,7 +118,7 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 							String prefix_message = this.plugin.getChat().replace(config_messages.getNode("prefix").getString(prefix_default));
 							String message = this.plugin.getChat().replace(config_messages.getNode("message").getString(""));
 							
-							String type_string = config_messages.getNode("type").getString("");
+							String type_string = config_messages.getNode("format").getString("");
 							TextSerializer type = TextSerializers.FORMATTING_CODE;
 							if(type_string.equalsIgnoreCase("JSON")) {
 								type = TextSerializers.JSON;
