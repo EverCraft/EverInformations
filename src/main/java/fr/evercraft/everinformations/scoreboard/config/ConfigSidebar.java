@@ -97,15 +97,15 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 			
 			if(config.getNode("titles").isVirtual()) {
 				Text title = EChat.of(this.plugin.getChat().replace(config.getNode("title").getString("")));
-				if(!title.isEmpty()) {
-					titles.add(new SidebarTitle(stay_title_default, title));
-				}
+				titles.add(new SidebarTitle(stay_title_default, title));
 			} else {
 				for(ConfigurationNode config_title : config.getNode("titles").getChildrenList()) {
-					double stay_title = config_title.getNode("stay").getDouble(stay_title_default);
-					Text title = EChat.of(this.plugin.getChat().replace(config_title.getNode("title").getString("")));
-					
-					if(!title.isEmpty()) {
+					if(config_title.getValue() instanceof String) {
+						Text title = EChat.of(this.plugin.getChat().replace(config_title.getString("")));
+						titles.add(new SidebarTitle(stay_title_default, title));
+					} else {
+						double stay_title = config_title.getNode("stay").getDouble(stay_title_default);
+						Text title = EChat.of(this.plugin.getChat().replace(config_title.getNode("title").getString("")));
 						titles.add(new SidebarTitle(stay_title, title));
 					}
 				}
