@@ -61,13 +61,13 @@ public class SidebarEconomyObjective extends SidebarObjective {
 	}
 	
 	@Override
-	public boolean start() {
+	public boolean subStart() {
 		this.update();
 		return true;
 	}
 
 	@Override
-	public boolean stop() {
+	public boolean subStop() {
 		return false;
 	}
 
@@ -75,7 +75,7 @@ public class SidebarEconomyObjective extends SidebarObjective {
 	public void update() {
 		Objective objective = Objective.builder()
 				.name(ScoreBoard.SIDEBAR_IDENTIFIER)
-				.displayName(this.titles.get(0).getTitle())
+				.displayName(this.getSidebarTitle().getTitle())
 				.criterion(Criteria.DUMMY)
 				.build();
 		
@@ -113,5 +113,13 @@ public class SidebarEconomyObjective extends SidebarObjective {
 	@Override
 	public boolean isUpdate() {
 		return true;
+	}
+	
+	@Override
+	protected void updateTitle() {		
+		SidebarTitle title = this.getSidebarTitle();
+		this.plugin.getLogger().debug("SidebarTitle : View (title='" + title.getTitle().toPlain() + "';next='" + title.getNext() + "')");
+		
+		this.objective.setDisplayName(title.getTitle());
 	}
 }

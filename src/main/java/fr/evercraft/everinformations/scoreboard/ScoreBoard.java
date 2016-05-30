@@ -190,7 +190,6 @@ public class ScoreBoard<T extends EObjective> {
 			this.plugin.getLogger().debug("ScoreBoard (type='" + this.display.getName() + "';priority='" + this.priority + "';objective='" + objective + "')");
 			
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				this.plugin.getLogger().warn("view add = " + player.getName());
 				objective.add(this.priority, player);
 			}
 			

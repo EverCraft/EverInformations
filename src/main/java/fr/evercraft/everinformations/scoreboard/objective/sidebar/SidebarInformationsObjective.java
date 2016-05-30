@@ -39,22 +39,19 @@ import fr.evercraft.everinformations.scoreboard.objective.score.Score.TypeScore;
 public class SidebarInformationsObjective extends SidebarObjective {
 	
 	private final ConcurrentMap<Text, TypeScore> scores;
-	
-	private int numero;
 
 	public SidebarInformationsObjective(final EPlugin plugin, final double stay, final double update, final List<SidebarTitle> titles, final Map<Text, TypeScore> scores) {
 		super(plugin, stay, update, Type.INFORMATIONS, titles);
 		
 		this.scores = new ConcurrentHashMap<Text, TypeScore>();
 		this.scores.putAll(scores);
-		this.numero = 0;
 	}
 	
 	@Override
 	public boolean add(int priority, EPlayer player) {
 		Objective objective = Objective.builder()
 							.name(ScoreBoard.SIDEBAR_IDENTIFIER)
-							.displayName(titles.get(this.numero).getTitle())
+							.displayName(this.getSidebarTitle().getTitle())
 							.criterion(Criteria.DUMMY)
 							.build();
 		for(Entry<Text, TypeScore> score : this.scores.entrySet()) {
@@ -69,7 +66,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 	}
 
 	@Override
-	public boolean start() {
+	public boolean subStart() {
 		for(TypeScore type : new HashSet<TypeScore>(this.scores.values())) {
 			type.addListener(this.plugin, this);
 		}
@@ -77,7 +74,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 	}
 
 	@Override
-	public boolean stop() {
+	public boolean subStop() {
 		for(TypeScore type : new HashSet<TypeScore>(this.scores.values())) {
 			type.removeListener(this.plugin, this);
 		}
@@ -136,5 +133,18 @@ public class SidebarInformationsObjective extends SidebarObjective {
 			}
 		}
 		return update;
+	}
+	
+	@Override
+	protected void updateTitle() {		
+		SidebarTitle title = this.getSidebarTitle();
+		this.plugin.getLogger().debug("SidebarTitle : View (title='" + title.getTitle().toPlain() + "';next='" + title.getNext() + "')");
+		
+		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+			Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
+			if(objective.isPresent()) {
+				objective.get().setDisplayName(title.getTitle());
+			}
+		}
 	}
 }
