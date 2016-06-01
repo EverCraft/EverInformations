@@ -99,6 +99,9 @@ public class EIListener {
 				event.setMessageCancelled(true);
 			}
 			
+			// AutoMessage
+			this.plugin.getAutoMessages().removePlayer(player);
+			
 			// ScoreBoard
 			this.plugin.getScoreBoard().removePlayer(player);
 			

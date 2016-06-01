@@ -26,12 +26,14 @@ import fr.evercraft.everapi.services.priority.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.automessage.AutoMessage;
 import fr.evercraft.everinformations.automessage.config.IConfig;
+import fr.evercraft.everinformations.message.BossBarMessage;
 import fr.evercraft.everinformations.message.IMessage;
 
 public class AutoMessage<T extends IMessage> {
 	public static enum Type {
     	ACTION_BAR,
     	TITLE,
+    	BOSSBAR,
     	CHAT;
     }
 	
@@ -49,7 +51,7 @@ public class AutoMessage<T extends IMessage> {
 	
 	private int priority;
 	private Task task;
-
+	
 	public AutoMessage(final EverInformations plugin, IConfig<T> config, Type type) {
 		this.plugin = plugin;
 		
@@ -69,10 +71,12 @@ public class AutoMessage<T extends IMessage> {
 
 		this.priority = PriorityService.DEFAULT;
 		if(this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
-			if(type.equals(Type.ACTION_BAR)) {
+			if(this.type.equals(Type.ACTION_BAR)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getActionBar(IDENTIFIER);
-			} else if(type.equals(Type.TITLE)) {
+			} else if(this.type.equals(Type.TITLE)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(IDENTIFIER);
+			} else if(this.type.equals(Type.BOSSBAR)) {
+				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getBossBar(IDENTIFIER);
 			}
 		}
 		
@@ -105,22 +109,31 @@ public class AutoMessage<T extends IMessage> {
 			this.task.cancel();
 			this.task = null;
 		}
+		
+		this.remove();
 	}
 	
 	public void task() {
 		T message = this.getMessage();
 		
+		if(this.type.equals(Type.BOSSBAR) && ((BossBarMessage) message).getTimeNext() > 0) {
+			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
+					.execute(() -> this.remove())
+					.async()
+					.delay(message.getNext(), TimeUnit.MILLISECONDS)
+					.name("AutoMessages : Remove (type='" + this.type.name() + "')")
+					.submit(this.plugin);
 		// Si il n'y a pas de délai
-		if(message.getNext() == 0) {
+		} else if(!this.type.equals(Type.BOSSBAR) && message.getNext() <= 0) {
 			this.next();
 		// Il y a un délai
 		} else {
 			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
-							.execute(() -> this.next())
-							.async()
-							.delay(message.getNext(), TimeUnit.MILLISECONDS)
-							.name("AutoMessages (type='" + this.type.name() + "')")
-							.submit(this.plugin);
+					.execute(() -> this.next())
+					.async()
+					.delay(message.getNext(), TimeUnit.MILLISECONDS)
+					.name("AutoMessages (type='" + this.type.name() + "')")
+					.submit(this.plugin);
 		}
 	}
 	
@@ -132,7 +145,7 @@ public class AutoMessage<T extends IMessage> {
 		this.view();
 		this.task();
 	}
-
+	
 	protected void view() {
 		if(this.enable) {
 			T message = this.getMessage();
@@ -145,5 +158,34 @@ public class AutoMessage<T extends IMessage> {
 	
 	public T getMessage() {
 		return this.messages.get(this.numero);
+	}
+	
+	public void addPlayer(EPlayer player) {
+		if(this.enable && this.type.equals(Type.BOSSBAR)) {
+			BossBarMessage message = ((BossBarMessage) this.getMessage());
+			message.send(this.priority, player);
+		}
+	}
+	
+	public void remove() {
+		if(this.enable && this.type.equals(Type.BOSSBAR)) {
+			BossBarMessage message = ((BossBarMessage) this.getMessage());
+			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+				message.remove(this.priority, player);
+			}
+			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
+					.execute(() -> this.next())
+					.async()
+					.delay(message.getTimeNext(), TimeUnit.MILLISECONDS)
+					.name("AutoMessages (type='" + this.type.name() + "')")
+					.submit(this.plugin);
+		}
+	}
+	
+	public void removePlayer(EPlayer player) {
+		if(this.enable && this.type.equals(Type.BOSSBAR)) {
+			BossBarMessage message = ((BossBarMessage) this.getMessage());
+			message.remove(this.priority, player);
+		}
 	}
 }
