@@ -44,9 +44,15 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 		}
 		
 		addDefault(Connection.OTHERS + ".enable", true);
-		addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".subTitle", "&7&l[&2+&7&l] <DISPLAYNAME_FORMAT> &7joined the game");
-		addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".subTitle", "&7&l[&4-&7&l] <DISPLAYNAME_FORMAT> &7left the game");
-		addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".subTitle", "&7&l[&4-&7&l] <DISPLAYNAME_FORMAT> &7has been kicked out of the game for <reason>");
+		if(this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
+			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".subTitle", "&7&l[&2+&7&l] <DISPLAYNAME_FORMAT> &7joined the game");
+		}
+		if(this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".messages").isVirtual()) {
+			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".subTitle", "&7&l[&4-&7&l] <DISPLAYNAME_FORMAT> &7left the game");
+		}
+		if(this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".messages").isVirtual()) {
+			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".subTitle", "&7&l[&4-&7&l] <DISPLAYNAME_FORMAT> &7has been kicked out of the game for <reason>");
+		}
 	}
 	
 	/*

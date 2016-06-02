@@ -116,23 +116,64 @@ public class AutoMessage<T extends IMessage> {
 	public void task() {
 		T message = this.getMessage();
 		
-		if(this.type.equals(Type.BOSSBAR) && ((BossBarMessage) message).getTimeNext() > 0) {
-			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
-					.execute(() -> this.remove())
-					.async()
-					.delay(message.getNext(), TimeUnit.MILLISECONDS)
-					.name("AutoMessages : Remove (type='" + this.type.name() + "')")
-					.submit(this.plugin);
-		// Si il n'y a pas de délai
-		} else if(!this.type.equals(Type.BOSSBAR) && message.getNext() <= 0) {
-			this.next();
-		// Il y a un délai
+		if(this.type.equals(Type.BOSSBAR)) {
+			// Si il y a pas de délai
+			if(((BossBarMessage) message).getTimeNext() <= 0) {
+				this.taskNext();
+			// Il y a un délai
+			} else {
+				this.taskRemoveBossBar();
+			}
 		} else {
+			// Si il y a pas de délai
+			if(message.getNext() <= 0) {
+				this.next();
+			// Il y a un délai
+			} else {
+				this.taskNext();
+			}
+		}
+	}
+	
+	public void taskNext() {
+		T message = this.getMessage();
+		this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
+				.execute(() -> this.next())
+				.async()
+				.delay(message.getNext(), TimeUnit.MILLISECONDS)
+				.name("AutoMessages : Next (type='" + this.type.name() + "')")
+				.submit(this.plugin);
+	}
+	
+	/**
+	 * Le temps avant la prochaine bossbar
+	 */
+	public void taskNextBossBar() {
+		if(this.getMessage() instanceof BossBarMessage) {
+			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
 					.execute(() -> this.next())
 					.async()
+					.delay(message.getTimeNext(), TimeUnit.MILLISECONDS)
+					.name("AutoMessages : NextBossBar (type='" + this.type.name() + "')")
+					.submit(this.plugin);
+		}
+	}
+	
+	/**
+	 * Si il y a un délai en 2 bossbars, il faut supprimer la première au bout d'un certain temps
+	 */
+	public void taskRemoveBossBar() {
+		if(this.getMessage() instanceof BossBarMessage) {
+			BossBarMessage message = ((BossBarMessage) this.getMessage());
+			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
+					.execute(() -> {
+						this.remove();
+						this.taskNextBossBar();
+					})
+					.async()
 					.delay(message.getNext(), TimeUnit.MILLISECONDS)
-					.name("AutoMessages (type='" + this.type.name() + "')")
+					.name("AutoMessages : RemoveBossBar (type='" + this.type.name() + "')")
 					.submit(this.plugin);
 		}
 	}
@@ -161,29 +202,22 @@ public class AutoMessage<T extends IMessage> {
 	}
 	
 	public void addPlayer(EPlayer player) {
-		if(this.enable && this.type.equals(Type.BOSSBAR)) {
-			BossBarMessage message = ((BossBarMessage) this.getMessage());
-			message.send(this.priority, player);
+		if(this.enable && this.getMessage() instanceof BossBarMessage) {
+			this.getMessage().send(this.priority, player);
 		}
 	}
 	
 	public void remove() {
-		if(this.enable && this.type.equals(Type.BOSSBAR)) {
+		if(this.enable && this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				message.remove(this.priority, player);
 			}
-			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
-					.execute(() -> this.next())
-					.async()
-					.delay(message.getTimeNext(), TimeUnit.MILLISECONDS)
-					.name("AutoMessages (type='" + this.type.name() + "')")
-					.submit(this.plugin);
 		}
 	}
 	
 	public void removePlayer(EPlayer player) {
-		if(this.enable && this.type.equals(Type.BOSSBAR)) {
+		if(this.enable && this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			message.remove(this.priority, player);
 		}

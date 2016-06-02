@@ -86,6 +86,7 @@ public class BossBarMessage implements IMessage {
 	}
 	
 	private boolean sendText(int priority, EPlayer player, Text text) {
+		
 		Optional<ServerBossBar> bossbar = player.getBossBar(priority);
 		if(bossbar.isPresent()) {
 			bossbar.get().setName(text);

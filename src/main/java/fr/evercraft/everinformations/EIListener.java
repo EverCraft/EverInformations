@@ -86,6 +86,7 @@ public class EIListener {
 		// Chargement du EPlayer
 		if(optPlayer.isPresent()) {
 			EPlayer player = optPlayer.get();
+			
 			// Newbie
 			if(player.getFirstDatePlayed() == player.getLastDatePlayed()) {
 				this.plugin.getNewbie().removePlayer(player);

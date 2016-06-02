@@ -25,10 +25,12 @@ import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.connection.Connection.Type;
 import fr.evercraft.everinformations.connection.config.ConfigActionBar;
+import fr.evercraft.everinformations.connection.config.ConfigBossBar;
 import fr.evercraft.everinformations.connection.config.ConfigChat;
 import fr.evercraft.everinformations.connection.config.ConfigTitle;
 import fr.evercraft.everinformations.connection.config.IConfig;
 import fr.evercraft.everinformations.message.ActionBarMessage;
+import fr.evercraft.everinformations.message.BossBarMessage;
 import fr.evercraft.everinformations.message.ChatMessage;
 import fr.evercraft.everinformations.message.TitleMessage;
 public class ManagerConnection {
@@ -39,6 +41,9 @@ public class ManagerConnection {
 	
 	private final Connection<TitleMessage> titlePlayer;
 	private final Connection<TitleMessage> titleOthers;
+	
+	private final Connection<BossBarMessage> bossbarPlayer;
+	private final Connection<BossBarMessage> bossbarOthers;
 
 	private final Connection<ActionBarMessage> actionbarPlayer;
 	private final Connection<ActionBarMessage> actionbarOthers;
@@ -54,6 +59,10 @@ public class ManagerConnection {
 		this.titlePlayer = new ConnectionPlayer<TitleMessage>(this.plugin, config_title, Type.TITLE_PLAYER);
 		this.titleOthers = new ConnectionOthers<TitleMessage>(this.plugin, config_title, Type.TITLE_OTHERS);
 		
+		IConfig<BossBarMessage> config_bossbar = new ConfigBossBar(this.plugin);
+		this.bossbarPlayer = new ConnectionPlayer<BossBarMessage>(this.plugin, config_bossbar, Type.BOSSBAR_PLAYER);
+		this.bossbarOthers = new ConnectionOthers<BossBarMessage>(this.plugin, config_bossbar, Type.BOSSBAR_OTHERS);
+		
 		IConfig<ActionBarMessage> config_actionbar = new ConfigActionBar(this.plugin);
 		this.actionbarPlayer = new ConnectionPlayer<ActionBarMessage>(this.plugin, config_actionbar, Type.ACTION_BAR_PLAYER);
 		this.actionbarOthers = new ConnectionOthers<ActionBarMessage>(this.plugin, config_actionbar, Type.ACTION_BAR_OTHERS);
@@ -66,6 +75,9 @@ public class ManagerConnection {
 		this.titlePlayer.reload();
 		this.titleOthers.reload();
 		
+		this.bossbarPlayer.reload();
+		this.bossbarOthers.reload();
+		
 		this.actionbarPlayer.reload();
 		this.actionbarOthers.reload();
 	}
@@ -76,6 +88,9 @@ public class ManagerConnection {
 		
 		this.titlePlayer.joinPlayer(player, subject);
 		this.titleOthers.joinPlayer(player, subject);
+		
+		this.bossbarPlayer.joinPlayer(player, subject);
+		this.bossbarOthers.joinPlayer(player, subject);
 		
 		this.actionbarPlayer.joinPlayer(player, subject);
 		this.actionbarOthers.joinPlayer(player, subject);
@@ -88,6 +103,9 @@ public class ManagerConnection {
 		this.titlePlayer.quitPlayer(player, subject);
 		this.titleOthers.quitPlayer(player, subject);
 		
+		this.bossbarPlayer.quitPlayer(player, subject);
+		this.bossbarOthers.quitPlayer(player, subject);
+		
 		this.actionbarPlayer.quitPlayer(player, subject);
 		this.actionbarOthers.quitPlayer(player, subject);
 	}
@@ -98,6 +116,9 @@ public class ManagerConnection {
 		
 		this.titlePlayer.kickPlayer(player, subject, reason);
 		this.titleOthers.kickPlayer(player, subject, reason);
+		
+		this.bossbarPlayer.kickPlayer(player, subject, reason);
+		this.bossbarOthers.kickPlayer(player, subject, reason);
 		
 		this.actionbarPlayer.kickPlayer(player, subject, reason);
 		this.actionbarOthers.kickPlayer(player, subject, reason);
