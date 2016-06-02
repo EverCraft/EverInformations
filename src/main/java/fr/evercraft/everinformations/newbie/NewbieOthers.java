@@ -22,6 +22,7 @@ import org.spongepowered.api.scheduler.Task;
 
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
+import fr.evercraft.everinformations.message.BossBarMessage;
 import fr.evercraft.everinformations.message.IMessage;
 import fr.evercraft.everinformations.newbie.Newbie;
 import fr.evercraft.everinformations.newbie.config.IConfig;
@@ -61,6 +62,8 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 	}
 
 	public void stop() {
+		this.remove();
+		
 		// Si Start
 		if (this.task != null) {
 			this.task.cancel();
@@ -76,6 +79,14 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 		// Si il y a encore un message
 		if(this.numero < this.messages.size() - 1) {
 			this.task();
+		} else if(this.type.equals(Type.BOSSBAR_OTHERS)) {
+			// Si il y a pas de délai
+			if(((BossBarMessage) this.getMessage()).getNext() <= 0) {
+				this.remove();
+			// Il y a un délai
+			} else {
+				this.taskRemoveBossBar();
+			}
 		}
 	}
 	
@@ -92,18 +103,69 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 	}
 	
 	public void task() {
- 		T message = this.getMessage();
-
- 		// Il n'y a pas de temps, on affiche le message tout de suite
-		if(message.getNext() == 0) {
-			this.next();
+		T message = this.getMessage();
+		
+		if(this.type.equals(Type.BOSSBAR_OTHERS)) {
+			// Si il y a pas de délai
+			if(((BossBarMessage) message).getTimeNext() <= 0) {
+				this.taskNext();
+			// Il y a un délai
+			} else {
+				this.taskRemoveBossBar();
+			}
 		} else {
+			// Si il y a pas de délai
+			if(message.getNext() <= 0) {
+				this.next();
+			// Il y a un délai
+			} else {
+				this.taskNext();
+			}
+		}
+	}
+	
+	public void taskNext() {
+		T message = this.getMessage();
+		this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
+				.execute(() -> this.next())
+				.async()
+				.delay(message.getNext(), TimeUnit.MILLISECONDS)
+				.name("Newbie : Next (type='" + this.type.name() + "')")
+				.submit(this.plugin);
+	}
+	
+	/**
+	 * Le temps avant la prochaine bossbar
+	 */
+	public void taskNextBossBar() {
+		if(this.getMessage() instanceof BossBarMessage) {
+			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
-							.execute(() -> this.next())
-							.async()
-							.delay(message.getNext(), TimeUnit.MILLISECONDS)
-							.name("Newbie (type='" + this.type.name() + "')")
-							.submit(this.plugin);
+					.execute(() -> this.next())
+					.async()
+					.delay(message.getTimeNext(), TimeUnit.MILLISECONDS)
+					.name("Newbie : NextBossBar (type='" + this.type.name() + "')")
+					.submit(this.plugin);
+		}
+	}
+	
+	/**
+	 * Si il y a un délai en 2 bossbars, il faut supprimer la première au bout d'un certain temps
+	 */
+	public void taskRemoveBossBar() {
+		if(this.getMessage() instanceof BossBarMessage) {
+			BossBarMessage message = ((BossBarMessage) this.getMessage());
+			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
+					.execute(() -> {
+						this.remove();
+						if(this.numero < this.messages.size() - 1) {
+							this.taskNextBossBar();
+						}
+					})
+					.async()
+					.delay(message.getNext(), TimeUnit.MILLISECONDS)
+					.name("Newbie : RemoveBossBar (type='" + this.type.name() + "')")
+					.submit(this.plugin);
 		}
 	}
 	
@@ -122,6 +184,19 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 	public void removePlayer(EPlayer player) {
 		if(this.player != null && this.player.equals(player)) {
 			this.stop();
+		}
+	}
+	
+	public void remove() {
+		if(this.enable && this.player != null && this.messages != null && !this.messages.isEmpty() && this.getMessage() instanceof BossBarMessage) {
+			BossBarMessage message = ((BossBarMessage) this.getMessage());
+			
+			this.plugin.getLogger().debug("Newbie : RemoveBossbar (type='" + this.type.name() + "';priority='" + this.priority + "';message='" + message + "')");
+			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+				if(!this.player.equals(player)) {
+					message.remove(this.priority, player);
+				}
+			}
 		}
 	}
 }

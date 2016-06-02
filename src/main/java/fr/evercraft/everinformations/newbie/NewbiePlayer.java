@@ -25,6 +25,7 @@ import org.spongepowered.api.scheduler.Task;
 
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
+import fr.evercraft.everinformations.message.BossBarMessage;
 import fr.evercraft.everinformations.message.IMessage;
 import fr.evercraft.everinformations.newbie.config.IConfig;
 
@@ -102,21 +103,31 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 		}
 		
 		public void stop() {
+			this.remove();
+			
 			if(this.task != null) {
 				this.task.cancel();
 				this.task = null;
 			}
 		}
 		
-		public void next() {		
+		public void next() {
 			this.numero++;
 			this.view();
 			
 			//Si il y a encore un message
 			if(this.numero < this.newbie.messages.size() - 1){
 				this.task();
+			} else if(this.newbie.type.equals(Type.BOSSBAR_PLAYER)) {
+				// Si il y a pas de délai
+				if(((BossBarMessage) this.getMessage()).getNext() <= 0) {
+					this.remove();
+				// Il y a un délai
+				} else {
+					this.taskRemoveBossBar();
+				}
 			} else {
-				this.newbie.players.remove(player.getUniqueId());
+				this.remove();
 			}
 		}
 		
@@ -140,21 +151,82 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 		public void task() {
 			T message = this.getMessage();
 			
-			// Il n'y a pas de temps, on affiche le message tout de suite
-			if(message.getNext() == 0) {
-				this.next();
+			if(this.newbie.plugin.equals(Type.BOSSBAR_PLAYER)) {
+				// Si il y a pas de délai
+				if(((BossBarMessage) message).getTimeNext() <= 0) {
+					this.taskNext();
+				// Il y a un délai
+				} else {
+					this.taskRemoveBossBar();
+				}
 			} else {
+				// Si il y a pas de délai
+				if(message.getNext() <= 0) {
+					this.next();
+				// Il y a un délai
+				} else {
+					this.taskNext();
+				}
+			}
+		}
+		
+		public void taskNext() {
+			T message = this.getMessage();
+			this.task = this.newbie.plugin.getGame().getScheduler().createTaskBuilder()
+					.execute(() -> this.next())
+					.async()
+					.delay(message.getNext(), TimeUnit.MILLISECONDS)
+					.name("Newbie : Next (type='" + this.newbie.type.name() + "')")
+					.submit(this.newbie.plugin);
+		}
+		
+		/**
+		 * Le temps avant la prochaine bossbar
+		 */
+		public void taskNextBossBar() {
+			if(this.getMessage() instanceof BossBarMessage) {
+				BossBarMessage message = ((BossBarMessage) this.getMessage());
 				this.task = this.newbie.plugin.getGame().getScheduler().createTaskBuilder()
-								.execute(() -> this.next())
-								.async()
-								.delay(message.getNext(), TimeUnit.MILLISECONDS)
-								.name("Newbie (type='" + this.newbie.type.name() + "')")
-								.submit(this.newbie.plugin);
+						.execute(() -> this.next())
+						.async()
+						.delay(message.getTimeNext(), TimeUnit.MILLISECONDS)
+						.name("Newbie : NextBossBar (type='" + this.newbie.type.name() + "')")
+						.submit(this.newbie.plugin);
+			}
+		}
+		
+		/**
+		 * Si il y a un délai en 2 bossbars, il faut supprimer la première au bout d'un certain temps
+		 */
+		public void taskRemoveBossBar() {
+			if(this.getMessage() instanceof BossBarMessage) {
+				BossBarMessage message = ((BossBarMessage) this.getMessage());
+				this.task = this.newbie.plugin.getGame().getScheduler().createTaskBuilder()
+						.execute(() -> {
+							this.remove();
+							if(this.numero < this.newbie.messages.size() - 1) {
+								this.taskNextBossBar();
+							}
+						})
+						.async()
+						.delay(message.getNext(), TimeUnit.MILLISECONDS)
+						.name("Newbie : RemoveBossBar (type='" + this.newbie.type.name() + "')")
+						.submit(this.newbie.plugin);
 			}
 		}
 		
 		public T getMessage() {
 			return this.newbie.messages.get(this.numero);
+		}
+		
+		public void remove() {
+			if(this.getMessage() instanceof BossBarMessage) {
+				BossBarMessage message = ((BossBarMessage) this.getMessage());
+				
+				this.newbie.plugin.getLogger().debug("Newbie : RemoveBossbar (type='" + this.newbie.type.name() + "';priority='" + this.newbie.priority + "';message='" + message + "')");
+				message.remove(this.newbie.priority, this.player);
+			}
+			this.newbie.players.remove(player.getUniqueId());
 		}
 		
 	}

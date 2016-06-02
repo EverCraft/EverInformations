@@ -50,8 +50,8 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 		addDefault(Newbie.OTHERS + ".fadeOut", 1, "Seconds");
 		
 		if(this.get(Newbie.OTHERS + ".messages").isVirtual()) {
-			addDefault(Newbie.PLAYER + ".title", "");
-			addDefault(Newbie.PLAYER + ".subTitle", "&a<DISPLAYNAME_FORMAT> &4is a new player.");
+			addDefault(Newbie.OTHERS + ".title", "");
+			addDefault(Newbie.OTHERS + ".subTitle", "&a<DISPLAYNAME_FORMAT> &4is a new player.");
 		}
 	}
 	

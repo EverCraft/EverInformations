@@ -19,10 +19,12 @@ package fr.evercraft.everinformations.newbie;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.message.ActionBarMessage;
+import fr.evercraft.everinformations.message.BossBarMessage;
 import fr.evercraft.everinformations.message.ChatMessage;
 import fr.evercraft.everinformations.message.TitleMessage;
 import fr.evercraft.everinformations.newbie.Newbie.Type;
 import fr.evercraft.everinformations.newbie.config.ConfigActionBar;
+import fr.evercraft.everinformations.newbie.config.ConfigBossBar;
 import fr.evercraft.everinformations.newbie.config.ConfigChat;
 import fr.evercraft.everinformations.newbie.config.ConfigTitle;
 import fr.evercraft.everinformations.newbie.config.IConfig;
@@ -35,6 +37,9 @@ public class ManagerNewbie {
 	
 	private final Newbie<TitleMessage> titlePlayer;
 	private final Newbie<TitleMessage> titleOthers;
+	
+	private final Newbie<BossBarMessage> bossbarPlayer;
+	private final Newbie<BossBarMessage> bossbarOthers;
 
 	private final Newbie<ActionBarMessage> actionbarPlayer;
 	private final Newbie<ActionBarMessage> actionbarOthers;
@@ -50,6 +55,10 @@ public class ManagerNewbie {
 		this.titlePlayer = new NewbiePlayer<TitleMessage>(this.plugin, config_title, Type.TITLE_PLAYER);
 		this.titleOthers = new NewbieOthers<TitleMessage>(this.plugin, config_title, Type.TITLE_OTHERS);
 		
+		IConfig<BossBarMessage> config_bossbar = new ConfigBossBar(this.plugin);
+		this.bossbarPlayer = new NewbiePlayer<BossBarMessage>(this.plugin, config_bossbar, Type.BOSSBAR_PLAYER);
+		this.bossbarOthers = new NewbieOthers<BossBarMessage>(this.plugin, config_bossbar, Type.BOSSBAR_OTHERS);
+		
 		IConfig<ActionBarMessage> config_actionbar = new ConfigActionBar(this.plugin);
 		this.actionbarPlayer = new NewbiePlayer<ActionBarMessage>(this.plugin, config_actionbar, Type.ACTION_BAR_PLAYER);
 		this.actionbarOthers = new NewbieOthers<ActionBarMessage>(this.plugin, config_actionbar, Type.ACTION_BAR_OTHERS);
@@ -62,6 +71,9 @@ public class ManagerNewbie {
 		this.titlePlayer.reload();
 		this.titleOthers.reload();
 		
+		this.bossbarPlayer.reload();
+		this.bossbarOthers.reload();
+		
 		this.actionbarPlayer.reload();
 		this.actionbarOthers.reload();
 	}
@@ -73,6 +85,9 @@ public class ManagerNewbie {
 		this.titlePlayer.addPlayer(player);
 		this.titleOthers.addPlayer(player);
 		
+		this.bossbarPlayer.addPlayer(player);
+		this.bossbarOthers.addPlayer(player);
+		
 		this.actionbarPlayer.addPlayer(player);
 		this.actionbarOthers.addPlayer(player);
 	}
@@ -83,6 +98,9 @@ public class ManagerNewbie {
 		
 		this.titlePlayer.removePlayer(player);
 		this.titleOthers.removePlayer(player);
+		
+		this.bossbarPlayer.removePlayer(player);
+		this.bossbarOthers.removePlayer(player);
 		
 		this.actionbarPlayer.removePlayer(player);
 		this.actionbarOthers.removePlayer(player);

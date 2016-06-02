@@ -30,6 +30,8 @@ public abstract class Newbie<T extends IMessage> {
     	ACTION_BAR_OTHERS,
     	TITLE_PLAYER,
     	TITLE_OTHERS,
+    	BOSSBAR_PLAYER,
+    	BOSSBAR_OTHERS,
     	CHAT_PLAYER,
     	CHAT_OTHERS;
     }
@@ -75,6 +77,10 @@ public abstract class Newbie<T extends IMessage> {
 			} else if(type.equals(Type.TITLE_PLAYER)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(Newbie.IDENTIFIER_PLAYER);
 			} else if(type.equals(Type.TITLE_OTHERS)) {
+				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(Newbie.IDENTIFIER_OTHERS);
+			} else if(type.equals(Type.BOSSBAR_PLAYER)) {
+				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(Newbie.IDENTIFIER_PLAYER);
+			} else if(type.equals(Type.BOSSBAR_OTHERS)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(Newbie.IDENTIFIER_OTHERS);
 			}
 		}
