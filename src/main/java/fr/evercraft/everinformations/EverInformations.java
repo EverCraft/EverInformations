@@ -22,6 +22,7 @@ import org.spongepowered.api.plugin.Plugin;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everinformations.automessage.ManagerAutoMessage;
 import fr.evercraft.everinformations.connection.ManagerConnection;
+import fr.evercraft.everinformations.healthmob.ManagerHealthMob;
 import fr.evercraft.everinformations.nametag.ManagerNameTag;
 import fr.evercraft.everinformations.newbie.ManagerNewbie;
 import fr.evercraft.everinformations.scoreboard.ManagerScoreBoard;
@@ -49,6 +50,7 @@ public class EverInformations extends EPlugin {
 	private ManagerScoreBoard scoreboard;
 	private ManagerNameTag nametag;
 	private ManagerTabList tablist;
+	private ManagerHealthMob healthmob;
 	
 	@Override
 	protected void onPreEnable() {		
@@ -67,6 +69,7 @@ public class EverInformations extends EPlugin {
 		
 		this.nametag = new ManagerNameTag(this);
 		this.tablist = new ManagerTabList(this);
+		this.healthmob = new ManagerHealthMob(this);
 	}
 	
 	@Override
@@ -89,9 +92,22 @@ public class EverInformations extends EPlugin {
 		this.scoreboard.reload();
 		this.nametag.reload();
 		this.tablist.reload();
+		this.healthmob.reload();
 	}
 	
+	@Override
+	protected void onStopServer() {
+		this.healthmob.reset();
+	}
+	
+	@Override
 	protected void onDisable() {
+		this.automessages.stop();
+		this.connection.stop();
+		this.newbie.stop();
+		this.scoreboard.stop();
+		this.nametag.stop();
+		this.tablist.stop();
 	}
 
 	/*
@@ -127,5 +143,9 @@ public class EverInformations extends EPlugin {
 	
 	public ManagerTabList getTabList() {
 		return this.tablist;
+	}
+
+	public ManagerHealthMob getHealthMob() {
+		return this.healthmob;
 	}
 }

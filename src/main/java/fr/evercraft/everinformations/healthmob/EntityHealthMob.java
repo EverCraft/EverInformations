@@ -16,18 +16,42 @@
  */
 package fr.evercraft.everinformations.healthmob;
 
-import org.spongepowered.api.entity.Entity;
+import java.util.Optional;
+
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 
-import fr.evercraft.everinformations.EverInformations;
+public class EntityHealthMob {	
 
-public abstract class IHealthMob {
+	private final Text name;
+	private Task task;
 	
-	protected final EverInformations plugin;
-	
-	public IHealthMob(final EverInformations plugin) {
-		this.plugin = plugin;
+	public EntityHealthMob(Optional<Text> name) {
+		this.name = name.orElse(Text.EMPTY);
 	}
 	
-	public abstract Text get(Entity entity);
+	public EntityHealthMob() {
+		this.name = Text.EMPTY;
+	}
+
+	public Text getName() {
+		return name;
+	}
+	
+	public Task getTask() {
+		return task;
+	}
+
+	public void setTask(Task task) {
+		this.task = task;
+	}
+
+	public boolean cancel() {
+		if(this.task != null) {
+			return this.task.cancel();
+		}
+		return false;
+	}
+	
+	
 }

@@ -16,94 +16,91 @@
  */
 package fr.evercraft.everinformations.healthmob;
 
-import org.spongepowered.api.text.Text;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import fr.evercraft.everapi.plugin.EChat;
-import fr.evercraft.everapi.server.player.EPlayer;
+import org.spongepowered.api.entity.Entity;
+
 import fr.evercraft.everinformations.EverInformations;
-import fr.evercraft.everinformations.nametag.config.ConfigNameTag;
+import fr.evercraft.everinformations.healthmob.config.ConfigHealthMob;
 
 public class ManagerHealthMob {
-	private final static String IDENTIFIER = "everinformations";
-	
 	private final EverInformations plugin;
 	
-	private final ConfigNameTag config;
+	private final ConfigHealthMob config;
 
 	private boolean enable;
+	private int stay;
+	private final CopyOnWriteArrayList<String> messages;
 	
-	private String prefix;
-	private String suffix;
+	private final ConcurrentHashMap<UUID, WorldHealthMob> worlds;
 	 
 	public ManagerHealthMob(final EverInformations plugin) {		
 		this.plugin = plugin;
 		
-		this.config = new ConfigNameTag(this.plugin);
+		this.config = new ConfigHealthMob(this.plugin);
 		this.enable = false;
+		
+		this.worlds = new ConcurrentHashMap<UUID, WorldHealthMob>();
+		
+		this.messages = new CopyOnWriteArrayList<String>();
+		
+		this.plugin.getGame().getEventManager().registerListeners(this.plugin, new ListenerHealthMob(this.plugin));
 
 		this.reload();
 	}
 
 	public void reload(){		
-		this.stop();
+		this.reset();
 		
 		this.enable = this.config.isEnable();
-		this.prefix = this.config.getPrefix(); 
-		this.suffix = this.config.getSuffix();
+		this.stay = this.config.getStay();
 		
-		this.start();
+		this.messages.clear();
+		this.messages.addAll(this.config.getMessages());		
 	}
 
-	public void start() {
-		if(this.enable) {
-			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				Text prefix = EChat.of(player.getOption(this.prefix).orElse(""));
-				Text suffix = EChat.of(player.getOption(this.suffix).orElse(""));
-				Text teamRepresentation = player.getTeamRepresentation();
-				
-				for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-					other.sendNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
-				}
-			}
+	public void reset() {
+		for(WorldHealthMob world : this.worlds.values()) {
+			world.reset();
 		}
+		this.worlds.clear();
 	}
-
-	public void stop() {
-		if(this.enable) {
-			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				player.clearNameTag(IDENTIFIER);
-			}
+	
+	public void add(Entity entity, double health) {
+		WorldHealthMob world = this.worlds.get(entity.getWorld().getUniqueId());
+		if(world == null) {
+			world = new WorldHealthMob(this.plugin, entity.getWorld().getUniqueId());
+			this.worlds.put(entity.getWorld().getUniqueId(), world);
+		}
+		world.send(entity, health);
+	}
+	
+	public void update(Entity entity, double health) {
+		WorldHealthMob world = this.worlds.get(entity.getWorld().getUniqueId());
+		if(world != null) {
+			world.update(entity, health);
 		}
 	}
 	
-	public void addPlayer(EPlayer player) {
-		if(this.enable) {
-			Text prefix = EChat.of(player.getOption(this.prefix).orElse(""));
-			Text suffix = EChat.of(player.getOption(this.suffix).orElse(""));
-			Text teamRepresentation = player.getTeamRepresentation();
-			
-			for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-				if(!player.equals(other)) {
-					other.sendNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
-				}
-				player.sendNameTag(IDENTIFIER, other.getTeamRepresentation(), EChat.of(other.getOption(this.prefix).orElse("")), EChat.of(other.getOption(this.suffix).orElse("")));
-			}
-		}
-	}
-	
-	public void removePlayer(EPlayer player) {
-		if(this.enable) {
-			Text teamRepresentation = player.getTeamRepresentation();
-			for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-				other.removeNameTag(IDENTIFIER, teamRepresentation);
-			}
-			
-			player.clearNameTag(IDENTIFIER);
+	public void remove(Entity entity) {
+		WorldHealthMob world = this.worlds.get(entity.getWorld().getUniqueId());
+		if(world != null) {
+			world.remove(entity);
 		}
 	}
 
-	public void changePermission(EPlayer player) {
-		this.removePlayer(player);
-		this.addPlayer(player);
+	public boolean isEnable() {
+		return this.enable;
+	}
+	
+	public int getStay() {
+		return this.stay;
+	}
+
+	public List<String> getMessage() {
+		return this.messages;
 	}
 }

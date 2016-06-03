@@ -77,6 +77,20 @@ public class ManagerNewbie {
 		this.actionbarPlayer.reload();
 		this.actionbarOthers.reload();
 	}
+	
+	public void stop() {
+		this.chatPlayer.stop();
+		this.chatOthers.stop();
+		
+		this.titlePlayer.stop();
+		this.titleOthers.stop();
+		
+		this.bossbarPlayer.stop();
+		this.bossbarOthers.stop();
+		
+		this.actionbarPlayer.stop();
+		this.actionbarOthers.stop();
+	}
 
 	public void addPlayer(EPlayer player) {
 		this.chatPlayer.addPlayer(player);

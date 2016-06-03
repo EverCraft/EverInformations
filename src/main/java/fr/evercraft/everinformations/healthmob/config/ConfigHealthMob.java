@@ -16,7 +16,11 @@
  */
 package fr.evercraft.everinformations.healthmob.config;
  
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import ninja.leaping.configurate.ConfigurationNode;
 
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
@@ -29,8 +33,10 @@ public class ConfigHealthMob extends EConfig {
 	@Override
 	protected void loadDefault() {
 		addDefault("enable", true);
-		addDefault("message", "<HEALTH> &4❤");
-		addDefault("messages", Arrays.asList(
+		addDefault("stay", 30, "Seconds");
+		
+		if(this.get("message").isVirtual()) {
+			addDefault("messages", Arrays.asList(
 				"&c▌                   ",
 				"&c▌                   ",
 				"&c█                  ",
@@ -52,6 +58,7 @@ public class ConfigHealthMob extends EConfig {
 				"&a█████████  ",
 				"&a█████████▌ ",
 				"&a██████████"));
+		}
 	}
 	
 	/*
@@ -62,11 +69,28 @@ public class ConfigHealthMob extends EConfig {
 		return this.get("enable").getBoolean(false);
 	}
 	
-	public String getPrefix() {
-		return this.get("prefix").getString("prefix");
+	public int getStay() {
+		return this.get("stay").getInt(30);
 	}
-	
-	public String getSuffix() {
-		return this.get("suffix").getString("suffix");
+
+	public List<String> getMessages() {
+		List<String> messages = new ArrayList<String>();
+		
+		if(this.get("messages").isVirtual()) {
+			String message = this.plugin.getChat().replace(this.get("message").getString(""));
+			
+			if(!message.isEmpty()) {
+				messages.add(message);
+			}
+		} else {
+			for(ConfigurationNode config : this.get("messages").getChildrenList()) {
+				String message = this.plugin.getChat().replace(config.getString(""));
+				
+				if(!message.isEmpty()) {
+					messages.add(message);
+				}
+			}
+		}
+		return messages;
 	}
 }
