@@ -49,7 +49,7 @@ public class WorldHealthMob {
 		Optional<World> world = this.plugin.getGame().getServer().getWorld(this.world);
 		if(world.isPresent()) {
 			for(Entry<UUID, EntityHealthMob> healthmob : this.entities.entrySet()) {
-				healthmob.getValue().getTask().cancel();
+				healthmob.getValue().cancel();
 				Optional<Entity> entity = world.get().getEntity(healthmob.getKey());
 				if(entity.isPresent()) {
 					this.plugin.getLogger().debug("HealthMob : Remove (uuid='" + healthmob.getKey() + "';name='" + healthmob.getValue() + "'");

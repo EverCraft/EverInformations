@@ -45,7 +45,7 @@ public class ListenerHealthMob {
 			if (optDamageSource.isPresent() && optDamageSource.get().getSource() instanceof Player) {
 				this.plugin.getHealthMob().add(event.getTargetEntity(), event.getTargetEntity().get(Keys.HEALTH).orElse(0.0) - event.getFinalDamage());
 			} else {
-				this.plugin.getHealthMob().add(event.getTargetEntity(), event.getTargetEntity().get(Keys.HEALTH).orElse(0.0) - event.getFinalDamage());
+				this.plugin.getHealthMob().update(event.getTargetEntity(), event.getTargetEntity().get(Keys.HEALTH).orElse(0.0) - event.getFinalDamage());
 			}
 		}
 	}

@@ -226,7 +226,7 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 	}
 	
 	public void remove() {
-		if(this.enable && this.messages != null && !this.messages.isEmpty() && this.getMessage() instanceof BossBarMessage) {
+		if(this.enable && this.player != null && this.messages != null && !this.messages.isEmpty() && this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			
 			this.plugin.getLogger().debug("Connection : RemoveBossbar (type='" + this.type.name() + "';priority='" + this.priority + "';message='" + message + "')");

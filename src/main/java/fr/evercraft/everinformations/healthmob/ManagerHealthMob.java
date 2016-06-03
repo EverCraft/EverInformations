@@ -36,6 +36,9 @@ public class ManagerHealthMob {
 	private final CopyOnWriteArrayList<String> messages;
 	
 	private final ConcurrentHashMap<UUID, WorldHealthMob> worlds;
+	
+	private final CopyOnWriteArrayList<String> disable_worlds;
+	private final CopyOnWriteArrayList<String> disable_entities;
 	 
 	public ManagerHealthMob(final EverInformations plugin) {		
 		this.plugin = plugin;
@@ -46,6 +49,8 @@ public class ManagerHealthMob {
 		this.worlds = new ConcurrentHashMap<UUID, WorldHealthMob>();
 		
 		this.messages = new CopyOnWriteArrayList<String>();
+		this.disable_worlds = new CopyOnWriteArrayList<String>();
+		this.disable_entities = new CopyOnWriteArrayList<String>();
 		
 		this.plugin.getGame().getEventManager().registerListeners(this.plugin, new ListenerHealthMob(this.plugin));
 
@@ -59,7 +64,12 @@ public class ManagerHealthMob {
 		this.stay = this.config.getStay();
 		
 		this.messages.clear();
-		this.messages.addAll(this.config.getMessages());		
+		this.disable_worlds.clear();
+		this.disable_entities.clear();
+		
+		this.messages.addAll(this.config.getMessages());
+		this.disable_worlds.addAll(this.config.getDisableWorlds());
+		this.disable_entities.addAll(this.config.getDisableEntities());
 	}
 
 	public void reset() {
@@ -69,13 +79,21 @@ public class ManagerHealthMob {
 		this.worlds.clear();
 	}
 	
-	public void add(Entity entity, double health) {
-		WorldHealthMob world = this.worlds.get(entity.getWorld().getUniqueId());
-		if(world == null) {
-			world = new WorldHealthMob(this.plugin, entity.getWorld().getUniqueId());
-			this.worlds.put(entity.getWorld().getUniqueId(), world);
+	public boolean add(Entity entity, double health) {
+		if(!this.disable_entities.contains(entity.getType().getName().toUpperCase())) {
+			WorldHealthMob world = this.worlds.get(entity.getWorld().getUniqueId());
+			if(world == null) {
+				if(!this.disable_worlds.contains(entity.getWorld().getName())) {
+					world = new WorldHealthMob(this.plugin, entity.getWorld().getUniqueId());
+					this.worlds.put(entity.getWorld().getUniqueId(), world);
+				} else {
+					return false;
+				}
+			}
+			world.send(entity, health);
+			return true;
 		}
-		world.send(entity, health);
+		return false;
 	}
 	
 	public void update(Entity entity, double health) {

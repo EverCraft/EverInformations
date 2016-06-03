@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import ninja.leaping.configurate.ConfigurationNode;
+import org.spongepowered.api.entity.EntityTypes;
 
+import ninja.leaping.configurate.ConfigurationNode;
+import fr.evercraft.everapi.java.UtilsList;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
 
@@ -34,6 +36,13 @@ public class ConfigHealthMob extends EConfig {
 	protected void loadDefault() {
 		addDefault("enable", true);
 		addDefault("stay", 30, "Seconds");
+		
+		addDefault("disable-worlds", Arrays.asList(
+				"world1", 
+				"world2"));
+		addDefault("disable-entities", Arrays.asList(
+				EntityTypes.ENDER_DRAGON.getName().toUpperCase(), 
+				EntityTypes.WITHER.getName().toUpperCase()));
 		
 		if(this.get("message").isVirtual()) {
 			addDefault("messages", Arrays.asList(
@@ -93,4 +102,13 @@ public class ConfigHealthMob extends EConfig {
 		}
 		return messages;
 	}
+	
+	public List<String> getDisableWorlds() {
+		return this.getListString("disable-worlds");
+	}
+
+	public List<String> getDisableEntities() {
+		return UtilsList.toUpperCase(this.getListString("disable-entities"));
+	}
+	
 }
