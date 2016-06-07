@@ -27,6 +27,7 @@ import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarTitle;
 public abstract class SidebarObjective extends EObjective {
 	public static enum Type {
 		INFORMATIONS,
+		NUMBERS,
 		ECONOMY;
     }
 	

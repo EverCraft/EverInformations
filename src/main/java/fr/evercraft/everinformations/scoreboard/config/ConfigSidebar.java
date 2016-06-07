@@ -33,6 +33,7 @@ import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective.Type;
 import fr.evercraft.everinformations.scoreboard.objective.score.Score.TypeScore;
 import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarEconomyObjective;
 import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarInformationsObjective;
+import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarNumbersObjective;
 import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarTitle;
 
 public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> {
@@ -47,6 +48,8 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 		if(this.get("objectives").isVirtual()) {
 			List<HashMap<String, Object>> messages = new ArrayList<HashMap<String, Object>>();
 			HashMap<String, Object> message = new HashMap<String, Object>();
+			
+			// Informations
 			message.put("title", "&6✖ Infos ✖");
 			message.put("stay", 300);
 			message.put("update", 20);
@@ -64,8 +67,32 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 			message.put("scores", scores);
 			messages.add(message);
 			
+			// Numbers
 			message = new HashMap<String, Object>();
-			message.put("title", "&6✖ Top eco ✖");
+			HashMap<Integer, String> scores_int = new HashMap<Integer, String>();
+			message.put("title", "&6✖  EverCraft ✖");
+			message.put("stay", 300);
+			message.put("update", 20);
+			message.put("type", Type.NUMBERS.name());
+			
+			scores_int.put(9, "");
+			scores_int.put(8, "&aJoueur");
+			scores_int.put(7, "&4  <" + TypeScore.ONLINE_PLAYERS.name() + ">");
+			scores_int.put(6, "");
+			scores_int.put(5, "&aTeamSpeak :");
+			scores_int.put(4, "&4  ts.evercraft.fr");
+			scores_int.put(3, "");
+			scores_int.put(2, "&aSite Web :");
+			scores_int.put(1, "&4  evercraft.fr");
+			scores_int.put(0, "");
+			
+			
+			message.put("scores", scores_int);
+			messages.add(message);
+			
+			// Economy
+			message = new HashMap<String, Object>();
+			message.put("title", "&6✖  Top eco ✖");
 			message.put("stay", 300);
 			message.put("type", Type.ECONOMY.name());
 			message.put("message", "&a<player>");
@@ -111,35 +138,61 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 				}
 			}
 			
-			if(!titles.isEmpty()) {
-				double stay = config.getNode("stay").getDouble(stay_default);
-				double update = config.getNode("update").getDouble(update_default);
-				Type type = Type.valueOf(config.getNode("type").getString(""));
-				
-				if(type != null) {
-					if(type.equals(Type.INFORMATIONS)) {
-						Map<Text, TypeScore> scores = new HashMap<Text, TypeScore>();
-						for(Entry<Object, ? extends ConfigurationNode> config_score : config.getNode("scores").getChildrenMap().entrySet()) {
-							if(config_score.getKey() instanceof String) {
-								try {
-									Text score_value = EChat.of((String) config_score.getKey());
-									TypeScore score_type = TypeScore.valueOf(config_score.getValue().getString(""));
-									scores.put(score_value, score_type);
-								} catch (IllegalArgumentException e) {}
+			try {
+				if(!titles.isEmpty()) {
+					double stay = config.getNode("stay").getDouble(stay_default);
+					double update = config.getNode("update").getDouble(update_default);
+					Type type = Type.valueOf(config.getNode("type").getString(""));
+					
+					if(type != null) {
+						if(type.equals(Type.INFORMATIONS)) {
+							Map<Text, TypeScore> scores = new HashMap<Text, TypeScore>();
+							for(Entry<Object, ? extends ConfigurationNode> config_score : config.getNode("scores").getChildrenMap().entrySet()) {
+								if(config_score.getKey() instanceof String) {
+									try {
+										Text score_value = EChat.of((String) config_score.getKey());
+										TypeScore score_type = TypeScore.valueOf(config_score.getValue().getString(""));
+										scores.put(score_value, score_type);
+									} catch (IllegalArgumentException e) {}
+								}
+							}
+							
+							if(!scores.isEmpty()) {
+								objectives.add(new SidebarInformationsObjective(this.plugin, stay, update, titles, scores));
+							} else {
+								this.plugin.getLogger().warn("ScoreBoard Score Empty : " + type.name());
+							}
+							
+						} else if(type.equals(Type.NUMBERS)) {
+							Map<Integer, String> scores = new HashMap<Integer, String>();
+							for(Entry<Object, ? extends ConfigurationNode> config_score : config.getNode("scores").getChildrenMap().entrySet()) {
+								if(config_score.getKey() instanceof String) {
+									try {
+										Integer score_int = Integer.parseInt((String) config_score.getKey());
+										String score_text = this.plugin.getChat().replace(config_score.getValue().getString(""));
+										scores.put(score_int, score_text);
+									} catch (NumberFormatException e) {}
+								}
+							}
+							
+							if(!scores.isEmpty()) {
+								objectives.add(new SidebarNumbersObjective(this.plugin, stay, update, titles, scores));
+							} else {
+								this.plugin.getLogger().warn("ScoreBoard Score Empty : " + type.name());
+							}
+							
+						} else if(type.equals(Type.ECONOMY)) {
+							if(this.plugin.getEverAPI().getManagerService().getTopEconomy().isPresent()) {
+								String message = this.plugin.getChat().replace(config.getNode("message").getString("<player>"));
+								objectives.add(new SidebarEconomyObjective(this.plugin, stay, update, titles, message));
 							}
 						}
-						
-						if(!scores.isEmpty()) {
-							objectives.add(new SidebarInformationsObjective(this.plugin, stay, update, titles, scores));
-						}
-						
-					} else if(type.equals(Type.ECONOMY)) {
-						if(this.plugin.getEverAPI().getManagerService().getTopEconomy().isPresent()) {
-							String message = this.plugin.getChat().replace(config.getNode("message").getString("<player>"));
-							objectives.add(new SidebarEconomyObjective(this.plugin, stay, update, titles, message));
-						}
 					}
+				} else {
+					this.plugin.getLogger().warn("ScoreBoard Title Empty : " + config.getNode("type").getString(""));
 				}
+			} catch(IllegalArgumentException e) {
+				this.plugin.getLogger().warn("ScoreBoard Type : " + config.getNode("type").getString(""));
 			}
 		}
 		
