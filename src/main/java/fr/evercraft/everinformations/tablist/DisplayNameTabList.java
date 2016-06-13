@@ -109,9 +109,6 @@ public class DisplayNameTabList {
 					Optional<TabListEntry> entry_other = other.getTabList().getEntry(player.getUniqueId());
 					if(entry_other.isPresent()) {
 						entry_other.get().setDisplayName(EChat.of(prefix_player + player.getName() + suffix_player));
-						this.plugin.getEServer().broadcast("Present pour " + other.getName() + " :" + prefix_player + player.getName() + suffix_player);
-					} else {
-						this.plugin.getEServer().broadcast("No Present : " + other.getName());
 					}
 				}
 			}
@@ -123,7 +120,6 @@ public class DisplayNameTabList {
 			for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 				Optional<TabListEntry> entry = other.getTabList().getEntry(player.getUniqueId());
 				if(entry.isPresent()) {
-					this.plugin.getEServer().broadcast("removePlayer : " + other.getName());
 					entry.get().setDisplayName(Text.EMPTY);
 				}
 			}
