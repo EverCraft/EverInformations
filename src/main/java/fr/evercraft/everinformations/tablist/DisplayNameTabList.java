@@ -125,4 +125,18 @@ public class DisplayNameTabList {
 			}
 		}
 	}
+
+	public void updatePlayer(EPlayer player) {
+		if(this.enable) {
+			String prefix_player = this.plugin.getChat().replace(player.getOption(this.prefix).orElse(""));
+			String suffix_player = this.plugin.getChat().replace(player.getOption(this.suffix).orElse(""));
+			
+			for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
+				Optional<TabListEntry> entry_other = other.getTabList().getEntry(player.getUniqueId());
+				if(entry_other.isPresent()) {
+					entry_other.get().setDisplayName(EChat.of(prefix_player + player.getName() + suffix_player));
+				}
+			}
+		}
+	}
 }

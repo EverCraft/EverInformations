@@ -60,7 +60,7 @@ public class ManagerTabList {
 		this.displayname.removePlayer(player);
 	}
 
-	public void changePermission(EPlayer player) {
-		this.header_footer.addPlayer(player);
+	public void updatePlayer(EPlayer player) {
+		this.displayname.updatePlayer(player);
 	}
 }

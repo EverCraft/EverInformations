@@ -102,7 +102,7 @@ public class ManagerNameTag {
 		}
 	}
 
-	public void changePermission(EPlayer player) {
+	public void updatePermission(EPlayer player) {
 		this.removePlayer(player);
 		this.addPlayer(player);
 	}

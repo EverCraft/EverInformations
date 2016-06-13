@@ -19,7 +19,6 @@ package fr.evercraft.everinformations;
 import java.util.Optional;
 
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.entity.living.humanoid.player.KickPlayerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 
@@ -69,24 +68,14 @@ public class EIListener {
 			
 			// NameTag
 			this.plugin.getNameTag().addPlayer(player);
+			
+			// TabList
+			this.plugin.getTabList().addPlayer(player);
 		}
 		
 		// Active l'AutoMessage
 		if(this.plugin.getGame().getServer().getOnlinePlayers().size() == 1) {
 			this.plugin.getAutoMessages().start();
-		}
-	}
-	
-	@Listener(order = Order.POST)
-	public void onPlayerJoinPost(final ClientConnectionEvent.Join event) {
-		Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
-		
-		// Chargement du EPlayer
-		if(optPlayer.isPresent()) {
-			EPlayer player = optPlayer.get();
-			
-			// TabList
-			this.plugin.getTabList().addPlayer(player);
 		}
 	}
 	
@@ -155,6 +144,7 @@ public class EIListener {
 				this.plugin.getConnection().quitPlayer(event.getEPlayer(), event.getEPlayer().getGroup());
 			} else {
 				this.plugin.getConnection().joinPlayer(event.getEPlayer(), event.getEPlayer().getGroup());
+				this.plugin.getTabList().updatePlayer(event.getEPlayer());
 			}
 		}
 	}
@@ -165,10 +155,10 @@ public class EIListener {
 			event.getAction().equals(PermUserEvent.Action.USER_GROUP_CHANGED) ||
 			event.getAction().equals(PermUserEvent.Action.USER_SUBGROUP_CHANGED))) {
 			// NameTag
-			this.plugin.getNameTag().changePermission(event.getEPlayer().get());
+			this.plugin.getNameTag().updatePermission(event.getEPlayer().get());
 			
 			// TabList
-			this.plugin.getTabList().changePermission(event.getEPlayer().get());
+			this.plugin.getTabList().updatePlayer(event.getEPlayer().get());
 		}
 	}
 	
@@ -177,10 +167,10 @@ public class EIListener {
 		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			if(player.isChildOf(event.getSubject())) {
 				// NameTag
-				this.plugin.getNameTag().changePermission(player);
+				this.plugin.getNameTag().updatePermission(player);
 				
 				// TabList
-				this.plugin.getTabList().changePermission(player);
+				this.plugin.getTabList().updatePlayer(player);
 			}
 		}
 	}
@@ -189,10 +179,10 @@ public class EIListener {
     public void permSystemEvent(PermSystemEvent event) {
 		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			// NameTag
-			this.plugin.getNameTag().changePermission(player);
+			this.plugin.getNameTag().updatePermission(player);
 			
 			// TabList
-			this.plugin.getTabList().changePermission(player);
+			this.plugin.getTabList().updatePlayer(player);
 		}
 	}
 	

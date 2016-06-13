@@ -21,6 +21,8 @@ import java.util.Optional;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.Creature;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.projectile.Projectile;
+import org.spongepowered.api.entity.projectile.source.ProjectileSource;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
@@ -40,17 +42,31 @@ public class ListenerHealthMob {
 	
 	@Listener(order=Order.POST)
 	public void onPlayerDamage(DamageEntityEvent event) {
-		if (event.getTargetEntity() instanceof Creature && this.plugin.getHealthMob().isEnable()) {
-			Optional<EntityDamageSource> optDamageSource = event.getCause().first(EntityDamageSource.class);
-			if (optDamageSource.isPresent() && optDamageSource.get().getSource() instanceof Player) {
-				this.plugin.getHealthMob().add(event.getTargetEntity(), event.getTargetEntity().get(Keys.HEALTH).orElse(0.0) - event.getFinalDamage());
-			} else {
-				this.plugin.getHealthMob().update(event.getTargetEntity(), event.getTargetEntity().get(Keys.HEALTH).orElse(0.0) - event.getFinalDamage());
+		if(this.plugin.getHealthMob().isEnable()) {
+			if (event.getTargetEntity() instanceof Creature) {
+				Optional<EntityDamageSource> optDamageSource = event.getCause().first(EntityDamageSource.class);
+				if (optDamageSource.isPresent() && optDamageSource.get().getSource() instanceof Player) {
+					this.plugin.getHealthMob().add(event.getTargetEntity(), event.getTargetEntity().get(Keys.HEALTH).orElse(0.0) - event.getFinalDamage());
+				} else {
+					this.plugin.getHealthMob().update(event.getTargetEntity(), event.getTargetEntity().get(Keys.HEALTH).orElse(0.0) - event.getFinalDamage());
+				}
+			} else if(event.getTargetEntity() instanceof Player && event.willCauseDeath()) {
+				Optional<EntityDamageSource> optDamageSource = event.getCause().first(EntityDamageSource.class);
+				if (optDamageSource.isPresent()) {
+					if(optDamageSource.get().getSource() instanceof Projectile) {
+						ProjectileSource projectile = ((Projectile)optDamageSource.get().getSource()).getShooter();
+			        	if (projectile instanceof Creature) {
+							this.plugin.getHealthMob().remove((Creature) projectile);
+			        	}
+					} else if(optDamageSource.get().getSource() instanceof Creature) {
+						this.plugin.getHealthMob().remove(optDamageSource.get().getSource());
+					}
+				}
 			}
 		}
 	}
 	
-	@Listener
+	@Listener(order=Order.PRE)
 	public void onPlayerDamage(DestructEntityEvent.Death event) {
 		if (event.getTargetEntity() instanceof Creature && this.plugin.getHealthMob().isEnable()) {
 			Optional<EntityDamageSource> optDamageSource = event.getCause().first(EntityDamageSource.class);
@@ -71,6 +87,5 @@ public class ListenerHealthMob {
 				this.plugin.getHealthMob().update(event.getTargetEntity(), event.getTargetEntity().get(Keys.HEALTH).orElse(0.0) - event.getFinalHealAmount());
 			}
 		}
-	}
-	
+	}	
 }
