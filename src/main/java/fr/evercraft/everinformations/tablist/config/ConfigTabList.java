@@ -35,6 +35,8 @@ public class ConfigTabList extends EConfig {
 		addDefault("update", 20);
 		addDefault("header", "&4Header[RT]&aSubHeader");
 		addDefault("footer", "&4Footer[RT]&aSubFooter");
+		addDefault("prefix", "prefix", "PermissionService : Option");
+		addDefault("suffix", "suffix", "PermissionService : Option");
 	}
 	
 	/*
@@ -43,6 +45,14 @@ public class ConfigTabList extends EConfig {
 	
 	public boolean isEnable() {
 		return this.get("enable").getBoolean(false);
+	}
+	
+	public String getPrefix() {
+		return this.get("prefix").getString("prefix");
+	}
+	
+	public String getSuffix() {
+		return this.get("suffix").getString("suffix");
 	}
 	
 	public List<TabListMessage> getTabLists() {
