@@ -21,7 +21,6 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.HealEntityEvent;
 
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everinformations.scoreboard.objective.EObjective;
 
 public class ScoreHealth extends Score {
 	
@@ -33,9 +32,7 @@ public class ScoreHealth extends Score {
 	@Listener
     public void event(HealEntityEvent event) {
 		if(event.getTargetEntity() instanceof Player) {
-			for(EObjective objective : this.objectives) {
-				objective.update(event.getTargetEntity().getUniqueId(), TypeScore.HEALTH);
-			}
+			this.update(event.getTargetEntity().getUniqueId(), TypeScore.HEALTH);
 		}
 	}
 	

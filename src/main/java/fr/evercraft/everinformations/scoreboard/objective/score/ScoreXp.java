@@ -21,7 +21,6 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.ChangeEntityExperienceEvent;
 
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everinformations.scoreboard.objective.EObjective;
 
 public class ScoreXp extends Score {
 	
@@ -33,9 +32,7 @@ public class ScoreXp extends Score {
 	@Listener
     public void event(ChangeEntityExperienceEvent event) {
 		if(event.getTargetEntity() instanceof Player) {
-			for(EObjective objective : this.objectives) {
-				objective.update(event.getTargetEntity().getUniqueId(), TypeScore.XP);
-			}
+			this.update(event.getTargetEntity().getUniqueId(), TypeScore.XP);
 		}
 	}
 

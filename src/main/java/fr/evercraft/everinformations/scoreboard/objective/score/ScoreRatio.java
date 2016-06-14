@@ -16,28 +16,30 @@
  */
 package fr.evercraft.everinformations.scoreboard.objective.score;
 
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.entity.living.humanoid.ChangeLevelEvent;
 
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.stats.event.StatsEvent;
 
-public class ScoreLevel extends Score {
+public class ScoreRatio extends Score {
 	
 	@Override
 	public int getValue(EPlayer player) {
-		return player.getLevel();
+		return player.getRatio();
 	}
 	
 	@Listener
-	public void event(ChangeLevelEvent event) {
-		if(event.getTargetEntity() instanceof Player) {
-			this.update(event.getTargetEntity().getUniqueId(), TypeScore.LEVEL);
-		}
+    public void event(StatsEvent.Death event) {
+		this.update(event.getVictim().getUniqueId(), TypeScore.RATIO);
+	}
+	
+	@Listener
+    public void event(StatsEvent.Kill event) {
+		this.update(event.getKiller().getUniqueId(), TypeScore.RATIO);
 	}
 	
 	@Override
 	public boolean isUpdate() {
-		return false;
+		return true;
 	}
 }

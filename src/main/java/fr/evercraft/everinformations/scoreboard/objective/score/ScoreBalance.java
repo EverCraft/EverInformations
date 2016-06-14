@@ -22,7 +22,6 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.economy.EconomyTransactionEvent;
 
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everinformations.scoreboard.objective.EObjective;
 
 public class ScoreBalance extends Score {
 	
@@ -35,9 +34,7 @@ public class ScoreBalance extends Score {
     public void event(EconomyTransactionEvent event) {
 		try {
 			UUID uuid = UUID.fromString(event.getTransactionResult().getAccount().getIdentifier());
-			for(EObjective objective : this.objectives) {
-				objective.update(uuid, TypeScore.BALANCE);
-			}
+			this.update(uuid, TypeScore.BALANCE);
 		} catch (IllegalArgumentException e) {}
 	}
 	

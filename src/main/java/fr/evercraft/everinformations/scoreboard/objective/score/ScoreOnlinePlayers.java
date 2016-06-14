@@ -22,7 +22,6 @@ import org.spongepowered.api.event.network.ClientConnectionEvent;
 
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.essentials.event.VanishEvent;
-import fr.evercraft.everinformations.scoreboard.objective.EObjective;
 
 public class ScoreOnlinePlayers extends Score {
 	
@@ -33,23 +32,17 @@ public class ScoreOnlinePlayers extends Score {
 	
 	@Listener
     public void joinEvent(ClientConnectionEvent.Join event) {
-		for(EObjective objective : this.objectives) {
-			objective.update(TypeScore.ONLINE_PLAYERS);
-		}
+		this.update(TypeScore.ONLINE_PLAYERS);
 	}
 	
 	@Listener(order=Order.POST)
     public void quitEvent(ClientConnectionEvent.Disconnect event) {
-		for(EObjective objective : this.objectives) {
-			objective.update(TypeScore.ONLINE_PLAYERS);
-		}
+		this.update(TypeScore.ONLINE_PLAYERS);
 	}
 	
 	@Listener
     public void vanishEvent(VanishEvent event) {
-		for(EObjective objective : this.objectives) {
-			objective.update(TypeScore.ONLINE_PLAYERS);
-		}
+		this.update(TypeScore.ONLINE_PLAYERS);
 	}
 	
 	@Override

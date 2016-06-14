@@ -16,6 +16,7 @@
  */
 package fr.evercraft.everinformations.scoreboard.objective.score;
 
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.evercraft.everapi.plugin.EPlugin;
@@ -31,7 +32,13 @@ public abstract class Score {
 		HEALTH(new ScoreHealth()),
 		FOOD(new ScoreFood()),
 		LEVEL(new ScoreLevel()),
-		XP(new ScoreXp());
+		XP(new ScoreXp()),
+		DEATHS(new ScoreDeath()),
+		KILLS(new ScoreKill()),
+		RATIO(new ScoreRatio()),
+		DEATHS_MONTHLY(new ScoreDeathMonthly()),
+		KILLS_MONTHLY(new ScoreKillMonthly()),
+		RATIO_MONTHLY(new ScoreRatioMonthly());
 		
 		private final Score score;
 		private TypeScore(Score score) {
@@ -73,6 +80,18 @@ public abstract class Score {
 		this.objectives.remove(objective);
 		if(this.objectives.isEmpty()) {
 			plugin.getGame().getEventManager().unregisterListeners(this);
+		}
+	}
+	
+	protected void update(TypeScore type) {
+		for(EObjective objective : this.objectives) {
+			objective.update(type);
+		}
+	}
+	
+	protected void update(UUID uniqueId, TypeScore type) {
+		for(EObjective objective : this.objectives) {
+			objective.update(type);
 		}
 	}
 	

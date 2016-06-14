@@ -28,7 +28,6 @@ import fr.evercraft.everinformations.scoreboard.objective.score.Score.TypeScore;
 public enum ObjectiveType {
 	HEALTH(Criteria.HEALTH, ObjectiveDisplayModes.HEARTS),
 	HEALTH_INTEGER(Criteria.HEALTH),
-	DEATHS(Criteria.DEATHS),
 	PLAYER_KILLS(Criteria.PLAYER_KILLS),
 	TOTAL_KILLS(Criteria.TOTAL_KILLS),
 	ONLINE_PLAYERS(TypeScore.ONLINE_PLAYERS),
@@ -36,7 +35,13 @@ public enum ObjectiveType {
 	PING(TypeScore.PING),
 	FOOD(TypeScore.FOOD),
 	LEVEL(TypeScore.LEVEL),
-	XP(TypeScore.XP);
+	XP(TypeScore.XP),
+	DEATHS(TypeScore.DEATHS),
+	KILLS(TypeScore.KILLS),
+	RATIO(TypeScore.RATIO),
+	DEATHS_MONTHLY(TypeScore.DEATHS_MONTHLY),
+	KILSL_MONTHLY(TypeScore.KILLS_MONTHLY),
+	RATIO_MONTHLY(TypeScore.RATIO_MONTHLY);
 	
 	private final Criterion criterion;
 	private final ObjectiveDisplayMode display;
