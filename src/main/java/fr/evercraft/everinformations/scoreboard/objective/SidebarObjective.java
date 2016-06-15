@@ -28,7 +28,8 @@ public abstract class SidebarObjective extends EObjective {
 	public static enum Type {
 		INFORMATIONS,
 		NUMBERS,
-		ECONOMY;
+		ECONOMY,
+		STATS;
     }
 	
 	protected final Type type;

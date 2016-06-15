@@ -16,7 +16,7 @@
  */
 package fr.evercraft.everinformations.scoreboard.objective.sidebar;
 
-import java.math.BigDecimal;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map.Entry;
@@ -35,19 +35,29 @@ import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
 import fr.evercraft.everinformations.scoreboard.objective.score.Score.TypeScore;
 
-public class SidebarEconomyObjective extends SidebarObjective {
+public class SidebarStatsObjective extends SidebarObjective {
 	private final static int TOP_COUNT = 16;
+	
+	public static enum ScoreTypes {
+		DEATHS,
+		KILLS,
+		RATIO;
+    }
 
 	private final EPlugin plugin;
 	private Objective objective;
 	private final String message;
 	
+	private final ScoreTypes score_type;
 	
-	public SidebarEconomyObjective(final EPlugin plugin, final double stay, final double update, final List<SidebarTitle> titles, final String message) {
-		super(plugin, stay,  update, Type.ECONOMY, titles);
+	
+	public SidebarStatsObjective(final EPlugin plugin, final double stay, final List<SidebarTitle> titles, final String message, ScoreTypes score_type) {
+		super(plugin, stay,  0.0, Type.STATS, titles);
 		
 		this.plugin = plugin;
 		this.message = message;
+		
+		this.score_type = score_type;
 	}
 	
 	@Override
@@ -80,19 +90,32 @@ public class SidebarEconomyObjective extends SidebarObjective {
 				.build();
 		
 		if(this.plugin.getEverAPI().getManagerService().getTopEconomy().isPresent()) {
-			for(Entry<UUID, BigDecimal> player : this.plugin.getEverAPI().getManagerService().getTopEconomy().get().topUniqueAccount(TOP_COUNT).entrySet()) {
+			for(Entry<UUID, Double> player : this.getTop().entrySet()) {
 				Optional<User> user = this.plugin.getEServer().getUser(player.getKey());
 				// Si le User existe bien
-				if(user.isPresent()){
+				if(user.isPresent()) {
 					objective.getOrCreateScore(EChat.of(this.message.replaceAll("<player>",user.get().getName()))).setScore(player.getValue().intValue());
 				}
 			}
+		} else {
+			this.plugin.getLogger().warn("No EverStats");
 		}
 		
 		if(objective.getScores().isEmpty()) {
 			objective.getOrCreateScore(EIMessages.SCOREBOARD_EMPTY.getText()).setScore(0);
 		}
 		this.objective = objective;
+	}
+	
+	public LinkedHashMap<UUID, Double> getTop() {
+		if(this.score_type == ScoreTypes.DEATHS) {
+			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopDeaths(TOP_COUNT);
+		} else if(this.score_type == ScoreTypes.KILLS) {
+			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopKills(TOP_COUNT);
+		} else if(this.score_type == ScoreTypes.RATIO) {
+			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopRatio(TOP_COUNT);
+		}
+		return new LinkedHashMap<UUID, Double>();
 	}
 	
 	@Override

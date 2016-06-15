@@ -34,6 +34,8 @@ import fr.evercraft.everinformations.scoreboard.objective.score.Score.TypeScore;
 import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarEconomyObjective;
 import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarInformationsObjective;
 import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarNumbersObjective;
+import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarStatsObjective;
+import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarStatsObjective.ScoreTypes;
 import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarTitle;
 
 public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> {
@@ -51,7 +53,7 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 			
 			// Informations
 			message.put("title", "&6✖ Infos ✖");
-			message.put("stay", 300);
+			message.put("stay", 60);
 			message.put("update", 20);
 			message.put("type", Type.INFORMATIONS.name());
 			
@@ -71,7 +73,7 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 			message = new HashMap<String, Object>();
 			HashMap<Integer, String> scores_int = new HashMap<Integer, String>();
 			message.put("title", "&6✖  EverCraft ✖");
-			message.put("stay", 300);
+			message.put("stay", 60);
 			message.put("update", 20);
 			message.put("type", Type.NUMBERS.name());
 			
@@ -93,12 +95,21 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 			// Economy
 			message = new HashMap<String, Object>();
 			message.put("title", "&6✖  Top eco ✖");
-			message.put("stay", 300);
+			message.put("stay", 60);
 			message.put("type", Type.ECONOMY.name());
 			message.put("message", "&a<player>");
 			messages.add(message);
 			
-			addDefault("objectives", messages, "Type : INFORMATIONS|ECONOMY");
+			// Stats
+			message = new HashMap<String, Object>();
+			message.put("title", "&6✖  Top Kill ✖");
+			message.put("stay", 60);
+			message.put("type", Type.STATS.name());
+			message.put("score", ScoreTypes.KILLS.name());
+			message.put("message", "&a<player>");
+			messages.add(message);
+			
+			addDefault("objectives", messages, "Type : INFORMATIONS|NUMBERS|ECONOMY|STATS");
 		}
 	}
 	
@@ -153,14 +164,16 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 										Text score_value = EChat.of((String) config_score.getKey());
 										TypeScore score_type = TypeScore.valueOf(config_score.getValue().getString(""));
 										scores.put(score_value, score_type);
-									} catch (IllegalArgumentException e) {}
+									} catch (IllegalArgumentException e) {
+										this.plugin.getLogger().warn("Error during the change of the scoreboard (type='INFORMATIONS') : score='" + config_score.getValue().getString("") + "'");
+									}
 								}
 							}
 							
 							if(!scores.isEmpty()) {
 								objectives.add(new SidebarInformationsObjective(this.plugin, stay, update, titles, scores));
 							} else {
-								this.plugin.getLogger().warn("ScoreBoard Score Empty : " + type.name());
+								this.plugin.getLogger().warn("ScoreBoard Score Empty (type='INFORMATIONS') : " + type.name());
 							}
 							
 						} else if(type.equals(Type.NUMBERS)) {
@@ -171,20 +184,33 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 										Integer score_int = Integer.parseInt((String) config_score.getKey());
 										String score_text = this.plugin.getChat().replace(config_score.getValue().getString(""));
 										scores.put(score_int, score_text);
-									} catch (NumberFormatException e) {}
+									} catch (NumberFormatException e) {
+										this.plugin.getLogger().warn("Error during the change of the scoreboard (type='NUMBERS') : number='" + config_score.getValue().getString("") + "'");
+									}
 								}
 							}
 							
 							if(!scores.isEmpty()) {
 								objectives.add(new SidebarNumbersObjective(this.plugin, stay, update, titles, scores));
 							} else {
-								this.plugin.getLogger().warn("ScoreBoard Score Empty : " + type.name());
+								this.plugin.getLogger().warn("ScoreBoard Score Empty (type='NUMBERS') : " + type.name());
 							}
 							
 						} else if(type.equals(Type.ECONOMY)) {
 							if(this.plugin.getEverAPI().getManagerService().getTopEconomy().isPresent()) {
 								String message = this.plugin.getChat().replace(config.getNode("message").getString("<player>"));
 								objectives.add(new SidebarEconomyObjective(this.plugin, stay, update, titles, message));
+							}
+						} else if(type.equals(Type.STATS)) {
+							if(this.plugin.getEverAPI().getManagerService().getStats().isPresent()) {
+								try {
+									ScoreTypes score_type = ScoreTypes.valueOf(config.getNode("score").getString(""));
+									String message = this.plugin.getChat().replace(config.getNode("message").getString("<player>"));
+									
+									objectives.add(new SidebarStatsObjective(this.plugin, stay, titles, message, score_type));
+								} catch (IllegalArgumentException e) {
+									this.plugin.getLogger().warn("Error during the change of the scoreboard (type='STATS') : score='" + config.getNode("score").getString("") + "'");
+								}
 							}
 						}
 					}
