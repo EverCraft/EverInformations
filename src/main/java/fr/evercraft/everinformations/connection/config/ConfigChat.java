@@ -116,7 +116,7 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 					if(!message.isEmpty()) {
 						messages.add(new ChatMessage(interval_player, TextSerializers.FORMATTING_CODE, prefix_player, message));
 					}
-				// Liste de message
+				// Liste de messages
 				} else {
 					for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
 						// Message uniquement

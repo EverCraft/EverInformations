@@ -22,12 +22,12 @@ import java.util.concurrent.TimeUnit;
 import org.spongepowered.api.scheduler.Task;
 
 import fr.evercraft.everapi.plugin.EPlugin;
-import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarTitle;
+import fr.evercraft.everinformations.scoreboard.sidebar.SidebarTitle;
 
 public abstract class SidebarObjective extends EObjective {
 	public static enum Type {
-		INFORMATIONS,
 		NUMBERS,
+		INFORMATIONS,
 		ECONOMY,
 		STATS;
     }

@@ -26,8 +26,8 @@ import org.spongepowered.api.text.Text;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
-import fr.evercraft.everinformations.scoreboard.objective.score.ObjectiveType;
-import fr.evercraft.everinformations.scoreboard.objective.score.Score.TypeScore;
+import fr.evercraft.everinformations.scoreboard.score.ObjectiveType;
+import fr.evercraft.everinformations.scoreboard.score.Score.TypeScore;
 
 public class ListObjective extends EObjective {
 

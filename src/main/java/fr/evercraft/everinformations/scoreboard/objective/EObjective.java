@@ -20,7 +20,7 @@ import java.util.UUID;
 
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everinformations.scoreboard.objective.score.Score.TypeScore;
+import fr.evercraft.everinformations.scoreboard.score.Score.TypeScore;
 
 public abstract class EObjective  {
 	

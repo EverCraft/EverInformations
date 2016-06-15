@@ -114,7 +114,7 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 					if(!message.isEmpty()) {
 						messages.add(new ActionBarMessage(stay_player, interval_player, message));
 					}
-				// Liste de message
+				// Liste de messages
 				} else {
 					for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
 						// Message uniquement

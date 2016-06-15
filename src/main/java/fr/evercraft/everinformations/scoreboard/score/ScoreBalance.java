@@ -14,33 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.scoreboard.objective.sidebar;
+package fr.evercraft.everinformations.scoreboard.score;
 
-import org.spongepowered.api.text.Text;
+import java.util.UUID;
 
-public class SidebarTitle  {
-	// En secondes
-	private final double stay;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.economy.EconomyTransactionEvent;
+
+import fr.evercraft.everapi.server.player.EPlayer;
+
+public class ScoreBalance extends Score {
 	
-	private final Text title;
-	
-	public SidebarTitle(final double stay, Text title) {
-		this.stay = stay;
-		this.title = title;
-	}
-
-	public long getNext() {
-		return (long) (this.stay * 1000);
-	}
-	
-	public Text getTitle() {
-		return this.title;
-	}
-
 	@Override
-	public String toString() {
-		return "SidebarTitle [stay=" + stay + ", title=" + title + "]";
+	public int getValue(EPlayer player) {
+		return player.getBalance().intValue();
 	}
 	
+	@Listener
+    public void event(EconomyTransactionEvent event) {
+		try {
+			UUID uuid = UUID.fromString(event.getTransactionResult().getAccount().getIdentifier());
+			this.update(uuid, TypeScore.BALANCE);
+		} catch (IllegalArgumentException e) {}
+	}
 	
+	@Override
+	public boolean isUpdate() {
+		return true;
+	}
 }

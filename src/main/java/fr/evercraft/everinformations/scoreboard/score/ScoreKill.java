@@ -14,28 +14,23 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.scoreboard.objective.score;
+package fr.evercraft.everinformations.scoreboard.score;
 
 import org.spongepowered.api.event.Listener;
 
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.stats.event.StatsUserEvent;
 
-public class ScoreRatioMonthly extends Score {
+public class ScoreKill extends Score {
 	
 	@Override
 	public int getValue(EPlayer player) {
-		return player.getRatioMonthly();
-	}
-	
-	@Listener
-    public void event(StatsUserEvent.Death event) {
-		this.update(event.getVictim().getUniqueId(), TypeScore.RATIO);
+		return player.getKill();
 	}
 	
 	@Listener
     public void event(StatsUserEvent.Kill event) {
-		this.update(event.getKiller().getUniqueId(), TypeScore.RATIO);
+		this.update(event.getKiller().getUniqueId(), TypeScore.KILLS);
 	}
 	
 	@Override

@@ -88,6 +88,7 @@ public class BossBarMessage implements IMessage {
 	private boolean sendText(int priority, EPlayer player, Text text) {
 		
 		Optional<ServerBossBar> bossbar = player.getBossBar(priority);
+		// Si le joueur à déjà une bossbar
 		if(bossbar.isPresent()) {
 			bossbar.get().setName(text);
 			bossbar.get().setPercent(this.percent);
@@ -109,6 +110,10 @@ public class BossBarMessage implements IMessage {
 					.build());
 		}
 	}
+	
+	public boolean remove(int priority, EPlayer player) {
+		return player.removeBossBar(priority);
+	}
 
 	@Override
 	public String toString() {
@@ -118,9 +123,4 @@ public class BossBarMessage implements IMessage {
 				+ ", playEndBossMusic=" + playEndBossMusic + ", createFog="
 				+ createFog + "]";
 	}
-
-	public boolean remove(int priority, EPlayer player) {
-		return player.removeBossBar(priority);
-	}
-
 }

@@ -91,19 +91,26 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 		double fadeIn_default = this.get(prefix + ".fadeIn").getDouble(1);
 		double fadeOut_default = this.get(prefix + ".fadeOut").getDouble(1);
 		
+		double stay_player = this.get(prefix + ".stay").getDouble(stay_default);
+		double interval_player = this.get(prefix + ".inverval").getDouble(interval_default);
+		double fadeIn_player = this.get(prefix + ".fadeIn").getDouble(fadeIn_default);
+		double fadeOut_player = this.get(prefix + ".fadeOut").getDouble(fadeOut_default);
+		
+		// Message unique
 		if(this.get(prefix + ".messages").isVirtual()) {
 			String title = this.plugin.getChat().replace(this.get(prefix + ".title").getString(""));
 			String subTitle = this.plugin.getChat().replace(this.get(prefix + ".subTitle").getString(""));
 			
 			if(!title.isEmpty() || !subTitle.isEmpty()) {
-				messages.add(new TitleMessage(stay_default, interval_default, fadeIn_default, fadeOut_default, title, subTitle));
+				messages.add(new TitleMessage(stay_player, interval_player, fadeIn_player, fadeOut_player, title, subTitle));
 			}
+		// Liste de messages
 		} else {
 			for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
-				double stay = config.getNode("stay").getDouble(stay_default);
-				double interval = config.getNode("next").getDouble(interval_default);
-				double fadeIn = config.getNode("fadeIn").getDouble(fadeIn_default);
-				double fadeOut = config.getNode("fadeOut").getDouble(fadeOut_default);
+				double stay = config.getNode("stay").getDouble(stay_player);
+				double interval = config.getNode("next").getDouble(config.getNode("inverval").getDouble(interval_player));
+				double fadeIn = config.getNode("fadeIn").getDouble(fadeIn_player);
+				double fadeOut = config.getNode("fadeOut").getDouble(fadeOut_player);
 				
 				String title = this.plugin.getChat().replace(config.getNode("title").getString(""));
 				String subTitle = this.plugin.getChat().replace(config.getNode("subTitle").getString(""));

@@ -78,6 +78,10 @@ public class ConfigHealthMob extends EConfig {
 		return this.get("enable").getBoolean(false);
 	}
 	
+	/**
+	 * Temps avant de réinitialisé le nom original
+	 * @return En Seconde
+	 */
 	public int getStay() {
 		return this.get("stay").getInt(30);
 	}
@@ -85,12 +89,14 @@ public class ConfigHealthMob extends EConfig {
 	public List<String> getMessages() {
 		List<String> messages = new ArrayList<String>();
 		
+		// Message unique
 		if(this.get("messages").isVirtual()) {
 			String message = this.plugin.getChat().replace(this.get("message").getString(""));
 			
 			if(!message.isEmpty()) {
 				messages.add(message);
 			}
+		// Liste de messages
 		} else {
 			for(ConfigurationNode config : this.get("messages").getChildrenList()) {
 				String message = this.plugin.getChat().replace(config.getString(""));

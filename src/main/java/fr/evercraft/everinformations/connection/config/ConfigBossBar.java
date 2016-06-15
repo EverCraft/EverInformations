@@ -132,7 +132,7 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 						messages.add(new BossBarMessage(stay_player, next_player, message, percent_player, color_player, overlay_player,
 								darkenSky_player, playEndBossMusic_player, createFog_player));
 					}
-				// Liste de message
+				// Liste de messages
 				} else {
 					for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
 						double stay = config_messages.getNode("stay").getDouble(stay_player);

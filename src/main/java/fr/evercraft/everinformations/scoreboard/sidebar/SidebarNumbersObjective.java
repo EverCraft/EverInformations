@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.scoreboard.objective.sidebar;
+package fr.evercraft.everinformations.scoreboard.sidebar;
 
 import java.util.HashSet;
 import java.util.List;
@@ -34,14 +34,14 @@ import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
-import fr.evercraft.everinformations.scoreboard.objective.score.Score.TypeScore;
+import fr.evercraft.everinformations.scoreboard.score.Score.TypeScore;
 
-public class SidebarInformationsObjective extends SidebarObjective {
+public class SidebarNumbersObjective extends SidebarObjective {
 	
 	private final ConcurrentMap<Text, TypeScore> scores;
 
-	public SidebarInformationsObjective(final EPlugin plugin, final double stay, final double update, final List<SidebarTitle> titles, final Map<Text, TypeScore> scores) {
-		super(plugin, stay, update, Type.INFORMATIONS, titles);
+	public SidebarNumbersObjective(final EPlugin plugin, final double stay, final double update, final List<SidebarTitle> titles, final Map<Text, TypeScore> scores) {
+		super(plugin, stay, update, Type.NUMBERS, titles);
 		
 		this.scores = new ConcurrentHashMap<Text, TypeScore>();
 		this.scores.putAll(scores);

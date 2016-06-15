@@ -14,32 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.scoreboard.objective.score;
-
-import java.util.UUID;
-
-import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.economy.EconomyTransactionEvent;
+package fr.evercraft.everinformations.scoreboard.score;
 
 import fr.evercraft.everapi.server.player.EPlayer;
 
-public class ScoreBalance extends Score {
+public class ScorePing extends Score {
 	
 	@Override
 	public int getValue(EPlayer player) {
-		return player.getBalance().intValue();
-	}
-	
-	@Listener
-    public void event(EconomyTransactionEvent event) {
-		try {
-			UUID uuid = UUID.fromString(event.getTransactionResult().getAccount().getIdentifier());
-			this.update(uuid, TypeScore.BALANCE);
-		} catch (IllegalArgumentException e) {}
+		return player.getConnection().getLatency();
 	}
 	
 	@Override
 	public boolean isUpdate() {
-		return true;
+		return false;
 	}
 }

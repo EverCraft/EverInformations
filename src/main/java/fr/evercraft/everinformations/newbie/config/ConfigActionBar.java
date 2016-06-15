@@ -77,25 +77,32 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 	private List<ActionBarMessage> getMessages(String prefix) {
 		List<ActionBarMessage> messages = new ArrayList<ActionBarMessage>();
 		
-		double stay_default = this.get(prefix + ".stay").getDouble(10);
-		double interval_default = this.get(prefix + ".inverval").getDouble(0);
+		double stay_default = this.get("stay").getDouble(10);
+		double interval_default = this.get("inverval").getDouble(0);
 		
+		double stay_player = this.get(prefix + ".stay").getDouble(stay_default);
+		double interval_player = this.get(prefix + ".inverval").getDouble(interval_default);
+		
+		// Message unique
 		if(this.get(prefix + ".messages").isVirtual()) {
 			String message = this.plugin.getChat().replace(this.get(prefix + ".message").getString(""));
 			if(!message.isEmpty()) {
-				messages.add(new ActionBarMessage(stay_default, interval_default, message));
+				messages.add(new ActionBarMessage(stay_player, interval_player, message));
 			}
+		// Liste de messages
 		} else {
 			for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
+				// Message uniquement
 				if(config.getValue() instanceof String) {
 					String message = this.plugin.getChat().replace(config.getString(""));
 					
 					if(!message.isEmpty()) {
 						messages.add(new ActionBarMessage(stay_default, interval_default, message));
 					}
+				// Message avec config
 				} else {
 					double stay = config.getNode("stay").getDouble(stay_default);
-					double interval = config.getNode("next").getDouble(interval_default);
+					double interval = config.getNode("next").getDouble(config.getNode("interval").getDouble(interval_default));
 					String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
 					
 					if(!message.isEmpty()) {

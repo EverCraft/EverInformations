@@ -53,8 +53,10 @@ public class ChatMessage implements IMessage {
 	
 	@Override
 	public boolean send(int priority, EPlayer player) {
+		// Format normal
 		if(this.format.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessageVariables(this.prefix.orElse("") + this.message);
+		// Format différent
 		} else {
 			if(this.prefix.isPresent()) {
 				player.sendMessage(player.replaceVariable(this.prefix.get()).concat(this.format.deserialize(this.message)));
@@ -67,8 +69,10 @@ public class ChatMessage implements IMessage {
 	
 	@Override
 	public boolean send(int priority, EPlayer player, Text reason) {
+		// Format normal
 		if(this.format.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessageVariables((this.prefix.orElse("") + this.message).replaceAll("<reason>", EChat.serialize(reason)));
+		// Format différent
 		} else {
 			if(this.prefix.isPresent()) {
 				player.sendMessage(player.replaceVariable(this.prefix.get()).concat(this.format.deserialize(this.message)));
@@ -81,8 +85,10 @@ public class ChatMessage implements IMessage {
 	
 	@Override
 	public boolean send(int priority, EPlayer player, EPlayer replace) {
+		// Format normal
 		if(this.format.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessage(replace.replaceVariable(this.prefix.orElse("") + this.message));
+		// Format différent
 		} else {
 			if(this.prefix.isPresent()) {
 				player.sendMessage(replace.replaceVariable(this.prefix.get()).concat(this.format.deserialize(this.message)));
@@ -95,8 +101,10 @@ public class ChatMessage implements IMessage {
 	
 	@Override
 	public boolean send(int priority, EPlayer player, EPlayer replace, Text reason) {
+		// Format normal
 		if(this.format.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessage(replace.replaceVariable((this.prefix.orElse("") + this.message).replaceAll("<reason>", EChat.serialize(reason))));
+		// Format différent
 		} else {
 			if(this.prefix.isPresent()) {
 				player.sendMessage(replace.replaceVariable(this.prefix.get()).concat(this.format.deserialize(this.message)));

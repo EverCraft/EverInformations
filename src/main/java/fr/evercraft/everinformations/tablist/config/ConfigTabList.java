@@ -61,10 +61,12 @@ public class ConfigTabList extends EConfig {
 		double stay_default = this.get("stay").getDouble(60);
 		double update_default = this.get("update").getDouble(20);
 		
+		// Objectif unique
 		if(this.get("tablists").isVirtual()) {
 			String header = this.plugin.getChat().replace(this.get("header").getString(""));
 			String footer = this.plugin.getChat().replace(this.get("footer").getString(""));
 			tablists.add(new TabListMessage(this.plugin, stay_default, update_default, header, footer));
+		// Liste d'objectives
 		} else {
 			for(ConfigurationNode config : this.get("objectives").getChildrenList()) {
 				double stay = config.getNode("stay").getDouble(stay_default);

@@ -14,9 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.scoreboard.objective.sidebar;
+package fr.evercraft.everinformations.scoreboard.sidebar;
 
-import java.math.BigDecimal;
+import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map.Entry;
@@ -33,21 +34,40 @@ import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EIMessage.EIMessages;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
-import fr.evercraft.everinformations.scoreboard.objective.score.Score.TypeScore;
+import fr.evercraft.everinformations.scoreboard.score.Score.TypeScore;
 
-public class SidebarEconomyObjective extends SidebarObjective {
+public class SidebarStatsObjective extends SidebarObjective {
 	private final static int TOP_COUNT = 16;
+	
+	public static enum TypeScores {
+		DEATHS,
+		KILLS,
+		RATIO;
+    }
+	
+	public static enum TypeTimes {
+		ALL,
+		MONTH,
+		WEEK,
+		DAY;
+    }
 
 	private final EPlugin plugin;
 	private Objective objective;
 	private final String message;
 	
+	private final TypeScores score_type;
+	private final TypeTimes time_type;
 	
-	public SidebarEconomyObjective(final EPlugin plugin, final double stay, final double update, final List<SidebarTitle> titles, final String message) {
-		super(plugin, stay,  update, Type.ECONOMY, titles);
+	
+	public SidebarStatsObjective(final EPlugin plugin, final double stay, final List<SidebarTitle> titles, final String message, TypeScores score_type, TypeTimes time_type) {
+		super(plugin, stay,  0.0, Type.STATS, titles);
 		
 		this.plugin = plugin;
 		this.message = message;
+		
+		this.score_type = score_type;
+		this.time_type = time_type;
 	}
 	
 	@Override
@@ -80,19 +100,64 @@ public class SidebarEconomyObjective extends SidebarObjective {
 				.build();
 		
 		if(this.plugin.getEverAPI().getManagerService().getTopEconomy().isPresent()) {
-			for(Entry<UUID, BigDecimal> player : this.plugin.getEverAPI().getManagerService().getTopEconomy().get().topUniqueAccount(TOP_COUNT).entrySet()) {
+			for(Entry<UUID, Double> player : this.getTop().entrySet()) {
 				Optional<User> user = this.plugin.getEServer().getUser(player.getKey());
 				// Si le User existe bien
-				if(user.isPresent()){
+				if(user.isPresent()) {
 					objective.getOrCreateScore(EChat.of(this.message.replaceAll("<player>",user.get().getName()))).setScore(player.getValue().intValue());
 				}
 			}
+		} else {
+			this.plugin.getLogger().warn("No EverStats");
 		}
 		
 		if(objective.getScores().isEmpty()) {
 			objective.getOrCreateScore(EIMessages.SCOREBOARD_EMPTY.getText()).setScore(0);
 		}
 		this.objective = objective;
+	}
+	
+	private LinkedHashMap<UUID, Double> getTop() {
+		if(this.score_type == TypeScores.DEATHS) {
+			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopDeaths(TOP_COUNT, this.getTime());
+		} else if(this.score_type == TypeScores.KILLS) {
+			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopKills(TOP_COUNT, this.getTime());
+		} else if(this.score_type == TypeScores.RATIO) {
+			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopRatio(TOP_COUNT, this.getTime());
+		}
+		return new LinkedHashMap<UUID, Double>();
+	}
+	
+	private Long getTime() {
+		if(this.time_type == TypeTimes.ALL) {
+			return (long) 0;
+		} else if(this.time_type == TypeTimes.MONTH) {
+			GregorianCalendar calendar = new GregorianCalendar();
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			calendar.set(GregorianCalendar.MONTH, 1);
+			calendar.set(GregorianCalendar.HOUR, 0);
+			calendar.set(GregorianCalendar.MINUTE, 0);
+			calendar.set(GregorianCalendar.SECOND, 0);
+			return calendar.getTimeInMillis();
+		} else if(this.time_type == TypeTimes.WEEK) {
+			GregorianCalendar calendar = new GregorianCalendar();
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			while (calendar.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.MONDAY) {
+				calendar.add(GregorianCalendar.DAY_OF_WEEK,-1);
+		    }
+			calendar.set(GregorianCalendar.HOUR, 0);
+			calendar.set(GregorianCalendar.MINUTE, 0);
+			calendar.set(GregorianCalendar.SECOND, 0);
+			return calendar.getTimeInMillis();
+		} else if(this.time_type == TypeTimes.DAY) {
+			GregorianCalendar calendar = new GregorianCalendar();
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			calendar.set(GregorianCalendar.HOUR, 0);
+			calendar.set(GregorianCalendar.MINUTE, 0);
+			calendar.set(GregorianCalendar.SECOND, 0);
+			return calendar.getTimeInMillis();
+		}
+		return (long) 0;
 	}
 	
 	@Override

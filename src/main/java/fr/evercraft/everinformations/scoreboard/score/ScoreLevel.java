@@ -14,27 +14,30 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.scoreboard.objective.score;
+package fr.evercraft.everinformations.scoreboard.score;
 
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.entity.living.humanoid.ChangeLevelEvent;
 
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everapi.services.stats.event.StatsUserEvent;
 
-public class ScoreKill extends Score {
+public class ScoreLevel extends Score {
 	
 	@Override
 	public int getValue(EPlayer player) {
-		return player.getKill();
+		return player.getLevel();
 	}
 	
 	@Listener
-    public void event(StatsUserEvent.Kill event) {
-		this.update(event.getKiller().getUniqueId(), TypeScore.KILLS);
+	public void event(ChangeLevelEvent event) {
+		if(event.getTargetEntity() instanceof Player) {
+			this.update(event.getTargetEntity().getUniqueId(), TypeScore.LEVEL);
+		}
 	}
 	
 	@Override
 	public boolean isUpdate() {
-		return true;
+		return false;
 	}
 }

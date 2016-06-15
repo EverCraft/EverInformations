@@ -102,6 +102,7 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 		boolean playEndBossMusic_player = config.getNode("playEndBossMusic").getBoolean(playEndBossMusic_default);
 		boolean createFog_player = config.getNode("createFog").getBoolean(createFog_default);
 		
+		// Message unique
 		if(config.getNode("messages").isVirtual()) {
 			String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
 			
@@ -109,10 +110,11 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 				messages.add(new BossBarMessage(stay_player, next_player, message, percent_player, color_player, overlay_player,
 						darkenSky_player, playEndBossMusic_player, createFog_player));
 			}
+			// Liste de messages
 		} else {
 			for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
 				double stay = config_messages.getNode("stay").getDouble(stay_player);
-				double next = config_messages.getNode("next").getDouble(next_player);
+				double next = config_messages.getNode("next").getDouble(config_messages.getNode("interval").getDouble(next_player));
 				float percent = config_messages.getNode("percent").getFloat(percent_player);
 				BossBarColor color = UtilsBossBar.getColor(config_messages.getNode("color").getString("")).orElse(color_player);
 				BossBarOverlay overlay = UtilsBossBar.getOverlay(config_messages.getNode("overlay").getString("")).orElse(overlay_player);

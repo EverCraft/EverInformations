@@ -118,7 +118,7 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 					if(!title.isEmpty() || !subTitle.isEmpty()) {
 						messages.add(new TitleMessage(stay_player, interval_player, fadeIn_player, fadeOut_player, title, subTitle));
 					}
-				// Liste de message
+				// Liste de messages
 				} else {
 					for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
 						double stay = config_messages.getNode("stay").getDouble(stay_player);

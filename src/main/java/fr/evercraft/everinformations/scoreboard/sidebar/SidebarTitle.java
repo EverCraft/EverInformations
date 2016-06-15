@@ -14,27 +14,33 @@
  * You should have received a copy of the GNU General Public License
  * along with EverInformations.  If not, see <http://www.gnu.org/licenses/>.
  */
-package fr.evercraft.everinformations.scoreboard.objective.score;
+package fr.evercraft.everinformations.scoreboard.sidebar;
 
-import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.text.Text;
 
-import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everapi.services.stats.event.StatsUserEvent;
-
-public class ScoreKillMonthly extends Score {
+public class SidebarTitle  {
+	// En secondes
+	private final double stay;
 	
+	private final Text title;
+	
+	public SidebarTitle(final double stay, Text title) {
+		this.stay = stay;
+		this.title = title;
+	}
+
+	public long getNext() {
+		return (long) (this.stay * 1000);
+	}
+	
+	public Text getTitle() {
+		return this.title;
+	}
+
 	@Override
-	public int getValue(EPlayer player) {
-		return player.getKillMonthly();
+	public String toString() {
+		return "SidebarTitle [stay=" + stay + ", title=" + title + "]";
 	}
 	
-	@Listener
-    public void event(StatsUserEvent.Kill event) {
-		this.update(event.getKiller().getUniqueId(), TypeScore.KILLS);
-	}
 	
-	@Override
-	public boolean isUpdate() {
-		return true;
-	}
 }
