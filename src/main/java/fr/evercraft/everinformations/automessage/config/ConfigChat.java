@@ -53,10 +53,12 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 	public List<ChatMessage> getMessages() {
 		List<ChatMessage> messages = new ArrayList<ChatMessage>();
 		
+		// Default
 		double interval_default = this.get("interval").getDouble(300);
 		String prefix_default = this.plugin.getChat().replace(this.get("prefix").getString("&f[&4Ever&6&lNews&f] "));
 		
 		for(ConfigurationNode config : this.get("messages").getChildrenList()) {
+			// Message uniquement
 			if(config.getValue() instanceof String) {
 				String prefix_message = this.plugin.getChat().replace(prefix_default);
 				String message = this.plugin.getChat().replace(config.getString(""));
@@ -64,8 +66,9 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 				if(!message.isEmpty()) {
 					messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_message, message));
 				}
+			// Message avec config
 			} else {
-				double interval = config.getNode("next").getDouble(interval_default);
+				double interval = config.getNode("next").getDouble(config.getNode("interval").getDouble(interval_default));
 				String prefix = this.plugin.getChat().replace(config.getNode("prefix").getString(prefix_default));
 				String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
 				

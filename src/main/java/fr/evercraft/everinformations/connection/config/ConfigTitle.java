@@ -93,29 +93,38 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 	
 	private Map<String, List<TitleMessage>> getMessages(String prefix, Connections connections) {
 		Map<String, List<TitleMessage>> groups = new HashMap<String, List<TitleMessage>>();
+		
+		// Default
+		double stay_default = this.get("stay").getDouble(10);
+		double interval_default = this.get("interval").getDouble(0);
+		double fadeIn_default = this.get("fadeIn").getDouble(1);
+		double fadeOut_default = this.get("fadeOut").getDouble(1);
+		
 		for(Entry<Object, ? extends CommentedConfigurationNode> group : this.get(prefix).getChildrenMap().entrySet()) {
 			if(group.getKey() instanceof String && !((String) group.getKey()).equals("enable")) {  
 				CommentedConfigurationNode config = group.getValue().getNode(connections.name());
 				List<TitleMessage> messages = new ArrayList<TitleMessage>();
 				
-				double stay_default = config.getNode("stay").getDouble(10);
-				double interval_default = config.getNode("interval").getDouble(0);
-				double fadeIn_default = config.getNode("fadeIn").getDouble(1);
-				double fadeOut_default = config.getNode("fadeOut").getDouble(1);
+				double stay_player = config.getNode("stay").getDouble(stay_default);
+				double interval_player = config.getNode("interval").getDouble(interval_default);
+				double fadeIn_player = config.getNode("fadeIn").getDouble(fadeIn_default);
+				double fadeOut_player = config.getNode("fadeOut").getDouble(fadeOut_default);
 				
+				// Message unique
 				if(config.getNode("messages").isVirtual()) {
 					String title = this.plugin.getChat().replace(config.getNode("title").getString(""));
 					String subTitle = this.plugin.getChat().replace(config.getNode("subTitle").getString(""));
 					
 					if(!title.isEmpty() || !subTitle.isEmpty()) {
-						messages.add(new TitleMessage(stay_default, interval_default, fadeIn_default, fadeOut_default, title, subTitle));
+						messages.add(new TitleMessage(stay_player, interval_player, fadeIn_player, fadeOut_player, title, subTitle));
 					}
+				// Liste de message
 				} else {
 					for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
-						double stay = config_messages.getNode("stay").getDouble(stay_default);
-						double interval = config_messages.getNode("next").getDouble(interval_default);
-						double fadeIn = config_messages.getNode("fadeIn").getDouble(fadeIn_default);
-						double fadeOut = config_messages.getNode("fadeOut").getDouble(fadeOut_default);
+						double stay = config_messages.getNode("stay").getDouble(stay_player);
+						double interval = config_messages.getNode("next").getDouble(config_messages.getNode("interval").getDouble(interval_player));
+						double fadeIn = config_messages.getNode("fadeIn").getDouble(fadeIn_player);
+						double fadeOut = config_messages.getNode("fadeOut").getDouble(fadeOut_player);
 								
 						String title = this.plugin.getChat().replace(config_messages.getNode("title").getString(""));
 						String subTitle = this.plugin.getChat().replace(config_messages.getNode("subTitle").getString(""));

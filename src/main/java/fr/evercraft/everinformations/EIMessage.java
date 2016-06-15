@@ -51,7 +51,8 @@ public class EIMessage extends EMessage {
 	    }
 	    
 	    private EIMessages(final String path, final Object french, final Object english) {
-	    	Preconditions.checkNotNull(french, "Le message '" + this.name() + "' n'est pas définit");
+	    	Preconditions.checkNotNull(french, "Le message français '" + this.name() + "' n'est pas définit");
+	    	Preconditions.checkNotNull(english, "Le message anglais '" + this.name() + "' n'est pas définit");
 	    	
 	    	this.path = path;	    	
 	    	this.french = french;

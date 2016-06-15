@@ -69,12 +69,14 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 	public List<TitleMessage> getMessages() {
 		List<TitleMessage> messages = new ArrayList<TitleMessage>();
 		
+		// Default
 		double stay_default = this.get("stay").getDouble(360);
 		double interval_default = this.get("interval").getDouble(20);
 		double fadeIn_default = this.get("fadeIn").getDouble(1);
 		double fadeOut_default = this.get("fadeOut").getDouble(1);
 		
 		for(ConfigurationNode config : this.get("messages").getChildrenList()) {
+			// Message avec config
 			double stay = config.getNode("stay").getDouble(stay_default);
 			double interval = config.getNode("next").getDouble(interval_default);
 			double fadeIn = config.getNode("fadeIn").getDouble(fadeIn_default);

@@ -93,27 +93,39 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 	
 	private Map<String, List<ActionBarMessage>> getMessages(String prefix, Connections connections) {
 		Map<String, List<ActionBarMessage>> groups = new HashMap<String, List<ActionBarMessage>>();
+		
+		// Default
+		double stay_default = this.get("stay").getDouble(10);
+		double interval_default = this.get("interval").getDouble(0);
+		
 		for(Entry<Object, ? extends CommentedConfigurationNode> group : this.get(prefix).getChildrenMap().entrySet()) {
 			if(group.getKey() instanceof String && !((String) group.getKey()).equals("enable")) {
 				CommentedConfigurationNode config = group.getValue().getNode(connections.name());
 				List<ActionBarMessage> messages = new ArrayList<ActionBarMessage>();
 				
-				double stay_default = config.getNode("stay").getDouble(10);
-				double interval_default = config.getNode("interval").getDouble(0);
+				// Default
+				double stay_player = config.getNode("stay").getDouble(stay_default);
+				double interval_player = config.getNode("interval").getDouble(interval_default);
 				
+				// Message unique
 				if(config.getNode("messages").isVirtual()) {
 					String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
+					
 					if(!message.isEmpty()) {
-						messages.add(new ActionBarMessage(stay_default, interval_default, message));
+						messages.add(new ActionBarMessage(stay_player, interval_player, message));
 					}
+				// Liste de message
 				} else {
 					for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
+						// Message uniquement
 						if(config_messages.getValue() instanceof String) {
-							messages.add(new ActionBarMessage(stay_default, interval_default, this.plugin.getChat().replace(config_messages.getString(""))));
+							messages.add(new ActionBarMessage(stay_player, interval_player, this.plugin.getChat().replace(config_messages.getString(""))));
+						// Message avec config
 						} else {
-							double stay = config_messages.getNode("stay").getDouble(stay_default);
-							double interval = config_messages.getNode("next").getDouble(interval_default);
+							double stay = config_messages.getNode("stay").getDouble(stay_player);
+							double interval = config_messages.getNode("next").getDouble(config_messages.getNode("interval").getDouble(interval_player));
 							String message = this.plugin.getChat().replace(config_messages.getNode("message").getString(""));
+							
 							if(!message.isEmpty()) {
 								messages.add(new ActionBarMessage(stay, interval, message));
 							}

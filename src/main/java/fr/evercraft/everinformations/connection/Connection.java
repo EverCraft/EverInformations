@@ -81,7 +81,6 @@ public abstract class Connection<T extends IMessage> {
 	}
 
 	public abstract void reload();
-	
 	public abstract void stop();
 
 	public abstract void joinPlayer(EPlayer player, Optional<Subject> subject);

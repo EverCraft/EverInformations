@@ -69,6 +69,7 @@ public class AutoMessage<T extends IMessage> {
 	public void reload(){		
 		stop();
 
+		// Priorité
 		this.priority = PriorityService.DEFAULT;
 		if(this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
 			if(this.type.equals(Type.ACTION_BAR)) {
@@ -85,15 +86,21 @@ public class AutoMessage<T extends IMessage> {
 		this.messages.clear();
 		this.messages.addAll(this.config.getMessages());
 		
-		if (this.messages.size() == 0 && this.enable) {
-			this.plugin.getLogger().warn("AutoMessages (type='" + this.type.name() + "') : There is no message");
-			this.enable = false;
-			this.stop();
-		} else if (this.enable && !this.plugin.getGame().getServer().getOnlinePlayers().isEmpty()) {
-			this.start();
-			this.plugin.getLogger().debug("AutoMessages (type='" + this.type.name() + "') : Start (player='" + this.plugin.getGame().getServer().getOnlinePlayers().size() + "')");
-		} else {
-			this.plugin.getLogger().debug("AutoMessages (type='" + this.type.name() + "') : No start (player='0')");
+		// Si il y est activé
+		if(this.enable) {
+			// Si il y a aucun message
+			if (this.messages.size() == 0) {
+				this.plugin.getLogger().warn("AutoMessages (type='" + this.type.name() + "') : There is no message");
+				this.enable = false;
+				this.stop();
+			// Si il y a des joueurs
+			} else if (!this.plugin.getGame().getServer().getOnlinePlayers().isEmpty()) {
+				this.start();
+				this.plugin.getLogger().debug("AutoMessages (type='" + this.type.name() + "') : Start (player='" + this.plugin.getGame().getServer().getOnlinePlayers().size() + "')");
+			// Si il y a pas de joueurs
+			} else {
+				this.plugin.getLogger().debug("AutoMessages (type='" + this.type.name() + "') : No start (player='0')");
+			}
 		}
 	}
 

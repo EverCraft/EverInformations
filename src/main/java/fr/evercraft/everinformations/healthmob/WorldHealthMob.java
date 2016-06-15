@@ -61,36 +61,59 @@ public class WorldHealthMob {
 		this.entities.clear();
 	}
 	
+	/**
+	 * Change le nom de l'entité par ca vie même si c'est une nouvelle entité
+	 * @param entity L'entité
+	 * @param health La vie
+	 * @return True si le nom a bien été changé
+	 */
 	public boolean send(Entity entity, Double health) {
 		EntityHealthMob healthmob = this.entities.get(entity.getUniqueId());
+		// Si c'est une nouvelle entité
 		if(healthmob == null) {
 			Optional<Text> display_name = entity.get(Keys.DISPLAY_NAME);
 			this.plugin.getLogger().debug("HealthMob : Add (uuid='" + entity.getUniqueId() + "';name='" + display_name + "'");
 			healthmob = new EntityHealthMob(display_name);
 			this.entities.put(entity.getUniqueId(), new EntityHealthMob(display_name));
 		}
+		
 		entity.offer(Keys.DISPLAY_NAME, this.getName(entity, health));
 		
+		// Update task
 		healthmob.cancel();
 		this.task(healthmob, entity.getUniqueId());
 		
 		return true;
 	}
 	
+	/**
+	 * Change le nom de l'entité par ca vie uniquement si l'on connait déjà l'entité
+	 * @param entity L'entité
+	 * @param health La vie
+	 */
 	public void update(Entity entity, Double health) {
 		EntityHealthMob healthmob = this.entities.get(entity.getUniqueId());
+		// Si l'entité est déjà connu
 		if(healthmob != null) {
 			entity.offer(Keys.DISPLAY_NAME, this.getName(entity, health));
 			
+			// Update task
 			healthmob.cancel();
 			this.task(healthmob, entity.getUniqueId());
 		}
 	}
 	
+	/**
+	 * Rechange le nom de l'entité par son vrai nom
+	 * @param uuid L'UUID de l'entité
+	 * @return True si le vrai nom de l'entité a bien été remit
+	 */
 	public boolean remove(UUID uuid) {
 		Optional<World> world = this.plugin.getGame().getServer().getWorld(this.world);
+		// Si le monde existe
 		if(world.isPresent()) {
 			Optional<Entity> entity = world.get().getEntity(uuid);
+			// Si l'entité existe
 			if(entity.isPresent()) {
 				return this.remove(entity.get());
 			}
@@ -98,22 +121,30 @@ public class WorldHealthMob {
 		return false;
 	}
 	
+	/**
+	 * Rechange le nom de l'entité par son vrai nom
+	 * @param entity L'entité
+	 * @return True si le vrai nom de l'entité a bien été remit
+	 */
 	public boolean remove(Entity entity) {
 		EntityHealthMob healthmob = this.entities.remove(entity.getUniqueId());
+		// Si l'entité est déjà connu
 		if(healthmob != null) {
 			this.plugin.getLogger().debug("HealthMob : Remove (uuid='" + entity.getUniqueId() + "';name='" + healthmob.getName() + "'");
         	
 			healthmob.cancel();
-			
-        	Optional<World> world = this.plugin.getGame().getServer().getWorld(this.world);
-			if(world.isPresent()) {
-				entity.offer(Keys.DISPLAY_NAME, healthmob.getName());
-			}
+			entity.offer(Keys.DISPLAY_NAME, healthmob.getName());
 			return true;
 		}
 		return false;
 	}
 	
+	/**
+	 * Retourne le nouveau nom de l'entité
+	 * @param entity L'entité
+	 * @param health La vie
+	 * @return Le nouveau nom de l'entité
+	 */
 	public Text getName(final Entity entity, final Double health) {
 		String message = null;
 		Double max_health = entity.get(Keys.MAX_HEALTH).orElse(0.0);
@@ -127,6 +158,11 @@ public class WorldHealthMob {
 		return EChat.of(this.plugin.getChat().replaceGlobal(message));
 	}
 	
+	/**
+	 * Création de la Task pour supprimé le réinitialisé le nom de l'entité
+	 * @param healthmob Le HeathMob
+	 * @param uuid L'UUID
+	 */
 	public void task(final EntityHealthMob healthmob, final UUID uuid) {
 		healthmob.setTask(this.plugin.getGame().getScheduler().createTaskBuilder()
 				.execute(()->this.remove(uuid))

@@ -96,26 +96,36 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 	
 	private Map<String, List<ChatMessage>> getMessages(String prefix, Connections connections) {
 		Map<String, List<ChatMessage>> groups = new HashMap<String, List<ChatMessage>>();
+		
+		// Default
+		double interval_default = this.get("interval").getDouble(0);
+		String prefix_default = this.get("prefix").getString("");
+		
 		for(Entry<Object, ? extends CommentedConfigurationNode> group : this.get(prefix).getChildrenMap().entrySet()) {
 			if(group.getKey() instanceof String && !((String) group.getKey()).equals("enable")) {
 				CommentedConfigurationNode config = group.getValue().getNode(connections.name());
 				List<ChatMessage> messages = new ArrayList<ChatMessage>();
 				
-				double interval_default = config.getNode("interval").getDouble(0);
-				String prefix_default = config.getNode("prefix").getString("");
+				// Default Player
+				double interval_player = config.getNode("interval").getDouble(interval_default);
+				String prefix_player = config.getNode("prefix").getString(prefix_default);
 				
+				// Message unique
 				if(config.getNode("messages").isVirtual()) {
 					String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
 					if(!message.isEmpty()) {
-						messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_default, message));
+						messages.add(new ChatMessage(interval_player, TextSerializers.FORMATTING_CODE, prefix_player, message));
 					}
+				// Liste de message
 				} else {
 					for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
+						// Message uniquement
 						if(config_messages.getValue() instanceof String) {
-							messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_default, this.plugin.getChat().replace(config_messages.getString(""))));
+							messages.add(new ChatMessage(interval_player, TextSerializers.FORMATTING_CODE, prefix_player, this.plugin.getChat().replace(config_messages.getString(""))));
+						// Message avec config
 						} else {							
-							double interval = config_messages.getNode("next").getDouble(interval_default);
-							String prefix_message = this.plugin.getChat().replace(config_messages.getNode("prefix").getString(prefix_default));
+							double interval = config_messages.getNode("next").getDouble(config_messages.getNode("interval").getDouble(interval_player));
+							String prefix_message = this.plugin.getChat().replace(config_messages.getNode("prefix").getString(prefix_player));
 							String message = this.plugin.getChat().replace(config_messages.getNode("message").getString(""));
 							
 							String type_string = config_messages.getNode("format").getString("");

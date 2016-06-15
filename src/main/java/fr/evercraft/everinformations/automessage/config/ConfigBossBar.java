@@ -63,6 +63,7 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 	public List<BossBarMessage> getMessages() {
 		List<BossBarMessage> messages = new ArrayList<BossBarMessage>();
 		
+		// Default
 		double stay_default = this.get("stay").getDouble(360);
 		double next_default = this.get("interval").getDouble(0);
 		float percent_default = this.get("percent").getFloat(100);
@@ -73,6 +74,7 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 		boolean createFog_default = this.get("createFog").getBoolean(false);
 		
 		for(ConfigurationNode config : this.get("messages").getChildrenList()) {
+			// Message uniquement
 			if(config.getValue() instanceof String) {
 				String message = this.plugin.getChat().replace(config.getString(""));
 				
@@ -80,9 +82,10 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 					messages.add(new BossBarMessage(stay_default, next_default, message, percent_default, color_default, overlay_default,
 							darkenSky_default, playEndBossMusic_default, createFog_default));
 				}
+			// Message avec config
 			} else {
 				double stay = config.getNode("stay").getDouble(stay_default);
-				double next = config.getNode("next").getDouble(next_default);
+				double next = config.getNode("next").getDouble(config.getNode("interval").getDouble(next_default));
 				float percent = config.getNode("percent").getFloat(percent_default);
 				BossBarColor color = UtilsBossBar.getColor(config.getNode("color").getString("")).orElse(color_default);
 				BossBarOverlay overlay = UtilsBossBar.getOverlay(config.getNode("overlay").getString("")).orElse(overlay_default);
