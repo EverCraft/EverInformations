@@ -19,7 +19,7 @@ package fr.evercraft.everinformations.scoreboard.objective.score;
 import org.spongepowered.api.event.Listener;
 
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everapi.services.stats.event.StatsEvent;
+import fr.evercraft.everapi.services.stats.event.StatsUserEvent;
 
 public class ScoreDeathMonthly extends Score {
 	
@@ -29,7 +29,7 @@ public class ScoreDeathMonthly extends Score {
 	}
 	
 	@Listener
-    public void event(StatsEvent.Death event) {
+    public void event(StatsUserEvent.Death event) {
 		this.update(event.getVictim().getUniqueId(), TypeScore.DEATHS_MONTHLY);
 	}
 	
