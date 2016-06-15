@@ -16,6 +16,7 @@
  */
 package fr.evercraft.everinformations.scoreboard.objective.sidebar;
 
+import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
@@ -38,26 +39,35 @@ import fr.evercraft.everinformations.scoreboard.objective.score.Score.TypeScore;
 public class SidebarStatsObjective extends SidebarObjective {
 	private final static int TOP_COUNT = 16;
 	
-	public static enum ScoreTypes {
+	public static enum TypeScores {
 		DEATHS,
 		KILLS,
 		RATIO;
+    }
+	
+	public static enum TypeTimes {
+		ALL,
+		MONTH,
+		WEEK,
+		DAY;
     }
 
 	private final EPlugin plugin;
 	private Objective objective;
 	private final String message;
 	
-	private final ScoreTypes score_type;
+	private final TypeScores score_type;
+	private final TypeTimes time_type;
 	
 	
-	public SidebarStatsObjective(final EPlugin plugin, final double stay, final List<SidebarTitle> titles, final String message, ScoreTypes score_type) {
+	public SidebarStatsObjective(final EPlugin plugin, final double stay, final List<SidebarTitle> titles, final String message, TypeScores score_type, TypeTimes time_type) {
 		super(plugin, stay,  0.0, Type.STATS, titles);
 		
 		this.plugin = plugin;
 		this.message = message;
 		
 		this.score_type = score_type;
+		this.time_type = time_type;
 	}
 	
 	@Override
@@ -107,15 +117,47 @@ public class SidebarStatsObjective extends SidebarObjective {
 		this.objective = objective;
 	}
 	
-	public LinkedHashMap<UUID, Double> getTop() {
-		if(this.score_type == ScoreTypes.DEATHS) {
-			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopDeaths(TOP_COUNT);
-		} else if(this.score_type == ScoreTypes.KILLS) {
-			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopKills(TOP_COUNT);
-		} else if(this.score_type == ScoreTypes.RATIO) {
-			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopRatio(TOP_COUNT);
+	private LinkedHashMap<UUID, Double> getTop() {
+		if(this.score_type == TypeScores.DEATHS) {
+			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopDeaths(TOP_COUNT, this.getTime());
+		} else if(this.score_type == TypeScores.KILLS) {
+			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopKills(TOP_COUNT, this.getTime());
+		} else if(this.score_type == TypeScores.RATIO) {
+			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopRatio(TOP_COUNT, this.getTime());
 		}
 		return new LinkedHashMap<UUID, Double>();
+	}
+	
+	private Long getTime() {
+		if(this.time_type == TypeTimes.ALL) {
+			return (long) 0;
+		} else if(this.time_type == TypeTimes.MONTH) {
+			GregorianCalendar calendar = new GregorianCalendar();
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			calendar.set(GregorianCalendar.MONTH, 1);
+			calendar.set(GregorianCalendar.HOUR, 0);
+			calendar.set(GregorianCalendar.MINUTE, 0);
+			calendar.set(GregorianCalendar.SECOND, 0);
+			return calendar.getTimeInMillis();
+		} else if(this.time_type == TypeTimes.WEEK) {
+			GregorianCalendar calendar = new GregorianCalendar();
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			while (calendar.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.MONDAY) {
+				calendar.add(GregorianCalendar.DAY_OF_WEEK,-1);
+		    }
+			calendar.set(GregorianCalendar.HOUR, 0);
+			calendar.set(GregorianCalendar.MINUTE, 0);
+			calendar.set(GregorianCalendar.SECOND, 0);
+			return calendar.getTimeInMillis();
+		} else if(this.time_type == TypeTimes.DAY) {
+			GregorianCalendar calendar = new GregorianCalendar();
+			calendar.setTimeInMillis(System.currentTimeMillis());
+			calendar.set(GregorianCalendar.HOUR, 0);
+			calendar.set(GregorianCalendar.MINUTE, 0);
+			calendar.set(GregorianCalendar.SECOND, 0);
+			return calendar.getTimeInMillis();
+		}
+		return (long) 0;
 	}
 	
 	@Override

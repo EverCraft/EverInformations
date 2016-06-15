@@ -45,10 +45,19 @@ public class ListenerHealthMob {
 		if(this.plugin.getHealthMob().isEnable()) {
 			if (event.getTargetEntity() instanceof Creature) {
 				Optional<EntityDamageSource> optDamageSource = event.getCause().first(EntityDamageSource.class);
-				if (optDamageSource.isPresent() && optDamageSource.get().getSource() instanceof Player) {
-					this.plugin.getHealthMob().add(event.getTargetEntity(), event.getTargetEntity().get(Keys.HEALTH).orElse(0.0) - event.getFinalDamage());
-				} else {
-					this.plugin.getHealthMob().update(event.getTargetEntity(), event.getTargetEntity().get(Keys.HEALTH).orElse(0.0) - event.getFinalDamage());
+				if(optDamageSource.isPresent()) {
+					if(optDamageSource.get().getSource() instanceof Projectile) {
+						ProjectileSource projectile = ((Projectile)optDamageSource.get().getSource()).getShooter();
+			        	if (projectile instanceof Player) {
+			        		this.plugin.getHealthMob().add(event.getTargetEntity(), event.getTargetEntity().get(Keys.HEALTH).orElse(0.0) - event.getFinalDamage());
+			        	} else {
+							this.plugin.getHealthMob().update(event.getTargetEntity(), event.getTargetEntity().get(Keys.HEALTH).orElse(0.0) - event.getFinalDamage());
+						}
+					} else if(optDamageSource.get().getSource() instanceof Player) {
+						this.plugin.getHealthMob().add(event.getTargetEntity(), event.getTargetEntity().get(Keys.HEALTH).orElse(0.0) - event.getFinalDamage());
+					} else {
+						this.plugin.getHealthMob().update(event.getTargetEntity(), event.getTargetEntity().get(Keys.HEALTH).orElse(0.0) - event.getFinalDamage());
+					}
 				}
 			} else if(event.getTargetEntity() instanceof Player && event.willCauseDeath()) {
 				Optional<EntityDamageSource> optDamageSource = event.getCause().first(EntityDamageSource.class);

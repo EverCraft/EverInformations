@@ -35,7 +35,8 @@ import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarEconomy
 import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarInformationsObjective;
 import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarNumbersObjective;
 import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarStatsObjective;
-import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarStatsObjective.ScoreTypes;
+import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarStatsObjective.TypeScores;
+import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarStatsObjective.TypeTimes;
 import fr.evercraft.everinformations.scoreboard.objective.sidebar.SidebarTitle;
 
 public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> {
@@ -105,7 +106,8 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 			message.put("title", "&6✖  Top Kill ✖");
 			message.put("stay", 60);
 			message.put("type", Type.STATS.name());
-			message.put("score", ScoreTypes.KILLS.name());
+			message.put("score", TypeScores.KILLS.name());
+			message.put("time", TypeTimes.MONTH.name());
 			message.put("message", "&a<player>");
 			messages.add(message);
 			
@@ -204,10 +206,15 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 						} else if(type.equals(Type.STATS)) {
 							if(this.plugin.getEverAPI().getManagerService().getStats().isPresent()) {
 								try {
-									ScoreTypes score_type = ScoreTypes.valueOf(config.getNode("score").getString(""));
-									String message = this.plugin.getChat().replace(config.getNode("message").getString("<player>"));
-									
-									objectives.add(new SidebarStatsObjective(this.plugin, stay, titles, message, score_type));
+									TypeScores score_type = TypeScores.valueOf(config.getNode("score").getString(""));
+									try {
+										TypeTimes time_type = TypeTimes.valueOf(config.getNode("time").getString(""));
+										String message = this.plugin.getChat().replace(config.getNode("message").getString("<player>"));
+										
+										objectives.add(new SidebarStatsObjective(this.plugin, stay, titles, message, score_type, time_type));
+									} catch (IllegalArgumentException e) {
+										this.plugin.getLogger().warn("Error during the change of the scoreboard (type='STATS') : time='" + config.getNode("time").getString("") + "'");
+									}
 								} catch (IllegalArgumentException e) {
 									this.plugin.getLogger().warn("Error during the change of the scoreboard (type='STATS') : score='" + config.getNode("score").getString("") + "'");
 								}
