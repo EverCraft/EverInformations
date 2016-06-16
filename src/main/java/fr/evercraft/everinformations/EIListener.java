@@ -22,13 +22,13 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.living.humanoid.player.KickPlayerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 
+import fr.evercraft.everapi.event.PermGroupEvent;
+import fr.evercraft.everapi.event.PermSystemEvent;
+import fr.evercraft.everapi.event.PermUserEvent;
+import fr.evercraft.everapi.event.ScoreBoardEvent;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.essentials.event.VanishEvent;
 import fr.evercraft.everapi.services.essentials.event.VanishEvent.Action;
-import fr.evercraft.everapi.services.permission.event.PermGroupEvent;
-import fr.evercraft.everapi.services.permission.event.PermSystemEvent;
-import fr.evercraft.everapi.services.permission.event.PermUserEvent;
-import fr.evercraft.everapi.services.scoreboard.event.ScoreBoardEvent;
 
 public class EIListener {
 	private EverInformations plugin;
@@ -151,14 +151,14 @@ public class EIListener {
 	
 	@Listener
     public void permUserEvent(PermUserEvent event) {
-		if(event.getEPlayer().isPresent() && (event.getAction().equals(PermUserEvent.Action.USER_OPTION_CHANGED) ||
+		if(event.getPlayer().isPresent() && (event.getAction().equals(PermUserEvent.Action.USER_OPTION_CHANGED) ||
 			event.getAction().equals(PermUserEvent.Action.USER_GROUP_CHANGED) ||
 			event.getAction().equals(PermUserEvent.Action.USER_SUBGROUP_CHANGED))) {
 			// NameTag
-			this.plugin.getNameTag().updatePermission(event.getEPlayer().get());
+			this.plugin.getNameTag().updatePermission(event.getPlayer().get());
 			
 			// TabList
-			this.plugin.getTabList().updatePlayer(event.getEPlayer().get());
+			this.plugin.getTabList().updatePlayer(event.getPlayer().get());
 		}
 	}
 	

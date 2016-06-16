@@ -19,7 +19,7 @@ package fr.evercraft.everinformations.newbie;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everapi.services.priority.PriorityService;
+import fr.evercraft.everapi.services.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.message.IMessage;
 import fr.evercraft.everinformations.newbie.config.IConfig;

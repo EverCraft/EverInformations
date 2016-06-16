@@ -24,7 +24,7 @@ import com.google.common.collect.Sets;
 
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everapi.services.priority.PriorityService;
+import fr.evercraft.everapi.services.PriorityService;
 import fr.evercraft.everinformations.scoreboard.objective.EObjective;
 import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 

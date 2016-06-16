@@ -28,11 +28,11 @@ public interface IMessage  {
 	 */
 	public long getNext();
 
-	public boolean send(int priority, EPlayer player);
+	public boolean send(String identifier, int priority, EPlayer player);
 	
-	public boolean send(int priority, EPlayer player, Text reason);
+	public boolean send(String identifier, int priority, EPlayer player, Text reason);
 
-	public boolean send(int priority, EPlayer player, EPlayer replace);
+	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace);
 	
-	public boolean send(int priority, EPlayer player, EPlayer replace, Text reason);
+	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason);
 }

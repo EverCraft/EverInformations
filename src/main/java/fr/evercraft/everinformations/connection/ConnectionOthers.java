@@ -110,14 +110,14 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 			// Affiche le message à tous les autres joueurs
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				if(!this.player.equals(player)) {
-					message.send(this.priority, player, this.player);
+					message.send(IDENTIFIER_OTHERS, this.priority, player, this.player);
 				}
 			}
 		} else {
 			// Affiche le message à tous les autres joueurs
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				if(!this.player.equals(player)) {
-					message.send(this.priority, player, this.player, this.reason);
+					message.send(IDENTIFIER_OTHERS, this.priority, player, this.player, this.reason);
 				}
 			}
 		}
@@ -232,7 +232,7 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 			this.plugin.getLogger().debug("Connection : RemoveBossbar (type='" + this.type.name() + "';priority='" + this.priority + "';message='" + message + "')");
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				if(!this.player.equals(player)) {
-					message.remove(this.priority, player);
+					message.remove(IDENTIFIER_OTHERS, player);
 				}
 			}
 		}

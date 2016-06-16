@@ -44,7 +44,7 @@ public class ListenerHealthMob {
 	public void onPlayerDamage(DamageEntityEvent event) {
 		if(this.plugin.getHealthMob().isEnable()) {
 			// Si l'entité est une créature
-			if (event.getTargetEntity() instanceof Creature) {
+			if (event.getTargetEntity() instanceof Creature && !event.willCauseDeath()) {
 				Optional<EntityDamageSource> optDamageSource = event.getCause().first(EntityDamageSource.class);
 				if(optDamageSource.isPresent()) {
 					// Si le dégât est un projectile 
@@ -90,7 +90,7 @@ public class ListenerHealthMob {
 	public void onPlayerDamage(DestructEntityEvent.Death event) {
 		if (event.getTargetEntity() instanceof Creature && this.plugin.getHealthMob().isEnable()) {
 			Optional<EntityDamageSource> optDamageSource = event.getCause().first(EntityDamageSource.class);
-			if (optDamageSource.isPresent() && optDamageSource.get().getSource() instanceof Player) {
+			if (optDamageSource.isPresent()) {
 				this.plugin.getHealthMob().remove(event.getTargetEntity());
 			}
 		}

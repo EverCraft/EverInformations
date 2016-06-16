@@ -151,7 +151,8 @@ public class WorldHealthMob {
 		if(this.plugin.getHealthMob().getMessage().size() == 1) {
 			message = this.plugin.getHealthMob().getMessage().get(0);
 		} else {
-			message = this.plugin.getHealthMob().getMessage().get(Math.max(0, (int) Math.round((this.plugin.getHealthMob().getMessage().size()-1)*(health/max_health))));
+			int size = this.plugin.getHealthMob().getMessage().size()-1;
+			message = this.plugin.getHealthMob().getMessage().get(Math.min(size, Math.max(0, (int) Math.round((size*(health/max_health))))));
 		}
 		message = message.replaceAll(EChat.HEALTH, health.toString());
 		message = message.replaceAll(EChat.MAX_HEALTH, max_health.toString());

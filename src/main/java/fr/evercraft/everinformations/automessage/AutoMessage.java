@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 import org.spongepowered.api.scheduler.Task;
 
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everapi.services.priority.PriorityService;
+import fr.evercraft.everapi.services.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.automessage.AutoMessage;
 import fr.evercraft.everinformations.automessage.config.IConfig;
@@ -199,7 +199,7 @@ public class AutoMessage<T extends IMessage> {
 			T message = this.getMessage();
 			this.plugin.getLogger().debug("AutoMessages (type='" + this.type.name() + "';priority='" + this.priority + "';actionBar='" + message + "')");
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				message.send(this.priority, player);
+				message.send(IDENTIFIER, this.priority, player);
 			}
 		}
 	}
@@ -210,7 +210,7 @@ public class AutoMessage<T extends IMessage> {
 	
 	public void addPlayer(EPlayer player) {
 		if(this.enable && this.getMessage() instanceof BossBarMessage) {
-			this.getMessage().send(this.priority, player);
+			this.getMessage().send(IDENTIFIER, this.priority, player);
 		}
 	}
 	
@@ -218,7 +218,7 @@ public class AutoMessage<T extends IMessage> {
 		if(this.enable && this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				message.remove(this.priority, player);
+				message.remove(IDENTIFIER, player);
 			}
 		}
 	}
@@ -226,7 +226,7 @@ public class AutoMessage<T extends IMessage> {
 	public void removePlayer(EPlayer player) {
 		if(this.enable && this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
-			message.remove(this.priority, player);
+			message.remove(IDENTIFIER, player);
 		}
 	}
 }

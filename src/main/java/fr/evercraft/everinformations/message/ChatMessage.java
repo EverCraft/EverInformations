@@ -52,7 +52,7 @@ public class ChatMessage implements IMessage {
 	}
 	
 	@Override
-	public boolean send(int priority, EPlayer player) {
+	public boolean send(String identifier, int priority, EPlayer player) {
 		// Format normal
 		if(this.format.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessageVariables(this.prefix.orElse("") + this.message);
@@ -68,7 +68,7 @@ public class ChatMessage implements IMessage {
 	}
 	
 	@Override
-	public boolean send(int priority, EPlayer player, Text reason) {
+	public boolean send(String identifier, int priority, EPlayer player, Text reason) {
 		// Format normal
 		if(this.format.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessageVariables((this.prefix.orElse("") + this.message).replaceAll("<reason>", EChat.serialize(reason)));
@@ -84,7 +84,7 @@ public class ChatMessage implements IMessage {
 	}
 	
 	@Override
-	public boolean send(int priority, EPlayer player, EPlayer replace) {
+	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace) {
 		// Format normal
 		if(this.format.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessage(replace.replaceVariable(this.prefix.orElse("") + this.message));
@@ -100,7 +100,7 @@ public class ChatMessage implements IMessage {
 	}
 	
 	@Override
-	public boolean send(int priority, EPlayer player, EPlayer replace, Text reason) {
+	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason) {
 		// Format normal
 		if(this.format.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessage(replace.replaceVariable((this.prefix.orElse("") + this.message).replaceAll("<reason>", EChat.serialize(reason))));

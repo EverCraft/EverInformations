@@ -50,22 +50,22 @@ public class ActionBarMessage implements IMessage {
 	}
 
 	@Override
-	public boolean send(int priority, EPlayer player) {
-		return player.sendActionBar(priority, this.getStay(), player.replaceVariable(this.message));
+	public boolean send(String identifier, int priority, EPlayer player) {
+		return player.sendActionBar(identifier, priority, this.getStay(), player.replaceVariable(this.message));
 	}
 	
 	@Override
-	public boolean send(int priority, EPlayer player, Text reason) {
-		return player.sendActionBar(priority, this.getStay(), player.replaceVariable(this.message.replaceAll("<reason>", EChat.serialize(reason))));
+	public boolean send(String identifier, int priority, EPlayer player, Text reason) {
+		return player.sendActionBar(identifier, priority, this.getStay(), player.replaceVariable(this.message.replaceAll("<reason>", EChat.serialize(reason))));
 	}
 
 	@Override
-	public boolean send(int priority, EPlayer player, EPlayer replace) {
-		return player.sendActionBar(priority, this.getStay(), replace.replaceVariable(this.message));
+	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace) {
+		return player.sendActionBar(identifier, priority, this.getStay(), replace.replaceVariable(this.message));
 	}
 
 	@Override
-	public boolean send(int priority, EPlayer player, EPlayer replace, Text reason) {
-		return player.sendActionBar(priority, this.getStay(), replace.replaceVariable(this.message.replaceAll("<reason>", EChat.serialize(reason))));
+	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason) {
+		return player.sendActionBar(identifier, priority, this.getStay(), replace.replaceVariable(this.message.replaceAll("<reason>", EChat.serialize(reason))));
 	}
 }

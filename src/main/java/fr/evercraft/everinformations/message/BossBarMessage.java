@@ -66,28 +66,28 @@ public class BossBarMessage implements IMessage {
 	}
 	
 	@Override
-	public boolean send(int priority, EPlayer player) {
-		return this.sendText(priority, player, player.replaceVariable(this.name));
+	public boolean send(String identifier, int priority, EPlayer player) {
+		return this.sendText(identifier, priority, player, player.replaceVariable(this.name));
 	}
 	
 	@Override
-	public boolean send(int priority, EPlayer player, Text reason) {
-		return this.sendText(priority, player, player.replaceVariable(this.name.replaceAll("<reason>", EChat.serialize(reason))));
+	public boolean send(String identifier, int priority, EPlayer player, Text reason) {
+		return this.sendText(identifier, priority, player, player.replaceVariable(this.name.replaceAll("<reason>", EChat.serialize(reason))));
 	}
 	
 	@Override
-	public boolean send(int priority, EPlayer player, EPlayer replace) {
-		return this.sendText(priority, player, replace.replaceVariable(this.name));
+	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace) {
+		return this.sendText(identifier, priority, player, replace.replaceVariable(this.name));
 	}
 	
 	@Override
-	public boolean send(int priority, EPlayer player, EPlayer replace, Text reason) {
-		return this.sendText(priority, player, replace.replaceVariable(this.name.replaceAll("<reason>", EChat.serialize(reason))));
+	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason) {
+		return this.sendText(identifier, priority, player, replace.replaceVariable(this.name.replaceAll("<reason>", EChat.serialize(reason))));
 	}
 	
-	private boolean sendText(int priority, EPlayer player, Text text) {
+	private boolean sendText(String identifier, int priority, EPlayer player, Text text) {
 		
-		Optional<ServerBossBar> bossbar = player.getBossBar(priority);
+		Optional<ServerBossBar> bossbar = player.getBossBar(identifier);
 		// Si le joueur à déjà une bossbar
 		if(bossbar.isPresent()) {
 			bossbar.get().setName(text);
@@ -99,7 +99,7 @@ public class BossBarMessage implements IMessage {
 			bossbar.get().setCreateFog(this.createFog);
 			return true;
 		} else {
-			return player.addBossBar(priority, ServerBossBar.builder()
+			return player.addBossBar(identifier, priority, ServerBossBar.builder()
 					.name(text)
 					.percent(this.percent)
 					.color(this.color)
@@ -111,8 +111,8 @@ public class BossBarMessage implements IMessage {
 		}
 	}
 	
-	public boolean remove(int priority, EPlayer player) {
-		return player.removeBossBar(priority);
+	public boolean remove(String identifier, EPlayer player) {
+		return player.removeBossBar(identifier);
 	}
 
 	@Override

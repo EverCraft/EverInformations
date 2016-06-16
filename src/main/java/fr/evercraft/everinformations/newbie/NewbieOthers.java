@@ -97,7 +97,7 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 		// Affiche le message à tous les autres joueurs
 		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			if(!this.player.equals(player)) {
-				message.send(this.priority, player, this.player);
+				message.send(IDENTIFIER_OTHERS, this.priority, player, this.player);
 			}
 		}
 	}
@@ -194,7 +194,7 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 			this.plugin.getLogger().debug("Newbie : RemoveBossbar (type='" + this.type.name() + "';priority='" + this.priority + "';message='" + message + "')");
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				if(!this.player.equals(player)) {
-					message.remove(this.priority, player);
+					message.remove(IDENTIFIER_OTHERS, player);
 				}
 			}
 		}

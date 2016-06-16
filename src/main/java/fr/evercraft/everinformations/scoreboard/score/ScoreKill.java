@@ -18,8 +18,8 @@ package fr.evercraft.everinformations.scoreboard.score;
 
 import org.spongepowered.api.event.Listener;
 
+import fr.evercraft.everapi.event.StatsUserEvent;
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everapi.services.stats.event.StatsUserEvent;
 
 public class ScoreKill extends Score {
 	

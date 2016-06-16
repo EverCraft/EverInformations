@@ -189,24 +189,24 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 					// Affiche le message à tous les autres joueurs
 					for(EPlayer player : this.connection.plugin.getEServer().getOnlineEPlayers()) {
 						if(!this.player.equals(player)) {
-							message.send(this.connection.priority, player, this.player);
+							message.send(IDENTIFIER_PLAYER, this.connection.priority, player, this.player);
 						}
 					}
 				} else {
 					// Affiche le message au joueur
-					message.send(this.connection.priority, this.player);
+					message.send(IDENTIFIER_PLAYER, this.connection.priority, this.player);
 				}
 			} else {
 				if(this.connection.type.equals(Type.CHAT_OTHERS)) {
 					// Affiche le message à tous les autres joueurs
 					for(EPlayer player : this.connection.plugin.getEServer().getOnlineEPlayers()) {
 						if(!this.player.equals(player)) {
-							message.send(this.connection.priority, player, this.player, this.reason);
+							message.send(IDENTIFIER_PLAYER, this.connection.priority, player, this.player, this.reason);
 						}
 					}
 				} else {
 					// Affiche le message au joueur
-					message.send(this.connection.priority, this.player, this.reason);
+					message.send(IDENTIFIER_PLAYER, this.connection.priority, this.player, this.reason);
 				}
 			}
 		}
@@ -287,7 +287,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 				BossBarMessage message = ((BossBarMessage) this.getMessage());
 				
 				this.connection.plugin.getLogger().debug("Connection : RemoveBossbar (type='" + this.connection.type.name() + "';priority='" + this.connection.priority + "';message='" + message + "')");
-				message.remove(this.connection.priority, this.player);
+				message.remove(IDENTIFIER_PLAYER, this.player);
 			}
 			this.connection.players.remove(player.getUniqueId());
 		}
