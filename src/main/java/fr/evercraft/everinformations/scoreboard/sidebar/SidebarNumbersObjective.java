@@ -34,16 +34,16 @@ import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
-import fr.evercraft.everinformations.scoreboard.score.Score.TypeScore;
+import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
 public class SidebarNumbersObjective extends SidebarObjective {
 	
-	private final ConcurrentMap<Text, TypeScore> scores;
+	private final ConcurrentMap<Text, TypeScores> scores;
 
-	public SidebarNumbersObjective(final EPlugin plugin, final double stay, final double update, final List<SidebarTitle> titles, final Map<Text, TypeScore> scores) {
+	public SidebarNumbersObjective(final EPlugin plugin, final double stay, final double update, final List<SidebarTitle> titles, final Map<Text, TypeScores> scores) {
 		super(plugin, stay, update, Type.NUMBERS, titles);
 		
-		this.scores = new ConcurrentHashMap<Text, TypeScore>();
+		this.scores = new ConcurrentHashMap<Text, TypeScores>();
 		this.scores.putAll(scores);
 	}
 	
@@ -54,7 +54,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 							.displayName(this.getSidebarTitle().getTitle())
 							.criterion(Criteria.DUMMY)
 							.build();
-		for(Entry<Text, TypeScore> score : this.scores.entrySet()) {
+		for(Entry<Text, TypeScores> score : this.scores.entrySet()) {
 			objective.getOrCreateScore(score.getKey()).setScore(score.getValue().getValue(player));
 		}
 		return player.addObjective(priority, DisplaySlots.SIDEBAR, objective);
@@ -67,7 +67,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 
 	@Override
 	public boolean subStart() {
-		for(TypeScore type : new HashSet<TypeScore>(this.scores.values())) {
+		for(TypeScores type : new HashSet<TypeScores>(this.scores.values())) {
 			type.addListener(this.plugin, this);
 		}
 		return true;
@@ -75,7 +75,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 
 	@Override
 	public boolean subStop() {
-		for(TypeScore type : new HashSet<TypeScore>(this.scores.values())) {
+		for(TypeScores type : new HashSet<TypeScores>(this.scores.values())) {
 			type.removeListener(this.plugin, this);
 		}
 		return true;
@@ -83,7 +83,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	
 	@Override
 	public void update() {
-		for(Entry<Text, TypeScore> score : this.scores.entrySet()) {
+		for(Entry<Text, TypeScores> score : this.scores.entrySet()) {
 			if(!score.getValue().isUpdate()) {
 				for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 					Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
@@ -96,8 +96,8 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	}
 	
 	@Override
-	public void update(TypeScore type) {
-		for(Entry<Text, TypeScore> score : this.scores.entrySet()) {
+	public void update(TypeScores type) {
+		for(Entry<Text, TypeScores> score : this.scores.entrySet()) {
 			if(score.getValue().equals(type)) {
 				for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 					Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
@@ -110,12 +110,12 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	}
 
 	@Override
-	public void update(UUID uuid, TypeScore type) {
+	public void update(UUID uuid, TypeScores type) {
 		Optional<EPlayer> player = this.plugin.getEServer().getEPlayer(uuid);
 		if(player.isPresent()) {
 			Optional<Objective> objective = player.get().getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
 			if(objective.isPresent()) {
-				for(Entry<Text, TypeScore> score : this.scores.entrySet()) {
+				for(Entry<Text, TypeScores> score : this.scores.entrySet()) {
 					if(score.getValue().equals(type)) {
 						objective.get().getOrCreateScore(score.getKey()).setScore(type.getValue(player.get()));
 					}
@@ -127,7 +127,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	@Override
 	public boolean isUpdate() {
 		boolean update = true;
-		for(Entry<Text, TypeScore> score : this.scores.entrySet()) {
+		for(Entry<Text, TypeScores> score : this.scores.entrySet()) {
 			if(!score.getValue().isUpdate()) {
 				update = false;
 			}

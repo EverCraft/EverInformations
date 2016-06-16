@@ -26,33 +26,28 @@ import org.spongepowered.api.text.Text;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
-import fr.evercraft.everinformations.scoreboard.score.ObjectiveType;
-import fr.evercraft.everinformations.scoreboard.score.Score.TypeScore;
+import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
 public class ListObjective extends EObjective {
 
 	private final Objective objective;
-	private final ObjectiveType type;
+	private final TypeScores type;
 	
-	public ListObjective(final EPlugin plugin, final double stay, final double update, ObjectiveType type) {
+	public ListObjective(final EPlugin plugin, final double stay, final double update, TypeScores type) {
 		super(plugin, stay, update);
 		this.type = type;
 		
 		this.objective = Objective.builder()
 				.name(ScoreBoard.LIST_IDENTIFIER)
 				.displayName(Text.of())
-				.criterion(type.getCriterion())
+				.criterion(type.getCriterion().orElse(null))
 				.objectiveDisplayMode(type.getObjectiveDisplayMode())
 				.build();
 	}
 
 	@Override
 	public boolean add(int priority, EPlayer player) {
-		if(this.type.equals(ObjectiveType.HEALTH) || this.type.equals(ObjectiveType.HEALTH_INTEGER)) {
-			this.objective.getOrCreateScore(player.getTeamRepresentation()).setScore((int) player.getHealth());
-		} else if(this.type.getTypeScore().isPresent()) {
-			this.objective.getOrCreateScore(player.getTeamRepresentation()).setScore(this.type.getTypeScore().get().getValue(player));
-		}
+		this.objective.getOrCreateScore(player.getTeamRepresentation()).setScore(this.type.getValue(player));
 		return player.addObjective(priority, DisplaySlots.LIST, this.objective);
 	}
 	
@@ -63,41 +58,30 @@ public class ListObjective extends EObjective {
 
 	@Override
 	public boolean start() {
-		Optional<TypeScore> score = this.type.getTypeScore();
-		if(score.isPresent()) {
-			score.get().addListener(this.plugin, this);
-			return true;
-		}
-		return false;
+		this.type.addListener(this.plugin, this);
+		return true;
 	}
 
 	@Override
 	public boolean stop() {
-		Optional<TypeScore> score = this.type.getTypeScore();
-		if(score.isPresent()) {
-			score.get().removeListener(this.plugin, this);
-			return true;
-		}
-		return false;
+		this.type.removeListener(this.plugin, this);
+		return true;
 	}
 	
 	@Override
 	public void update() {
-		Optional<TypeScore> score = this.type.getTypeScore();
-		if(score.isPresent()) {
-			this.update(score.get());
-		}
+		this.update(this.type);
 	}
 
 	@Override
-	public void update(TypeScore score) {
+	public void update(TypeScores score) {
 		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			this.objective.getOrCreateScore(player.getTeamRepresentation()).setScore(score.getValue(player));
 		}
 	}
 
 	@Override
-	public void update(UUID uuid, TypeScore score) {
+	public void update(UUID uuid, TypeScores score) {
 		Optional<EPlayer> player = this.plugin.getEServer().getEPlayer(uuid);
 		if(player.isPresent()) {
 			this.objective.getOrCreateScore(player.get().getTeamRepresentation()).setScore(score.getValue(player.get()));

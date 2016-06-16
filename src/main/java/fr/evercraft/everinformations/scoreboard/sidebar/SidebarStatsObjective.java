@@ -34,12 +34,12 @@ import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EIMessage.EIMessages;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
-import fr.evercraft.everinformations.scoreboard.score.Score.TypeScore;
+import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
 public class SidebarStatsObjective extends SidebarObjective {
 	private final static int TOP_COUNT = 16;
 	
-	public static enum TypeScores {
+	public static enum TypeTop {
 		DEATHS,
 		KILLS,
 		RATIO;
@@ -56,17 +56,17 @@ public class SidebarStatsObjective extends SidebarObjective {
 	private Objective objective;
 	private final String message;
 	
-	private final TypeScores score_type;
+	private final TypeTop score_type;
 	private final TypeTimes time_type;
 	
 	
-	public SidebarStatsObjective(final EPlugin plugin, final double stay, final List<SidebarTitle> titles, final String message, TypeScores score_type, TypeTimes time_type) {
+	public SidebarStatsObjective(final EPlugin plugin, final double stay, final List<SidebarTitle> titles, final String message, TypeTop top_type, TypeTimes time_type) {
 		super(plugin, stay,  0.0, Type.STATS, titles);
 		
 		this.plugin = plugin;
 		this.message = message;
 		
-		this.score_type = score_type;
+		this.score_type = top_type;
 		this.time_type = time_type;
 	}
 	
@@ -118,11 +118,11 @@ public class SidebarStatsObjective extends SidebarObjective {
 	}
 	
 	private LinkedHashMap<UUID, Double> getTop() {
-		if(this.score_type == TypeScores.DEATHS) {
+		if(this.score_type == TypeTop.DEATHS) {
 			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopDeaths(TOP_COUNT, this.getTime());
-		} else if(this.score_type == TypeScores.KILLS) {
+		} else if(this.score_type == TypeTop.KILLS) {
 			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopKills(TOP_COUNT, this.getTime());
-		} else if(this.score_type == TypeScores.RATIO) {
+		} else if(this.score_type == TypeTop.RATIO) {
 			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopRatio(TOP_COUNT, this.getTime());
 		}
 		return new LinkedHashMap<UUID, Double>();
@@ -161,12 +161,12 @@ public class SidebarStatsObjective extends SidebarObjective {
 	}
 	
 	@Override
-	public void update(TypeScore type) {
+	public void update(TypeScores type) {
 		this.update();
 	}
 
 	@Override
-	public void update(UUID uniqueId, TypeScore type) {
+	public void update(UUID uniqueId, TypeScores type) {
 		this.update();
 	}
 

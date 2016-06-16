@@ -30,7 +30,7 @@ public class ScoreDeath extends Score {
 	
 	@Listener
     public void event(StatsUserEvent.Death event) {
-		this.update(event.getVictim().getUniqueId(), TypeScore.DEATHS);
+		this.update(event.getVictim().getUniqueId(), TypeScores.DEATHS);
 	}
 	
 	@Override

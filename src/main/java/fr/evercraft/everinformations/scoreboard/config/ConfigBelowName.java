@@ -26,7 +26,7 @@ import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.objective.BelowNameObjective;
-import fr.evercraft.everinformations.scoreboard.score.ObjectiveType;
+import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
 public class ConfigBelowName extends EConfig implements IConfig<BelowNameObjective> {
 	public ConfigBelowName(final EverInformations plugin) {
@@ -57,7 +57,7 @@ public class ConfigBelowName extends EConfig implements IConfig<BelowNameObjecti
 		// Objectif unique
 		if(this.get("objectives").isVirtual()) {
 			try {
-				ObjectiveType type = ObjectiveType.valueOf(this.get("type").getString("").toUpperCase());
+				TypeScores type = TypeScores.valueOf(this.get("type").getString("").toUpperCase());
 				Text message = EChat.of(this.plugin.getChat().replace(this.get("name").getString("")));
 				
 				objectives.add(new BelowNameObjective(this.plugin, stay_default, update_default, type, message));
@@ -66,7 +66,7 @@ public class ConfigBelowName extends EConfig implements IConfig<BelowNameObjecti
 		} else {
 			for(ConfigurationNode config : this.get("objectives").getChildrenList()) {				
 				try {
-					ObjectiveType type = ObjectiveType.valueOf(config.getNode("type").getString("").toUpperCase());
+					TypeScores type = TypeScores.valueOf(config.getNode("type").getString("").toUpperCase());
 					double stay = config.getNode("stay").getDouble(stay_default);
 					double update = config.getNode("update").getDouble(update_default);
 					Text message = EChat.of(this.plugin.getChat().replace(config.getNode("name").getString("")));

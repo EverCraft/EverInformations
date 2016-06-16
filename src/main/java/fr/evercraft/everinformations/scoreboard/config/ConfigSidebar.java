@@ -30,13 +30,13 @@ import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective.Type;
-import fr.evercraft.everinformations.scoreboard.score.Score.TypeScore;
+import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 import fr.evercraft.everinformations.scoreboard.sidebar.SidebarEconomyObjective;
 import fr.evercraft.everinformations.scoreboard.sidebar.SidebarInformationsObjective;
 import fr.evercraft.everinformations.scoreboard.sidebar.SidebarNumbersObjective;
 import fr.evercraft.everinformations.scoreboard.sidebar.SidebarStatsObjective;
+import fr.evercraft.everinformations.scoreboard.sidebar.SidebarStatsObjective.TypeTop;
 import fr.evercraft.everinformations.scoreboard.sidebar.SidebarTitle;
-import fr.evercraft.everinformations.scoreboard.sidebar.SidebarStatsObjective.TypeScores;
 import fr.evercraft.everinformations.scoreboard.sidebar.SidebarStatsObjective.TypeTimes;
 
 public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> {
@@ -59,13 +59,13 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 			message.put("type", Type.NUMBERS.name());
 			
 			HashMap<String, String> scores = new HashMap<String, String>();
-			scores.put("&aOnline :", TypeScore.ONLINE_PLAYERS.name());
-			scores.put("&aBalance :", TypeScore.BALANCE.name());
-			scores.put("&aPing :", TypeScore.PING.name());
-			scores.put("&aFood :", TypeScore.FOOD.name());
-			scores.put("&aHealth :", TypeScore.HEALTH.name());
-			scores.put("&aLevel :", TypeScore.LEVEL.name());
-			scores.put("&aXP :", TypeScore.XP.name());
+			scores.put("&aOnline :", TypeScores.ONLINE_PLAYERS.name());
+			scores.put("&aBalance :", TypeScores.BALANCE.name());
+			scores.put("&aPing :", TypeScores.PING.name());
+			scores.put("&aFood :", TypeScores.FOOD.name());
+			scores.put("&aHealth :", TypeScores.HEALTH.name());
+			scores.put("&aLevel :", TypeScores.LEVEL.name());
+			scores.put("&aXP :", TypeScores.XP.name());
 
 			message.put("scores", scores);
 			messages.add(message);
@@ -80,7 +80,7 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 			
 			scores_int.put(9, "&1");
 			scores_int.put(8, "&aJoueur");
-			scores_int.put(7, "&4  <" + TypeScore.ONLINE_PLAYERS.name() + ">");
+			scores_int.put(7, "&4  <" + TypeScores.ONLINE_PLAYERS.name() + ">");
 			scores_int.put(6, "&2");
 			scores_int.put(5, "&aTeamSpeak :");
 			scores_int.put(4, "&4  ts.evercraft.fr");
@@ -106,7 +106,7 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 			message.put("title", "&6✖  Top Kill ✖");
 			message.put("stay", 60);
 			message.put("type", Type.STATS.name());
-			message.put("score", TypeScores.KILLS.name());
+			message.put("top", TypeTop.KILLS.name());
 			message.put("time", TypeTimes.MONTH.name());
 			message.put("message", "&a<player>");
 			messages.add(message);
@@ -169,12 +169,12 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 					
 					// Numbers
 					if(type.equals(Type.NUMBERS)) {
-						Map<Text, TypeScore> scores = new HashMap<Text, TypeScore>();
+						Map<Text, TypeScores> scores = new HashMap<Text, TypeScores>();
 						for(Entry<Object, ? extends ConfigurationNode> config_score : config.getNode("scores").getChildrenMap().entrySet()) {
 							if(config_score.getKey() instanceof String) {
 								try {
 									Text score_value = EChat.of((String) config_score.getKey());
-									TypeScore score_type = TypeScore.valueOf(config_score.getValue().getString("").toUpperCase());
+									TypeScores score_type = TypeScores.valueOf(config_score.getValue().getString("").toUpperCase());
 									scores.put(score_value, score_type);
 								} catch (IllegalArgumentException e) {
 									this.plugin.getLogger().warn("Error during the change of the scoreboard (type='INFORMATIONS') : score='" + config_score.getValue().getString("") + "'");
@@ -219,17 +219,17 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 					} else if(type.equals(Type.STATS)) {
 						if(this.plugin.getEverAPI().getManagerService().getStats().isPresent()) {
 							try {
-								TypeScores score_type = TypeScores.valueOf(config.getNode("score").getString("").toUpperCase());
+								TypeTop top_type = TypeTop.valueOf(config.getNode("top").getString("").toUpperCase());
 								try {
 									TypeTimes time_type = TypeTimes.valueOf(config.getNode("time").getString("").toUpperCase());
 									String message = this.plugin.getChat().replace(config.getNode("message").getString("<player>"));
 									
-									objectives.add(new SidebarStatsObjective(this.plugin, stay, titles, message, score_type, time_type));
+									objectives.add(new SidebarStatsObjective(this.plugin, stay, titles, message, top_type, time_type));
 								} catch (IllegalArgumentException e) {
 									this.plugin.getLogger().warn("Error during the change of the scoreboard (type='STATS') : time='" + config.getNode("time").getString("") + "'");
 								}
 							} catch (IllegalArgumentException e) {
-								this.plugin.getLogger().warn("Error during the change of the scoreboard (type='STATS') : score='" + config.getNode("score").getString("") + "'");
+								this.plugin.getLogger().warn("Error during the change of the scoreboard (type='STATS') : top='" + config.getNode("top").getString("") + "'");
 							}
 						} else {
 							this.plugin.getLogger().warn("Error during the change of the scoreboard (type='STATS') : There is no EverStats");

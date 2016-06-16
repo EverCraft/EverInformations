@@ -30,7 +30,7 @@ public class ScoreDeathMonthly extends Score {
 	
 	@Listener
     public void event(StatsUserEvent.Death event) {
-		this.update(event.getVictim().getUniqueId(), TypeScore.DEATHS_MONTHLY);
+		this.update(event.getVictim().getUniqueId(), TypeScores.DEATHS_MONTHLY);
 	}
 	
 	@Override

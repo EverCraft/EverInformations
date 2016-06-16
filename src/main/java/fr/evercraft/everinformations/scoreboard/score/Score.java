@@ -25,43 +25,6 @@ import fr.evercraft.everinformations.scoreboard.objective.EObjective;
 
 public abstract class Score {
 	
-	public static enum TypeScore {
-		ONLINE_PLAYERS(new ScoreOnlinePlayers()),
-		BALANCE(new ScoreBalance()),
-		PING(new ScorePing()),
-		HEALTH(new ScoreHealth()),
-		FOOD(new ScoreFood()),
-		LEVEL(new ScoreLevel()),
-		XP(new ScoreXp()),
-		DEATHS(new ScoreDeath()),
-		KILLS(new ScoreKill()),
-		RATIO(new ScoreRatio()),
-		DEATHS_MONTHLY(new ScoreDeathMonthly()),
-		KILLS_MONTHLY(new ScoreKillMonthly()),
-		RATIO_MONTHLY(new ScoreRatioMonthly());
-		
-		private final Score score;
-		private TypeScore(Score score) {
-			this.score = score;
-		}
-		
-		public int getValue(EPlayer player) {
-			return this.score.getValue(player);
-		}
-		
-		public boolean isUpdate() {
-			return this.score.isUpdate();
-		}
-		
-		public void addListener(EPlugin plugin, EObjective objective) {
-			this.score.addListener(plugin, objective);
-		}
-		
-		public void removeListener(EPlugin plugin, EObjective objective) {
-			this.score.removeListener(plugin, objective);
-		}
-    }
-	
 	protected final CopyOnWriteArrayList<EObjective> objectives;
 	
 	
@@ -83,13 +46,13 @@ public abstract class Score {
 		}
 	}
 	
-	protected void update(TypeScore type) {
+	protected void update(TypeScores type) {
 		for(EObjective objective : this.objectives) {
 			objective.update(type);
 		}
 	}
 	
-	protected void update(UUID uniqueId, TypeScore type) {
+	protected void update(UUID uniqueId, TypeScores type) {
 		for(EObjective objective : this.objectives) {
 			objective.update(type);
 		}

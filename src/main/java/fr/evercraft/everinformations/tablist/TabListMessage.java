@@ -26,11 +26,11 @@ import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.priority.PriorityService;
 import fr.evercraft.everinformations.scoreboard.objective.EObjective;
-import fr.evercraft.everinformations.scoreboard.score.Score.TypeScore;
+import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
 public class TabListMessage extends EObjective {
 	
-	private final Set<TypeScore> scores;
+	private final Set<TypeScores> scores;
 	
 	private final String header;
 	private final String footer;
@@ -44,7 +44,7 @@ public class TabListMessage extends EObjective {
 		this.scores = Sets.newConcurrentHashSet();
 		this.update = true;
 		
-		for(TypeScore score : TypeScore.values()) {
+		for(TypeScores score : TypeScores.values()) {
 			this.plugin.getLogger().warn("test : " + "<" + score.name() + ">");
 			if(this.header.contains("<" + score.name() + ">") || this.footer.contains("<" + score.name() + ">")) {
 				this.scores.add(score);
@@ -61,7 +61,7 @@ public class TabListMessage extends EObjective {
 
 	@Override
 	public boolean start() {		
-		for(TypeScore score : this.scores) {
+		for(TypeScores score : this.scores) {
 			this.plugin.getLogger().warn("addListener : " + "<" + score.name() + ">");
 			score.addListener(this.plugin, this);
 		}
@@ -70,7 +70,7 @@ public class TabListMessage extends EObjective {
 
 	@Override
 	public boolean stop() {		
-		for(TypeScore score : this.scores) {
+		for(TypeScores score : this.scores) {
 			score.removeListener(this.plugin, this);
 		}
 		
@@ -112,12 +112,12 @@ public class TabListMessage extends EObjective {
 	}
 
 	@Override
-	public void update(TypeScore score) {
+	public void update(TypeScores score) {
 		this.update();
 	}
 
 	@Override
-	public void update(UUID uuid, TypeScore score) {
+	public void update(UUID uuid, TypeScores score) {
 		Optional<EPlayer> player = this.plugin.getEServer().getEPlayer(uuid);
 		if(player.isPresent()) {
 			this.add(PriorityService.DEFAULT, player.get());

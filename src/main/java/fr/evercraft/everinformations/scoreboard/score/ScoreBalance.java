@@ -34,7 +34,7 @@ public class ScoreBalance extends Score {
     public void event(EconomyTransactionEvent event) {
 		try {
 			UUID uuid = UUID.fromString(event.getTransactionResult().getAccount().getIdentifier());
-			this.update(uuid, TypeScore.BALANCE);
+			this.update(uuid, TypeScores.BALANCE);
 		} catch (IllegalArgumentException e) {}
 	}
 	

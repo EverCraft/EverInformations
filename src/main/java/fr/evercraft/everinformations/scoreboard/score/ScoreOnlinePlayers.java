@@ -32,17 +32,17 @@ public class ScoreOnlinePlayers extends Score {
 	
 	@Listener
     public void joinEvent(ClientConnectionEvent.Join event) {
-		this.update(TypeScore.ONLINE_PLAYERS);
+		this.update(TypeScores.ONLINE_PLAYERS);
 	}
 	
 	@Listener(order=Order.POST)
     public void quitEvent(ClientConnectionEvent.Disconnect event) {
-		this.update(TypeScore.ONLINE_PLAYERS);
+		this.update(TypeScores.ONLINE_PLAYERS);
 	}
 	
 	@Listener
     public void vanishEvent(VanishEvent event) {
-		this.update(TypeScore.ONLINE_PLAYERS);
+		this.update(TypeScores.ONLINE_PLAYERS);
 	}
 	
 	@Override

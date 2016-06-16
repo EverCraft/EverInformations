@@ -32,7 +32,7 @@ public class ScoreHealth extends Score {
 	@Listener
     public void event(HealEntityEvent event) {
 		if(event.getTargetEntity() instanceof Player) {
-			this.update(event.getTargetEntity().getUniqueId(), TypeScore.HEALTH);
+			this.update(event.getTargetEntity().getUniqueId(), TypeScores.HEALTH);
 		}
 	}
 	

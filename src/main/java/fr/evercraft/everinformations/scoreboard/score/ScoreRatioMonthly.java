@@ -30,12 +30,12 @@ public class ScoreRatioMonthly extends Score {
 	
 	@Listener
     public void event(StatsUserEvent.Death event) {
-		this.update(event.getVictim().getUniqueId(), TypeScore.RATIO);
+		this.update(event.getVictim().getUniqueId(), TypeScores.RATIO);
 	}
 	
 	@Listener
     public void event(StatsUserEvent.Kill event) {
-		this.update(event.getKiller().getUniqueId(), TypeScore.RATIO);
+		this.update(event.getKiller().getUniqueId(), TypeScores.RATIO);
 	}
 	
 	@Override

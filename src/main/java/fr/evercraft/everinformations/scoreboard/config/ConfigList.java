@@ -23,7 +23,7 @@ import ninja.leaping.configurate.ConfigurationNode;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.objective.ListObjective;
-import fr.evercraft.everinformations.scoreboard.score.ObjectiveType;
+import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
 public class ConfigList extends EConfig implements IConfig<ListObjective> {
 	public ConfigList(final EverInformations plugin) {
@@ -53,14 +53,14 @@ public class ConfigList extends EConfig implements IConfig<ListObjective> {
 		// Objectif unique
 		if(this.get("objectives").isVirtual()) {
 			try {
-				ObjectiveType type = ObjectiveType.valueOf(this.get("type").getString("").toUpperCase());
+				TypeScores type = TypeScores.valueOf(this.get("type").getString("").toUpperCase());
 				objectives.add(new ListObjective(this.plugin, stay_default, update_default, type));
 			} catch (IllegalArgumentException e) {}
 		// Liste d'objectives
 		} else {
 			for(ConfigurationNode config : this.get("objectives").getChildrenList()) {
 				try {
-					ObjectiveType type = ObjectiveType.valueOf(config.getNode("type").getString("").toUpperCase());
+					TypeScores type = TypeScores.valueOf(config.getNode("type").getString("").toUpperCase());
 					double stay = config.getNode("stay").getDouble(stay_default);
 					double update = config.getNode("update").getDouble(update_default);
 					

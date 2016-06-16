@@ -33,7 +33,7 @@ import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EIMessage.EIMessages;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
-import fr.evercraft.everinformations.scoreboard.score.Score.TypeScore;
+import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
 public class SidebarEconomyObjective extends SidebarObjective {
 	private final static int TOP_COUNT = 16;
@@ -96,12 +96,12 @@ public class SidebarEconomyObjective extends SidebarObjective {
 	}
 	
 	@Override
-	public void update(TypeScore type) {
+	public void update(TypeScores type) {
 		this.update();
 	}
 
 	@Override
-	public void update(UUID uniqueId, TypeScore type) {
+	public void update(UUID uniqueId, TypeScores type) {
 		this.update();
 	}
 

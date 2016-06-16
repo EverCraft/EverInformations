@@ -20,7 +20,7 @@ import java.util.UUID;
 
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everinformations.scoreboard.score.Score.TypeScore;
+import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
 public abstract class EObjective  {
 	
@@ -65,6 +65,6 @@ public abstract class EObjective  {
 	public abstract boolean stop();
 
 	public abstract void update();
-	public abstract void update(TypeScore type);
-	public abstract void update(UUID uniqueId, TypeScore type);
+	public abstract void update(TypeScores type);
+	public abstract void update(UUID uniqueId, TypeScores type);
 }
