@@ -83,10 +83,16 @@ public class ListenerHealthMob {
 		}
 	}
 	
+	/*
+	 * Bug Event
+	 */
 	@Listener(order=Order.PRE)
 	public void onPlayerDamage(DestructEntityEvent.Death event) {
 		if (event.getTargetEntity() instanceof Creature && this.plugin.getHealthMob().isEnable()) {
-			this.plugin.getHealthMob().remove(event.getTargetEntity());
+			Optional<EntityDamageSource> optDamageSource = event.getCause().first(EntityDamageSource.class);
+			if (optDamageSource.isPresent() && optDamageSource.get().getSource() instanceof Player) {
+				this.plugin.getHealthMob().remove(event.getTargetEntity());
+			}
 		}
 	}
 	

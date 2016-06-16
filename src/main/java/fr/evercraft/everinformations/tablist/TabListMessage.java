@@ -45,7 +45,6 @@ public class TabListMessage extends EObjective {
 		this.update = true;
 		
 		for(TypeScores score : TypeScores.values()) {
-			this.plugin.getLogger().warn("test : " + "<" + score.name() + ">");
 			if(this.header.contains("<" + score.name() + ">") || this.footer.contains("<" + score.name() + ">")) {
 				this.scores.add(score);
 				if(!score.isUpdate()) {
@@ -62,7 +61,6 @@ public class TabListMessage extends EObjective {
 	@Override
 	public boolean start() {		
 		for(TypeScores score : this.scores) {
-			this.plugin.getLogger().warn("addListener : " + "<" + score.name() + ">");
 			score.addListener(this.plugin, this);
 		}
 		return false;

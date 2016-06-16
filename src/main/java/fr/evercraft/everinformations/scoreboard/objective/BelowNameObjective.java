@@ -19,6 +19,7 @@ package fr.evercraft.everinformations.scoreboard.objective;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.spongepowered.api.scoreboard.critieria.Criteria;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.api.scoreboard.objective.Objective;
 import org.spongepowered.api.text.Text;
@@ -40,7 +41,7 @@ public class BelowNameObjective extends EObjective {
 		this.objective = Objective.builder()
 				.name(ScoreBoard.BELOW_NAME_IDENTIFIER)
 				.displayName(name)
-				.criterion(type.getCriterion().orElse(null))
+				.criterion(type.getCriterion().orElse(Criteria.DUMMY))
 				.objectiveDisplayMode(type.getObjectiveDisplayMode())
 				.build();
 	}

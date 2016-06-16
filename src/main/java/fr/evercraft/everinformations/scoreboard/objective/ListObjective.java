@@ -19,6 +19,7 @@ package fr.evercraft.everinformations.scoreboard.objective;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.spongepowered.api.scoreboard.critieria.Criteria;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.api.scoreboard.objective.Objective;
 import org.spongepowered.api.text.Text;
@@ -40,7 +41,7 @@ public class ListObjective extends EObjective {
 		this.objective = Objective.builder()
 				.name(ScoreBoard.LIST_IDENTIFIER)
 				.displayName(Text.of())
-				.criterion(type.getCriterion().orElse(null))
+				.criterion(type.getCriterion().orElse(Criteria.DUMMY))
 				.objectiveDisplayMode(type.getObjectiveDisplayMode())
 				.build();
 	}

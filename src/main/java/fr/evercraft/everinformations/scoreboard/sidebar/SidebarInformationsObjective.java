@@ -61,8 +61,6 @@ public class SidebarInformationsObjective extends SidebarObjective {
 				}
 			}
 		}
-		
-		this.plugin.getLogger().warn("size : " + this.type_scores.size());
 	}
 	
 	@Override

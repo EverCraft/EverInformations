@@ -177,7 +177,7 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 									TypeScores score_type = TypeScores.valueOf(config_score.getValue().getString("").toUpperCase());
 									scores.put(score_value, score_type);
 								} catch (IllegalArgumentException e) {
-									this.plugin.getLogger().warn("Error during the change of the scoreboard (type='INFORMATIONS') : score='" + config_score.getValue().getString("") + "'");
+									this.plugin.getLogger().warn("Error during the change of the scoreboard (type='NUMBERS') : score='" + config_score.getValue().getString("") + "'");
 								}
 							}
 						}
@@ -185,7 +185,7 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 						if(!scores.isEmpty()) {
 							objectives.add(new SidebarNumbersObjective(this.plugin, stay, update, titles, scores));
 						} else {
-							this.plugin.getLogger().warn("ScoreBoard Score Empty (type='INFORMATIONS') : " + type.name());
+							this.plugin.getLogger().warn("Error during the change of the scoreboard (type='NUMBERS') : Score Empty");
 						}
 					// Informations	
 					} else if(type.equals(Type.INFORMATIONS)) {
@@ -197,7 +197,7 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 									String score_text = this.plugin.getChat().replace(config_score.getValue().getString(""));
 									scores.put(score_int, score_text);
 								} catch (NumberFormatException e) {
-									this.plugin.getLogger().warn("Error during the change of the scoreboard (type='NUMBERS') : number='" + config_score.getValue().getString("") + "'");
+									this.plugin.getLogger().warn("Error during the change of the scoreboard (type='INFORMATIONS') : number='" + config_score.getValue().getString("") + "'");
 								}
 							}
 						}
@@ -205,7 +205,7 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 						if(!scores.isEmpty()) {
 							objectives.add(new SidebarInformationsObjective(this.plugin, stay, update, titles, scores));
 						} else {
-							this.plugin.getLogger().warn("ScoreBoard Score Empty (type='NUMBERS') : " + type.name());
+							this.plugin.getLogger().warn("Error during the change of the scoreboard (type='INFORMATIONS') : Score Empty");
 						}
 					// Economy
 					} else if(type.equals(Type.ECONOMY)) {
