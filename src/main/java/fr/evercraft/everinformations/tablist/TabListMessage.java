@@ -22,9 +22,9 @@ import java.util.UUID;
 
 import com.google.common.collect.Sets;
 
-import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.PriorityService;
+import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.objective.EObjective;
 import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
@@ -35,7 +35,7 @@ public class TabListMessage extends EObjective {
 	private final String header;
 	private final String footer;
 	
-	public TabListMessage(EPlugin plugin, double stay, double update, String header, String footer) {
+	public TabListMessage(EverInformations plugin, double stay, double update, String header, String footer) {
 		super(plugin, stay, update);
 
 		this.header = header;
@@ -71,8 +71,6 @@ public class TabListMessage extends EObjective {
 		for(TypeScores score : this.scores) {
 			score.removeListener(this.plugin, this);
 		}
-		
-		
 		return true;
 	}
 	
@@ -82,11 +80,7 @@ public class TabListMessage extends EObjective {
 	
 	@Override
 	public boolean add(int priority, EPlayer player) {
-		return this.add(player);
-	}
-	
-	public boolean add(EPlayer player) {
-		if(player.sendTabList(ManagerTabList.IDENTIFIER)) {
+		if(player.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
 			player.getTabList().setHeaderAndFooter(player.replaceVariable(this.header), player.replaceVariable(this.footer));
 		}
 		return true;
@@ -105,7 +99,9 @@ public class TabListMessage extends EObjective {
 	@Override
 	public void update() {
 		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-			this.add(PriorityService.DEFAULT, player);
+			if(player.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
+				this.add(PriorityService.DEFAULT, player);
+			}
 		}
 	}
 
@@ -117,7 +113,7 @@ public class TabListMessage extends EObjective {
 	@Override
 	public void update(UUID uuid, TypeScores score) {
 		Optional<EPlayer> player = this.plugin.getEServer().getEPlayer(uuid);
-		if(player.isPresent()) {
+		if(player.isPresent() && player.get().sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
 			this.add(PriorityService.DEFAULT, player.get());
 		}
 	}

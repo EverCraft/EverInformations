@@ -32,6 +32,7 @@ import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EIMessage.EIMessages;
+import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
 import fr.evercraft.everinformations.scoreboard.score.TypeScores;
@@ -60,7 +61,7 @@ public class SidebarStatsObjective extends SidebarObjective {
 	private final TypeTimes time_type;
 	
 	
-	public SidebarStatsObjective(final EPlugin plugin, final double stay, final List<SidebarTitle> titles, final String message, TypeTop top_type, TypeTimes time_type) {
+	public SidebarStatsObjective(final EverInformations plugin, final double stay, final List<SidebarTitle> titles, final String message, TypeTop top_type, TypeTimes time_type) {
 		super(plugin, stay,  0.0, Type.STATS, titles);
 		
 		this.plugin = plugin;

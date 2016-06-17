@@ -86,7 +86,9 @@ public class HeaderFooterTabList {
 		
 		if(this.enable) {
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				player.getTabList().setHeaderAndFooter(null, null);
+				if(player.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
+					player.getTabList().setHeaderAndFooter(null, null);
+				}
 			}
 		}
 	}
@@ -118,7 +120,7 @@ public class HeaderFooterTabList {
 			TabListMessage tablist = this.getTabList();
 			this.plugin.getLogger().debug("TabList add (player='" + player.getIdentifier() + "';"
 														+ "tablist='" + tablist + "')");
-			tablist.add(0, player);
+			tablist.add(this.plugin.getTabList().getPriority(), player);
 		}
 	}
 	

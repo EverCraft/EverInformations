@@ -54,7 +54,7 @@ public class ConfigList extends EConfig implements IConfig<ListObjective> {
 		if(this.get("objectives").isVirtual()) {
 			try {
 				TypeScores type = TypeScores.valueOf(this.get("type").getString("").toUpperCase());
-				objectives.add(new ListObjective(this.plugin, stay_default, update_default, type));
+				objectives.add(new ListObjective((EverInformations) this.plugin, stay_default, update_default, type));
 			} catch (IllegalArgumentException e) {}
 		// Liste d'objectives
 		} else {
@@ -64,7 +64,7 @@ public class ConfigList extends EConfig implements IConfig<ListObjective> {
 					double stay = config.getNode("stay").getDouble(stay_default);
 					double update = config.getNode("update").getDouble(update_default);
 					
-					objectives.add(new ListObjective(this.plugin, stay, update, type));
+					objectives.add(new ListObjective((EverInformations) this.plugin, stay, update, type));
 				} catch (IllegalArgumentException e) {}
 			}
 		}

@@ -65,7 +65,7 @@ public class ConfigTabList extends EConfig {
 		if(this.get("tablists").isVirtual()) {
 			String header = this.plugin.getChat().replace(this.get("header").getString(""));
 			String footer = this.plugin.getChat().replace(this.get("footer").getString(""));
-			tablists.add(new TabListMessage(this.plugin, stay_default, update_default, header, footer));
+			tablists.add(new TabListMessage((EverInformations) this.plugin, stay_default, update_default, header, footer));
 		// Liste d'objectives
 		} else {
 			for(ConfigurationNode config : this.get("objectives").getChildrenList()) {
@@ -75,7 +75,7 @@ public class ConfigTabList extends EConfig {
 				String header = this.plugin.getChat().replace(config.getNode("header").getString(""));
 				String footer = this.plugin.getChat().replace(config.getNode("footer").getString(""));
 				
-				tablists.add(new TabListMessage(this.plugin, stay, update, header, footer));
+				tablists.add(new TabListMessage((EverInformations) this.plugin, stay, update, header, footer));
 			}
 		}
 		return tablists;

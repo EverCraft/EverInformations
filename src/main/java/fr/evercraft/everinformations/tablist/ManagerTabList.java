@@ -16,51 +16,80 @@
  */
 package fr.evercraft.everinformations.tablist;
 
+import fr.evercraft.everapi.event.TabListEvent;
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.tablist.config.ConfigTabList;
 
 public class ManagerTabList {
 	public final static String IDENTIFIER = "everinformations";
 	
+	private final EverInformations plugin;
+	
 	private final HeaderFooterTabList header_footer;
 	private final DisplayNameTabList displayname;
+	
+	private int priority;
 	 
-	public ManagerTabList(final EverInformations plugin) {		
-		ConfigTabList config = new ConfigTabList(plugin);
+	public ManagerTabList(final EverInformations plugin) {
+		this.plugin = plugin;
 		
-		this.header_footer = new HeaderFooterTabList(plugin, config);
-		this.displayname = new DisplayNameTabList(plugin, config);
+		ConfigTabList config = new ConfigTabList(this.plugin);
 		
-		reload();
+		this.header_footer = new HeaderFooterTabList(this.plugin, config);
+		this.displayname = new DisplayNameTabList(this.plugin, config);
+		
+		load();
 	}
 
-	public void reload(){		
-		this.header_footer.reload();
+	public void load() {
+		this.priority = PriorityService.DEFAULT;
+		if(this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTabList(IDENTIFIER);
+		}
+	}
+	
+	public void reload() {
+		this.load();
+		
 		this.displayname.reload();
+		this.header_footer.reload();
 	}
 
 	public void start() {
-		this.header_footer.start();
 		this.displayname.start();
+		this.header_footer.start();
 	}
 
 	public void stop() {
-		this.header_footer.stop();
 		this.displayname.stop();
+		this.header_footer.stop();
 	}
 	
 	public void addPlayer(EPlayer player) {
-		this.header_footer.addPlayer(player);
 		this.displayname.addPlayer(player);
+		this.displayname.addOther(player);
+		this.header_footer.addPlayer(player);
 	}
 	
 	public void removePlayer(EPlayer player) {
-		this.header_footer.removePlayer(player);
 		this.displayname.removePlayer(player);
+		this.header_footer.removePlayer(player);
 	}
 
 	public void updatePlayer(EPlayer player) {
-		this.displayname.updatePlayer(player);
+		this.displayname.addOther(player);
+	}
+
+	public void event(TabListEvent event) {
+		if(!event.getIdentifier().equalsIgnoreCase(IDENTIFIER)) {
+			this.displayname.addPlayer(event.getPlayer());
+			this.header_footer.addPlayer(event.getPlayer());
+		}
+	}
+	
+	public int getPriority() {
+		return this.priority;
 	}
 }

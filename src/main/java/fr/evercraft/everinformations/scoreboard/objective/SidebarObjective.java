@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.spongepowered.api.scheduler.Task;
 
-import fr.evercraft.everapi.plugin.EPlugin;
+import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.sidebar.SidebarTitle;
 
 public abstract class SidebarObjective extends EObjective {
@@ -41,7 +41,7 @@ public abstract class SidebarObjective extends EObjective {
 	private int numero;
 
 	
-	public SidebarObjective(final EPlugin plugin, final double stay, final double update, Type type, List<SidebarTitle> titles) {
+	public SidebarObjective(final EverInformations plugin, final double stay, final double update, Type type, List<SidebarTitle> titles) {
 		super(plugin, stay, update);
 		this.type = type;
 		this.titles = titles;

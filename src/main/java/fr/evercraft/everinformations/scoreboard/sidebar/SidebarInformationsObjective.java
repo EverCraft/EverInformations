@@ -33,8 +33,8 @@ import org.spongepowered.api.text.Text;
 
 import com.google.common.collect.Sets;
 
-import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
 import fr.evercraft.everinformations.scoreboard.score.TypeScores;
@@ -44,7 +44,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 	private final ConcurrentMap<Integer, String> scores;
 	private final ConcurrentMap<TypeScores, Set<Integer>> type_scores;
 
-	public SidebarInformationsObjective(final EPlugin plugin, final double stay, final double update, final List<SidebarTitle> titles, final Map<Integer, String> scores) {
+	public SidebarInformationsObjective(final EverInformations plugin, final double stay, final double update, final List<SidebarTitle> titles, final Map<Integer, String> scores) {
 		super(plugin, stay, update, Type.INFORMATIONS, titles);
 		
 		this.scores = new ConcurrentHashMap<Integer, String>();

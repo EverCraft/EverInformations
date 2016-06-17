@@ -24,8 +24,8 @@ import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.api.scoreboard.objective.Objective;
 import org.spongepowered.api.text.Text;
 
-import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
@@ -34,7 +34,7 @@ public class BelowNameObjective extends EObjective {
 	private final Objective objective;
 	private final TypeScores type;
 	
-	public BelowNameObjective(final EPlugin plugin, final double stay, final double update, TypeScores type, Text name) {
+	public BelowNameObjective(final EverInformations plugin, final double stay, final double update, TypeScores type, Text name) {
 		super(plugin, stay, update);
 		this.type = type;
 		

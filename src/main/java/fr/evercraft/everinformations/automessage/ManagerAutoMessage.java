@@ -16,6 +16,7 @@
  */
 package fr.evercraft.everinformations.automessage;
 
+import fr.evercraft.everapi.event.BossBarEvent;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.automessage.AutoMessage.Type;
@@ -29,6 +30,7 @@ import fr.evercraft.everinformations.message.ChatMessage;
 import fr.evercraft.everinformations.message.TitleMessage;
 
 public class ManagerAutoMessage {
+
 	private final EverInformations plugin;
 	
 
@@ -73,5 +75,10 @@ public class ManagerAutoMessage {
 	
 	public void removePlayer(EPlayer player) {
 		this.bossbar.removePlayer(player);
+	}
+
+	public void event(BossBarEvent.Remove event) {
+		// TODO Auto-generated method stub
+		
 	}
 }

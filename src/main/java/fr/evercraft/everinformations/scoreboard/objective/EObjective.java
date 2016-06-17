@@ -18,13 +18,13 @@ package fr.evercraft.everinformations.scoreboard.objective;
 
 import java.util.UUID;
 
-import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
 public abstract class EObjective  {
 	
-	protected final EPlugin plugin;
+	protected final EverInformations plugin;
 	
 	// En secondes
 	protected final double stay;
@@ -32,7 +32,7 @@ public abstract class EObjective  {
 	
 	protected boolean update;
 	
-	public EObjective(EPlugin plugin, double stay, double update) {
+	public EObjective(EverInformations plugin, double stay, double update) {
 		this.plugin = plugin;
 		this.stay = stay;
 		this.update_time = update;

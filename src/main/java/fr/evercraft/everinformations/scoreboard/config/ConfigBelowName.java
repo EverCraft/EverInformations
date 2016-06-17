@@ -60,7 +60,7 @@ public class ConfigBelowName extends EConfig implements IConfig<BelowNameObjecti
 				TypeScores type = TypeScores.valueOf(this.get("type").getString("").toUpperCase());
 				Text message = EChat.of(this.plugin.getChat().replace(this.get("name").getString("")));
 				
-				objectives.add(new BelowNameObjective(this.plugin, stay_default, update_default, type, message));
+				objectives.add(new BelowNameObjective((EverInformations) this.plugin, stay_default, update_default, type, message));
 			} catch (IllegalArgumentException e) {}
 		// Liste d'objectives
 		} else {
@@ -71,7 +71,7 @@ public class ConfigBelowName extends EConfig implements IConfig<BelowNameObjecti
 					double update = config.getNode("update").getDouble(update_default);
 					Text message = EChat.of(this.plugin.getChat().replace(config.getNode("name").getString("")));
 					
-					objectives.add(new BelowNameObjective(this.plugin, stay, update, type, message));
+					objectives.add(new BelowNameObjective((EverInformations) this.plugin, stay, update, type, message));
 				} catch (IllegalArgumentException e) {}
 			}
 		}

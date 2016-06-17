@@ -31,6 +31,7 @@ import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EIMessage.EIMessages;
+import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
 import fr.evercraft.everinformations.scoreboard.score.TypeScores;
@@ -43,7 +44,7 @@ public class SidebarEconomyObjective extends SidebarObjective {
 	private final String message;
 	
 	
-	public SidebarEconomyObjective(final EPlugin plugin, final double stay, final double update, final List<SidebarTitle> titles, final String message) {
+	public SidebarEconomyObjective(final EverInformations plugin, final double stay, final double update, final List<SidebarTitle> titles, final String message) {
 		super(plugin, stay,  update, Type.ECONOMY, titles);
 		
 		this.plugin = plugin;

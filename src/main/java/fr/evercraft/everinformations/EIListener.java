@@ -22,10 +22,12 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.living.humanoid.player.KickPlayerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 
+import fr.evercraft.everapi.event.BossBarEvent;
 import fr.evercraft.everapi.event.PermGroupEvent;
 import fr.evercraft.everapi.event.PermSystemEvent;
 import fr.evercraft.everapi.event.PermUserEvent;
 import fr.evercraft.everapi.event.ScoreBoardEvent;
+import fr.evercraft.everapi.event.TabListEvent;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.essentials.event.VanishEvent;
 import fr.evercraft.everapi.services.essentials.event.VanishEvent.Action;
@@ -187,9 +189,17 @@ public class EIListener {
 	}
 	
 	@Listener
-    public void scoreboardEvent(ScoreBoardEvent event) {
-		if(event.getAction().equals(ScoreBoardEvent.Action.REMOVE)) {
-			this.plugin.getScoreBoard().event(event);
-		}
+    public void scoreBoardEvent(ScoreBoardEvent.Remove event) {
+		this.plugin.getScoreBoard().event(event);
+	}
+	
+	@Listener
+    public void tabListEvent(TabListEvent.Remove event) {
+		this.plugin.getTabList().event(event);
+	}
+	
+	@Listener
+    public void bossBarEvent(BossBarEvent.Remove event) {
+		this.plugin.getAutoMessages().event(event);
 	}
 }
