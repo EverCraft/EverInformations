@@ -19,7 +19,6 @@ package fr.evercraft.everinformations.tablist;
 import java.util.Optional;
 
 import org.spongepowered.api.entity.living.player.tab.TabListEntry;
-import org.spongepowered.api.text.Text;
 
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.server.player.EPlayer;
@@ -84,7 +83,7 @@ public class DisplayNameTabList {
 					for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 						Optional<TabListEntry> entry = player.getTabList().getEntry(other.getUniqueId());
 						if(entry.isPresent()) {
-							entry.get().setDisplayName(Text.EMPTY);
+							entry.get().setDisplayName(null);
 						}
 					}
 				}
@@ -140,7 +139,7 @@ public class DisplayNameTabList {
 			for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 				Optional<TabListEntry> entry = player.getTabList().getEntry(other.getUniqueId());
 				if(entry.isPresent()) {
-					entry.get().setDisplayName(Text.EMPTY);
+					entry.get().setDisplayName(null);
 				}
 			}
 		}

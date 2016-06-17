@@ -16,9 +16,6 @@
  */
 package fr.evercraft.everinformations.automessage;
 
-import fr.evercraft.everapi.event.ActionBarEvent;
-import fr.evercraft.everapi.event.BossBarEvent;
-import fr.evercraft.everapi.event.TitleEvent;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.automessage.AutoMessage.Type;
@@ -79,21 +76,21 @@ public class ManagerAutoMessage {
 		this.bossbar.removePlayer(player);
 	}
 	
-	public void event(ActionBarEvent.Remove event) {
-		if(event.getIdentifier().equalsIgnoreCase(AutoMessage.IDENTIFIER)) {
-			this.actionbar.addPlayer(event.getPlayer());
+	public void eventActionBar(EPlayer player, String before_identifier) {
+		if(before_identifier.equalsIgnoreCase(AutoMessage.IDENTIFIER)) {
+			this.actionbar.addPlayer(player);
 		}
 	}
 
-	public void event(TitleEvent.Remove event) {
-		if(event.getIdentifier().equalsIgnoreCase(AutoMessage.IDENTIFIER)) {
-			this.title.addPlayer(event.getPlayer());
+	public void eventTitle(EPlayer player, String before_identifier) {
+		if(before_identifier.equalsIgnoreCase(AutoMessage.IDENTIFIER)) {
+			this.title.addPlayer(player);
 		}
 	}
 	
-	public void event(BossBarEvent.Remove event) {
-		if(event.getIdentifier().equalsIgnoreCase(AutoMessage.IDENTIFIER)) {
-			this.bossbar.addPlayer(event.getPlayer());
+	public void eventBossBar(EPlayer player, String before_identifier) {
+		if(before_identifier.equalsIgnoreCase(AutoMessage.IDENTIFIER)) {
+			this.bossbar.addPlayer(player);
 		}
 	}
 }

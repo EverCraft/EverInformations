@@ -22,12 +22,14 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.living.humanoid.player.KickPlayerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 
+import fr.evercraft.everapi.event.ActionBarEvent;
 import fr.evercraft.everapi.event.BossBarEvent;
 import fr.evercraft.everapi.event.PermGroupEvent;
 import fr.evercraft.everapi.event.PermSystemEvent;
 import fr.evercraft.everapi.event.PermUserEvent;
 import fr.evercraft.everapi.event.ScoreBoardEvent;
 import fr.evercraft.everapi.event.TabListEvent;
+import fr.evercraft.everapi.event.TitleEvent;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.essentials.event.VanishEvent;
 import fr.evercraft.everapi.services.essentials.event.VanishEvent.Action;
@@ -190,16 +192,26 @@ public class EIListener {
 	
 	@Listener
     public void scoreBoardEvent(ScoreBoardEvent.Remove event) {
-		this.plugin.getScoreBoard().event(event);
+		this.plugin.getScoreBoard().eventScoreBoard(event.getPlayer(), event.getDisplaySlot(), event.getIdentifier());
 	}
 	
 	@Listener
     public void tabListEvent(TabListEvent.Remove event) {
-		this.plugin.getTabList().event(event);
+		this.plugin.getTabList().eventTabList(event.getPlayer(), event.getIdentifier());
 	}
 	
 	@Listener
     public void bossBarEvent(BossBarEvent.Remove event) {
-		this.plugin.getAutoMessages().event(event);
+		this.plugin.getAutoMessages().eventBossBar(event.getPlayer(), event.getIdentifier());
+	}
+	
+	@Listener
+    public void titleEvent(TitleEvent.Remove event) {
+		this.plugin.getAutoMessages().eventTitle(event.getPlayer(), event.getIdentifier());
+	}
+	
+	@Listener
+    public void actionBarEvent(ActionBarEvent.Remove event) {
+		this.plugin.getAutoMessages().eventActionBar(event.getPlayer(), event.getIdentifier());
 	}
 }

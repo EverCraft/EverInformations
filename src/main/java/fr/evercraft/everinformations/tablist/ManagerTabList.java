@@ -92,4 +92,11 @@ public class ManagerTabList {
 	public int getPriority() {
 		return this.priority;
 	}
+
+	public void eventTabList(EPlayer player, String before_identifier) {
+		if(!before_identifier.equalsIgnoreCase(IDENTIFIER)) {
+			this.displayname.addPlayer(player);
+			this.header_footer.addPlayer(player);
+		}
+	}
 }

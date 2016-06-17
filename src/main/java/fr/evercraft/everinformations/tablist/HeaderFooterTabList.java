@@ -86,9 +86,7 @@ public class HeaderFooterTabList {
 		
 		if(this.enable) {
 			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				if(player.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
-					player.getTabList().setHeaderAndFooter(null, null);
-				}
+				player.removeTabList(ManagerTabList.IDENTIFIER);
 			}
 		}
 	}

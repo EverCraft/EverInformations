@@ -16,9 +16,9 @@
  */
 package fr.evercraft.everinformations.scoreboard;
 
+import org.spongepowered.api.scoreboard.displayslot.DisplaySlot;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 
-import fr.evercraft.everapi.event.ScoreBoardEvent;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.config.ConfigBelowName;
@@ -73,18 +73,18 @@ public class ManagerScoreBoard {
 		this.sidebar.removePlayer(player);
 	}
 
-	public void event(ScoreBoardEvent event) {
-		if(event.getDisplaySlot().equals(this.sidebar.getDisplaySlot())) {
-			if(!event.getObjective().getName().equals(ScoreBoard.SIDEBAR_IDENTIFIER)) {
-				this.sidebar.addPlayer(event.getPlayer());
+	public void eventScoreBoard(EPlayer player, DisplaySlot display, String berfore_identifier) {
+		if(display.equals(this.sidebar.getDisplaySlot())) {
+			if(!berfore_identifier.equalsIgnoreCase(ScoreBoard.SIDEBAR_IDENTIFIER)) {
+				this.sidebar.addPlayer(player);
 			}
-		} else if(event.getDisplaySlot().equals(this.below_name.getDisplaySlot())) {
-			if(!event.getObjective().getName().equals(ScoreBoard.BELOW_NAME_IDENTIFIER)) {
-				this.below_name.addPlayer(event.getPlayer());
+		} else if(display.equals(this.below_name.getDisplaySlot())) {
+			if(!berfore_identifier.equalsIgnoreCase(ScoreBoard.BELOW_NAME_IDENTIFIER)) {
+				this.below_name.addPlayer(player);
 			}
-		} else if(event.getDisplaySlot().equals(this.list.getDisplaySlot())) {
-			if(!event.getObjective().getName().equals(ScoreBoard.LIST_IDENTIFIER)) {
-				this.list.addPlayer(event.getPlayer());
+		} else if(display.equals(this.list.getDisplaySlot())) {
+			if(!berfore_identifier.equalsIgnoreCase(ScoreBoard.LIST_IDENTIFIER)) {
+				this.list.addPlayer(player);
 			}
 		}
 	}
