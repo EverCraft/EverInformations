@@ -64,7 +64,7 @@ public class TitleMessage implements IMessage {
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player) {
-		return player.sendTitle(priority, Title.builder()
+		return player.sendTitle(identifier, priority, Title.builder()
 				.stay(this.getStay())
 				.fadeIn(this.getFadeIn())
 				.fadeOut(this.getFadeOut())
@@ -75,7 +75,7 @@ public class TitleMessage implements IMessage {
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, Text reason) {
-		return player.sendTitle(priority, Title.builder()
+		return player.sendTitle(identifier, priority, Title.builder()
 				.stay(this.getStay())
 				.fadeIn(this.getFadeIn())
 				.fadeOut(this.getFadeOut())
@@ -86,7 +86,7 @@ public class TitleMessage implements IMessage {
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace) {
-		return player.sendTitle(priority, Title.builder()
+		return player.sendTitle(identifier, priority, Title.builder()
 				.stay(this.getStay())
 				.fadeIn(this.getFadeIn())
 				.fadeOut(this.getFadeOut())
@@ -97,7 +97,7 @@ public class TitleMessage implements IMessage {
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason) {
-		return player.sendTitle(priority, Title.builder()
+		return player.sendTitle(identifier, priority, Title.builder()
 				.stay(this.getStay())
 				.fadeIn(this.getFadeIn())
 				.fadeOut(this.getFadeOut())
