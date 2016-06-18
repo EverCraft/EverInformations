@@ -28,8 +28,8 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
-import fr.evercraft.everapi.plugin.ECommand;
-import fr.evercraft.everapi.services.pagination.ESubCommand;
+import fr.evercraft.everapi.command.ECommand;
+import fr.evercraft.everapi.services.pagination.CommandPagination;
 import fr.evercraft.everinformations.EIMessage.EIMessages;
 
 public class EICommand extends ECommand<EverInformations> {
@@ -115,10 +115,10 @@ public class EICommand extends ECommand<EverInformations> {
 	}
 	
 	private boolean commandHelp(final CommandSource source) {
-		LinkedHashMap<String, ESubCommand> commands = new LinkedHashMap<String, ESubCommand>();
-		if(source.hasPermission(EIPermissions.RELOAD.get())) {
-			commands.put(this.getName() + " reload", new ESubCommand(this.helpReload(source), EAMessages.RELOAD_DESCRIPTION.getText()));
-		}
+		LinkedHashMap<String, CommandPagination> commands = new LinkedHashMap<String, CommandPagination>();
+		/*if(source.hasPermission(EIPermissions.RELOAD.get())) {
+			commands.put(this.getName() + " reload", new CommandPagination(this.helpReload(source), EAMessages.RELOAD_DESCRIPTION.getText()));
+		}*/
 		this.plugin.getEverAPI().getManagerService().getEPagination().helpSubCommand(commands, source, this.plugin);
 		return true;
 	}
