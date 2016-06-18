@@ -30,11 +30,11 @@ import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.api.scoreboard.objective.Objective;
 import org.spongepowered.api.text.Text;
 
+import fr.evercraft.everapi.scoreboard.TypeScores;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
-import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
 public class SidebarNumbersObjective extends SidebarObjective {
 	

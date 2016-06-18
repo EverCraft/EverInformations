@@ -77,19 +77,19 @@ public class ManagerAutoMessage {
 	}
 	
 	public void eventActionBar(EPlayer player, String before_identifier) {
-		if(before_identifier.equalsIgnoreCase(AutoMessage.IDENTIFIER)) {
+		if(!before_identifier.equalsIgnoreCase(AutoMessage.IDENTIFIER)) {
 			this.actionbar.addPlayer(player);
 		}
 	}
 
 	public void eventTitle(EPlayer player, String before_identifier) {
-		if(before_identifier.equalsIgnoreCase(AutoMessage.IDENTIFIER)) {
+		if(!before_identifier.equalsIgnoreCase(AutoMessage.IDENTIFIER)) {
 			this.title.addPlayer(player);
 		}
 	}
 	
 	public void eventBossBar(EPlayer player, String before_identifier) {
-		if(before_identifier.equalsIgnoreCase(AutoMessage.IDENTIFIER)) {
+		if(!before_identifier.equalsIgnoreCase(AutoMessage.IDENTIFIER)) {
 			this.bossbar.addPlayer(player);
 		}
 	}

@@ -16,13 +16,11 @@
  */
 package fr.evercraft.everinformations.scoreboard.objective;
 
-import java.util.UUID;
-
+import fr.evercraft.everapi.scoreboard.IObjective;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
-import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
-public abstract class EObjective  {
+public abstract class EObjective implements IObjective {
 	
 	protected final EverInformations plugin;
 	
@@ -65,6 +63,4 @@ public abstract class EObjective  {
 	public abstract boolean stop();
 
 	public abstract void update();
-	public abstract void update(TypeScores type);
-	public abstract void update(UUID uniqueId, TypeScores type);
 }

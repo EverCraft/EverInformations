@@ -29,12 +29,12 @@ import org.spongepowered.api.scoreboard.objective.Objective;
 
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.EPlugin;
+import fr.evercraft.everapi.scoreboard.TypeScores;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EIMessage.EIMessages;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
-import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
 public class SidebarEconomyObjective extends SidebarObjective {
 	private final static int TOP_COUNT = 16;

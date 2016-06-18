@@ -24,9 +24,9 @@ import org.spongepowered.api.text.Text;
 import ninja.leaping.configurate.ConfigurationNode;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.file.EConfig;
+import fr.evercraft.everapi.scoreboard.TypeScores;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.objective.BelowNameObjective;
-import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
 public class ConfigBelowName extends EConfig implements IConfig<BelowNameObjective> {
 	public ConfigBelowName(final EverInformations plugin) {

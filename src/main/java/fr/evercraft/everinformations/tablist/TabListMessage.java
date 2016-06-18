@@ -22,11 +22,11 @@ import java.util.UUID;
 
 import com.google.common.collect.Sets;
 
+import fr.evercraft.everapi.scoreboard.TypeScores;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.objective.EObjective;
-import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
 public class TabListMessage extends EObjective {
 	

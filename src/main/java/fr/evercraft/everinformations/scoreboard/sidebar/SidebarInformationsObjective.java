@@ -33,11 +33,11 @@ import org.spongepowered.api.text.Text;
 
 import com.google.common.collect.Sets;
 
+import fr.evercraft.everapi.scoreboard.TypeScores;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
-import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
 public class SidebarInformationsObjective extends SidebarObjective {
 	

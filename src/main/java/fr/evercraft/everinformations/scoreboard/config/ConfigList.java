@@ -21,9 +21,9 @@ import java.util.List;
 
 import ninja.leaping.configurate.ConfigurationNode;
 import fr.evercraft.everapi.plugin.file.EConfig;
+import fr.evercraft.everapi.scoreboard.TypeScores;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.objective.ListObjective;
-import fr.evercraft.everinformations.scoreboard.score.TypeScores;
 
 public class ConfigList extends EConfig implements IConfig<ListObjective> {
 	public ConfigList(final EverInformations plugin) {
