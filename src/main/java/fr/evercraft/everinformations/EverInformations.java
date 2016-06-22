@@ -21,6 +21,7 @@ import org.spongepowered.api.plugin.Plugin;
 
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everinformations.automessage.ManagerAutoMessage;
+import fr.evercraft.everinformations.command.sub.EIReload;
 import fr.evercraft.everinformations.connection.ManagerConnection;
 import fr.evercraft.everinformations.healthmob.ManagerHealthMob;
 import fr.evercraft.everinformations.nametag.ManagerNameTag;
@@ -35,8 +36,7 @@ import fr.evercraft.everinformations.tablist.ManagerTabList;
 		url = "http://evercraft.fr/",
 		authors = {"rexbut"},
 		dependencies = {
-		    @Dependency(id = "fr.evercraft.everapi", version = "1.2"),
-		    @Dependency(id = "fr.evercraft.informations", version = "1.2", optional = true)
+		    @Dependency(id = "fr.evercraft.everapi", version = "1.2")
 		})
 public class EverInformations extends EPlugin {
 	private EIConfig configs;
@@ -74,7 +74,8 @@ public class EverInformations extends EPlugin {
 	
 	@Override
 	protected void onCompleteEnable() {
-		new EICommand(this);
+		EICommand command = new EICommand(this);
+		command.add(new EIReload(this, command));
 	}
 	
 	@Override
