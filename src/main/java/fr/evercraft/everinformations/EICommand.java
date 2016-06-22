@@ -28,7 +28,7 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import fr.evercraft.everapi.EAMessage.EAMessages;
-import fr.evercraft.everapi.command.ECommand;
+import fr.evercraft.everapi.plugin.command.ECommand;
 import fr.evercraft.everapi.services.pagination.CommandPagination;
 import fr.evercraft.everinformations.EIMessage.EIMessages;
 
