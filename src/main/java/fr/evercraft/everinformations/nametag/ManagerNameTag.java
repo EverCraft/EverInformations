@@ -106,4 +106,8 @@ public class ManagerNameTag {
 		this.removePlayer(player);
 		this.addPlayer(player);
 	}
+
+	public void eventNameTag(EPlayer player) {
+		this.addPlayer(player);
+	}
 }

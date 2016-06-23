@@ -24,6 +24,7 @@ import org.spongepowered.api.event.network.ClientConnectionEvent;
 
 import fr.evercraft.everapi.event.ActionBarEvent;
 import fr.evercraft.everapi.event.BossBarEvent;
+import fr.evercraft.everapi.event.NameTagEvent;
 import fr.evercraft.everapi.event.PermGroupEvent;
 import fr.evercraft.everapi.event.PermSystemEvent;
 import fr.evercraft.everapi.event.PermUserEvent;
@@ -213,5 +214,10 @@ public class EIListener {
 	@Listener
     public void actionBarEvent(ActionBarEvent.Remove event) {
 		this.plugin.getAutoMessages().eventActionBar(event.getPlayer(), event.getIdentifier());
+	}
+	
+	@Listener
+    public void nameTagEvent(NameTagEvent.Remove event) {
+		this.plugin.getNameTag().eventNameTag(event.getPlayer());
 	}
 }
