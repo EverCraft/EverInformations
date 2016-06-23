@@ -75,17 +75,11 @@ public class ManagerScoreBoard {
 
 	public void eventScoreBoard(EPlayer player, DisplaySlot display, String berfore_identifier) {
 		if(display.equals(this.sidebar.getDisplaySlot())) {
-			if(!berfore_identifier.equalsIgnoreCase(ScoreBoard.SIDEBAR_IDENTIFIER)) {
-				this.sidebar.addPlayer(player);
-			}
+			this.sidebar.addPlayer(player);
 		} else if(display.equals(this.below_name.getDisplaySlot())) {
-			if(!berfore_identifier.equalsIgnoreCase(ScoreBoard.BELOW_NAME_IDENTIFIER)) {
-				this.below_name.addPlayer(player);
-			}
+			this.below_name.addPlayer(player);
 		} else if(display.equals(this.list.getDisplaySlot())) {
-			if(!berfore_identifier.equalsIgnoreCase(ScoreBoard.LIST_IDENTIFIER)) {
-				this.list.addPlayer(player);
-			}
+			this.list.addPlayer(player);
 		}
 	}
 }

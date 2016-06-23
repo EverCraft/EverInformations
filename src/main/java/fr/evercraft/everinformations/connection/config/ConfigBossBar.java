@@ -101,7 +101,7 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 		Map<String, List<BossBarMessage>> groups = new HashMap<String, List<BossBarMessage>>();
 		
 		// Default
-		double stay_default = this.get("stay").getDouble(30);
+		double stay_default = this.get("stay").getDouble(15);
 		double next_default = this.get("interval").getDouble(0);
 		float percent_default = this.get("percent").getFloat(100);
 		BossBarColor color_default = UtilsBossBar.getColor(this.get("color").getString("")).orElse(BossBarColors.WHITE);
