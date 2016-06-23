@@ -193,31 +193,43 @@ public class EIListener {
 	
 	@Listener
     public void scoreBoardEvent(ScoreBoardEvent.Remove event) {
-		this.plugin.getScoreBoard().eventScoreBoard(event.getPlayer(), event.getDisplaySlot(), event.getIdentifier());
+		if(!event.getPlayer().isDisconnected()) {
+			this.plugin.getScoreBoard().eventScoreBoard(event.getPlayer(), event.getDisplaySlot(), event.getIdentifier());
+		}
 	}
 	
 	@Listener
     public void tabListEvent(TabListEvent.Remove event) {
-		this.plugin.getTabList().eventTabList(event.getPlayer(), event.getIdentifier());
+		if(!event.getPlayer().isDisconnected()) {
+			this.plugin.getTabList().eventTabList(event.getPlayer(), event.getIdentifier());
+		}
 	}
 	
 	@Listener
     public void bossBarEvent(BossBarEvent.Remove event) {
-		this.plugin.getAutoMessages().eventBossBar(event.getPlayer(), event.getIdentifier());
+		if(!event.getPlayer().isDisconnected()) {
+			this.plugin.getAutoMessages().eventBossBar(event.getPlayer(), event.getIdentifier());
+		}
 	}
 	
 	@Listener
     public void titleEvent(TitleEvent.Remove event) {
-		this.plugin.getAutoMessages().eventTitle(event.getPlayer(), event.getIdentifier());
+		if(!event.getPlayer().isDisconnected()) {
+			this.plugin.getAutoMessages().eventTitle(event.getPlayer(), event.getIdentifier());
+		}
 	}
 	
 	@Listener
     public void actionBarEvent(ActionBarEvent.Remove event) {
-		this.plugin.getAutoMessages().eventActionBar(event.getPlayer(), event.getIdentifier());
+		if(!event.getPlayer().isDisconnected()) {
+			this.plugin.getAutoMessages().eventActionBar(event.getPlayer(), event.getIdentifier());
+		}
 	}
 	
 	@Listener
     public void nameTagEvent(NameTagEvent.Remove event) {
-		this.plugin.getNameTag().eventNameTag(event.getPlayer());
+		if(!event.getPlayer().isDisconnected()) {
+			this.plugin.getNameTag().eventNameTag(event.getPlayer());
+		}
 	}
 }
