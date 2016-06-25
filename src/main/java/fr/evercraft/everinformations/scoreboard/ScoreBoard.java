@@ -50,7 +50,7 @@ public class ScoreBoard<T extends EObjective> {
 	private Task task;
 	
 	private Task task_update;
-	 
+		
 	public ScoreBoard(final EverInformations plugin, IConfig<T> config, DisplaySlot display) {		
 		this.plugin = plugin;
 		
@@ -124,7 +124,7 @@ public class ScoreBoard<T extends EObjective> {
 		}
 	}
 	
-	public void stopUpdate() {		
+	public void stopUpdate() {	
 		if (this.task_update != null) {
 			this.task_update.cancel();
 			this.task_update = null;
@@ -144,7 +144,7 @@ public class ScoreBoard<T extends EObjective> {
 							})
 							.async()
 							.delay(objective.getNext(), TimeUnit.MILLISECONDS)
-							.name("ScoreBoard (type='" + this.display.getName() + "') " + System.currentTimeMillis())
+							.name("ScoreBoard (type='" + this.display.getName() + "')")
 							.submit(this.plugin);
 		}
 	}
@@ -204,7 +204,7 @@ public class ScoreBoard<T extends EObjective> {
 						.async()
 						.delay(objective.getUpdate(), TimeUnit.MILLISECONDS)
 						.interval(objective.getUpdate(), TimeUnit.MILLISECONDS)
-						.name("ScoreBoard Update (type='" + this.display.getName() + "') " + System.currentTimeMillis())
+						.name("ScoreBoard Update (type='" + this.display.getName() + "')")
 						.submit(this.plugin);
 			}
 		}
