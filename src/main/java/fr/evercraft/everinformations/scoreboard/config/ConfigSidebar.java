@@ -72,22 +72,22 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 			
 			// Informations
 			message = new HashMap<String, Object>();
-			HashMap<Integer, String> scores_int = new HashMap<Integer, String>();
+			HashMap<String, String> scores_int = new HashMap<String, String>();
 			message.put("title", "&6✖  EverCraft ✖");
 			message.put("stay", 60);
 			message.put("update", 20);
 			message.put("type", Type.INFORMATIONS.name());
 			
-			scores_int.put(9, "&1");
-			scores_int.put(8, "&aJoueur");
-			scores_int.put(7, "&4  <" + TypeScores.ONLINE_PLAYERS.name() + ">");
-			scores_int.put(6, "&2");
-			scores_int.put(5, "&aTeamSpeak :");
-			scores_int.put(4, "&4  ts.evercraft.fr");
-			scores_int.put(3, "&3");
-			scores_int.put(2, "&aSite Web :");
-			scores_int.put(1, "&4  evercraft.fr");
-			scores_int.put(0, "&4");
+			scores_int.put("9", "&1");
+			scores_int.put("8", "&aJoueur");
+			scores_int.put("7", "&4  <" + TypeScores.ONLINE_PLAYERS.name() + ">");
+			scores_int.put("6", "&2");
+			scores_int.put("5", "&aTeamSpeak :");
+			scores_int.put("4", "&4  ts.evercraft.fr");
+			scores_int.put("3", "&3");
+			scores_int.put("2", "&aSite Web :");
+			scores_int.put("1", "&4  evercraft.fr");
+			scores_int.put("0", "&4");
 			
 			
 			message.put("scores", scores_int);
