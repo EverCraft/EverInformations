@@ -31,9 +31,8 @@ import fr.evercraft.everapi.event.PermUserEvent;
 import fr.evercraft.everapi.event.ScoreBoardEvent;
 import fr.evercraft.everapi.event.TabListEvent;
 import fr.evercraft.everapi.event.TitleEvent;
+import fr.evercraft.everapi.event.VanishEvent;
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everapi.services.essentials.event.VanishEvent;
-import fr.evercraft.everapi.services.essentials.event.VanishEvent.Action;
 
 public class EIListener {
 	private EverInformations plugin;
@@ -145,11 +144,11 @@ public class EIListener {
 	@Listener
     public void vanishEvent(VanishEvent event) {
 		if(this.plugin.getConfigs().isVanishFake()) {
-			if(event.getAction().equals(Action.ADD)) {
-				this.plugin.getConnection().quitPlayer(event.getEPlayer(), event.getEPlayer().getGroup());
+			if(event.getValue()) {
+				this.plugin.getConnection().quitPlayer(event.getPlayer(), event.getPlayer().getGroup());
 			} else {
-				this.plugin.getConnection().joinPlayer(event.getEPlayer(), event.getEPlayer().getGroup());
-				this.plugin.getTabList().updatePlayer(event.getEPlayer());
+				this.plugin.getConnection().joinPlayer(event.getPlayer(), event.getPlayer().getGroup());
+				this.plugin.getTabList().updatePlayer(event.getPlayer());
 			}
 		}
 	}
