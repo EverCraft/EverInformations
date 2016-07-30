@@ -59,7 +59,10 @@ public class EverInformations extends EPlugin {
 		this.messages = new EIMessage(this);
 		
 		this.getGame().getEventManager().registerListeners(this, new EIListener(this));
-		
+	}
+
+	@Override
+	protected void onEnable() {
 		this.automessages = new ManagerAutoMessage(this);
 		this.connection = new ManagerConnection(this);
 		this.newbie = new ManagerNewbie(this);
@@ -95,11 +98,6 @@ public class EverInformations extends EPlugin {
 	
 	@Override
 	protected void onStopServer() {
-		// Bug : Port déjà utilisé
-		if(this.scoreboard != null) {
-			this.scoreboard.stop();
-		}
-		
 		this.healthmob.reset();
 	}
 	
