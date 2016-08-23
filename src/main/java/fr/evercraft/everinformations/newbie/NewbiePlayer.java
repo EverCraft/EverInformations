@@ -48,7 +48,7 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 		this.enable = this.config.isPlayerEnable();
 		this.messages.clear();
 		
-		if(this.type.equals(Type.CHAT_OTHERS)) {
+		if (this.type.equals(Type.CHAT_OTHERS)) {
 			this.messages.addAll(this.config.getOthersMessages());
 		} else {
 			this.messages.addAll(this.config.getPlayerMessages());
@@ -62,7 +62,7 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 	
 	@Override
 	public void stop() {
-		for(Player player : this.players.values()) {
+		for (Player player : this.players.values()) {
 			player.stop();
 		}
 		this.players.clear();
@@ -70,16 +70,16 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 
 	@Override
 	public void addPlayer(EPlayer player) {
-		if(this.enable) {
+		if (this.enable) {
 			this.players.put(player.getUniqueId(), new Player(this, player));
 		}
 	}
 	
 	@Override
 	public void removePlayer(EPlayer player) {
-		if(this.enable) {
+		if (this.enable) {
 			Player titlePlayer = this.players.get(player.getUniqueId());
-			if(titlePlayer != null) {
+			if (titlePlayer != null) {
 				titlePlayer.stop();
 				this.players.remove(player.getUniqueId());
 			}
@@ -105,7 +105,7 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 		public void stop() {
 			this.remove();
 			
-			if(this.task != null) {
+			if (this.task != null) {
 				this.task.cancel();
 				this.task = null;
 			}
@@ -116,11 +116,11 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 			this.view();
 			
 			//Si il y a encore un message
-			if(this.numero < this.newbie.messages.size() - 1){
+			if (this.numero < this.newbie.messages.size() - 1){
 				this.task();
-			} else if(this.newbie.type.equals(Type.BOSSBAR_PLAYER)) {
+			} else if (this.newbie.type.equals(Type.BOSSBAR_PLAYER)) {
 				// Si il y a pas de délai
-				if(((BossBarMessage) this.getMessage()).getNext() <= 0) {
+				if (((BossBarMessage) this.getMessage()).getNext() <= 0) {
 					this.remove();
 				// Il y a un délai
 				} else {
@@ -135,10 +135,10 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 			T message = this.getMessage();
 			this.newbie.plugin.getLogger().debug("Newbie (type='" + this.newbie.type.name() + "';priority='" + this.newbie.priority + ";player='" + player.getIdentifier() + "',message='" + message + "')");
 			
-			if(this.newbie.type.equals(Type.CHAT_OTHERS)) {
+			if (this.newbie.type.equals(Type.CHAT_OTHERS)) {
 				// Affiche le message à tous les autres joueurs
-				for(EPlayer player : this.newbie.plugin.getEServer().getOnlineEPlayers()) {
-					if(!this.player.equals(player)) {
+				for (EPlayer player : this.newbie.plugin.getEServer().getOnlineEPlayers()) {
+					if (!this.player.equals(player)) {
 						message.send(IDENTIFIER_PLAYER, this.newbie.priority, player, this.player);
 					}
 				}
@@ -151,9 +151,9 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 		public void task() {
 			T message = this.getMessage();
 			
-			if(this.newbie.plugin.equals(Type.BOSSBAR_PLAYER)) {
+			if (this.newbie.plugin.equals(Type.BOSSBAR_PLAYER)) {
 				// Si il y a pas de délai
-				if(((BossBarMessage) message).getTimeNext() <= 0) {
+				if (((BossBarMessage) message).getTimeNext() <= 0) {
 					this.taskNext();
 				// Il y a un délai
 				} else {
@@ -161,7 +161,7 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 				}
 			} else {
 				// Si il y a pas de délai
-				if(message.getNext() <= 0) {
+				if (message.getNext() <= 0) {
 					this.next();
 				// Il y a un délai
 				} else {
@@ -184,7 +184,7 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 		 * Le temps avant la prochaine bossbar
 		 */
 		public void taskNextBossBar() {
-			if(this.getMessage() instanceof BossBarMessage) {
+			if (this.getMessage() instanceof BossBarMessage) {
 				BossBarMessage message = ((BossBarMessage) this.getMessage());
 				this.task = this.newbie.plugin.getGame().getScheduler().createTaskBuilder()
 						.execute(() -> this.next())
@@ -199,12 +199,12 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 		 * Si il y a un délai en 2 bossbars, il faut supprimer la première au bout d'un certain temps
 		 */
 		public void taskRemoveBossBar() {
-			if(this.getMessage() instanceof BossBarMessage) {
+			if (this.getMessage() instanceof BossBarMessage) {
 				BossBarMessage message = ((BossBarMessage) this.getMessage());
 				this.task = this.newbie.plugin.getGame().getScheduler().createTaskBuilder()
 						.execute(() -> {
 							this.remove();
-							if(this.numero < this.newbie.messages.size() - 1) {
+							if (this.numero < this.newbie.messages.size() - 1) {
 								this.taskNextBossBar();
 							}
 						})
@@ -220,7 +220,7 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 		}
 		
 		public void remove() {
-			if(this.getMessage() instanceof BossBarMessage) {
+			if (this.getMessage() instanceof BossBarMessage) {
 				BossBarMessage message = ((BossBarMessage) this.getMessage());
 				
 				this.newbie.plugin.getLogger().debug("Newbie : RemoveBossbar (type='" + this.newbie.type.name() + "';priority='" + this.newbie.priority + "';message='" + message + "')");

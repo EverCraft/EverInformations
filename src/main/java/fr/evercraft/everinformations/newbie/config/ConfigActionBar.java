@@ -35,13 +35,13 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 	protected void loadDefault() {		
 		addDefault(Newbie.PLAYER + ".enable", true);
 		addDefault(Newbie.PLAYER + ".stay", 20, "Seconds");
-		if(this.get(Newbie.PLAYER + ".messages").isVirtual()) {
+		if (this.get(Newbie.PLAYER + ".messages").isVirtual()) {
 			addDefault(Newbie.PLAYER + ".message", "&4Welcome &a<DISPLAYNAME_FORMAT> &4to the server!");
 		}
 		
 		addDefault(Newbie.OTHERS + ".enable", true);
 		addDefault(Newbie.OTHERS + ".stay", 20, "Seconds");
-		if(this.get(Newbie.OTHERS + ".messages").isVirtual()) {
+		if (this.get(Newbie.OTHERS + ".messages").isVirtual()) {
 			addDefault(Newbie.OTHERS + ".message", "&a<DISPLAYNAME_FORMAT> &4is a new player.");
 		}
 	}
@@ -84,19 +84,19 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 		double interval_player = this.get(prefix + ".inverval").getDouble(interval_default);
 		
 		// Message unique
-		if(this.get(prefix + ".messages").isVirtual()) {
+		if (this.get(prefix + ".messages").isVirtual()) {
 			String message = this.plugin.getChat().replace(this.get(prefix + ".message").getString(""));
-			if(!message.isEmpty()) {
+			if (!message.isEmpty()) {
 				messages.add(new ActionBarMessage(stay_player, interval_player, message));
 			}
 		// Liste de messages
 		} else {
-			for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
+			for (ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
 				// Message uniquement
-				if(config.getValue() instanceof String) {
+				if (config.getValue() instanceof String) {
 					String message = this.plugin.getChat().replace(config.getString(""));
 					
-					if(!message.isEmpty()) {
+					if (!message.isEmpty()) {
 						messages.add(new ActionBarMessage(stay_default, interval_default, message));
 					}
 				// Message avec config
@@ -105,7 +105,7 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 					double interval = config.getNode("next").getDouble(config.getNode("interval").getDouble(interval_default));
 					String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
 					
-					if(!message.isEmpty()) {
+					if (!message.isEmpty()) {
 						messages.add(new ActionBarMessage(stay, interval, message));
 					}
 				}

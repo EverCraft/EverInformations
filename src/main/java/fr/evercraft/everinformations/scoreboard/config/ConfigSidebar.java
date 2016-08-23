@@ -48,7 +48,7 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 	protected void loadDefault() {
 		addDefault("enable", true);
 
-		if(this.get("objectives").isVirtual()) {
+		if (this.get("objectives").isVirtual()) {
 			List<HashMap<String, Object>> messages = new ArrayList<HashMap<String, Object>>();
 			HashMap<String, Object> message = new HashMap<String, Object>();
 			
@@ -131,22 +131,22 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 		double stay_title_default = this.get("title_stay").getDouble(stay_default);
 		
 		// Liste des objectives
-		for(ConfigurationNode config : this.get("objectives").getChildrenList()) {
+		for (ConfigurationNode config : this.get("objectives").getChildrenList()) {
 			
 			// Chargement du title
 			double stay_title_default_2 = config.getNode("title_stay").getDouble(stay_title_default);
 			List<SidebarTitle> titles = new ArrayList<SidebarTitle>();
 			
 			// Titre unique
-			if(config.getNode("titles").isVirtual()) {
+			if (config.getNode("titles").isVirtual()) {
 				Text title = EChat.of(this.plugin.getChat().replace(config.getNode("title").getString("")));
 				
 				titles.add(new SidebarTitle(stay_title_default_2, title));
 			// Liste de titres
 			} else {
-				for(ConfigurationNode config_title : config.getNode("titles").getChildrenList()) {
+				for (ConfigurationNode config_title : config.getNode("titles").getChildrenList()) {
 					// Titre uniquement
-					if(config_title.getValue() instanceof String) {
+					if (config_title.getValue() instanceof String) {
 						Text title = EChat.of(this.plugin.getChat().replace(config_title.getString("")));
 						
 						titles.add(new SidebarTitle(stay_title_default_2, title));
@@ -162,16 +162,16 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 			
 			// Scores
 			try {
-				if(!titles.isEmpty()) {
+				if (!titles.isEmpty()) {
 					double stay = config.getNode("stay").getDouble(stay_default);
 					double update = config.getNode("update").getDouble(update_default);
 					Type type = Type.valueOf(config.getNode("type").getString("").toUpperCase());
 					
 					// Numbers
-					if(type.equals(Type.NUMBERS)) {
+					if (type.equals(Type.NUMBERS)) {
 						Map<Text, TypeScores> scores = new HashMap<Text, TypeScores>();
-						for(Entry<Object, ? extends ConfigurationNode> config_score : config.getNode("scores").getChildrenMap().entrySet()) {
-							if(config_score.getKey() instanceof String) {
+						for (Entry<Object, ? extends ConfigurationNode> config_score : config.getNode("scores").getChildrenMap().entrySet()) {
+							if (config_score.getKey() instanceof String) {
 								try {
 									Text score_value = EChat.of((String) config_score.getKey());
 									TypeScores score_type = TypeScores.valueOf(config_score.getValue().getString("").toUpperCase());
@@ -182,16 +182,16 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 							}
 						}
 						
-						if(!scores.isEmpty()) {
+						if (!scores.isEmpty()) {
 							objectives.add(new SidebarNumbersObjective((EverInformations) this.plugin, stay, update, titles, scores));
 						} else {
 							this.plugin.getLogger().warn("Error during the change of the scoreboard (type='NUMBERS') : Score Empty");
 						}
 					// Informations	
-					} else if(type.equals(Type.INFORMATIONS)) {
+					} else if (type.equals(Type.INFORMATIONS)) {
 						Map<Integer, String> scores = new HashMap<Integer, String>();
-						for(Entry<Object, ? extends ConfigurationNode> config_score : config.getNode("scores").getChildrenMap().entrySet()) {
-							if(config_score.getKey() instanceof String) {
+						for (Entry<Object, ? extends ConfigurationNode> config_score : config.getNode("scores").getChildrenMap().entrySet()) {
+							if (config_score.getKey() instanceof String) {
 								try {
 									Integer score_int = Integer.parseInt((String) config_score.getKey());
 									String score_text = this.plugin.getChat().replace(config_score.getValue().getString(""));
@@ -202,22 +202,22 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 							}
 						}
 						
-						if(!scores.isEmpty()) {
+						if (!scores.isEmpty()) {
 							objectives.add(new SidebarInformationsObjective((EverInformations) this.plugin, stay, update, titles, scores));
 						} else {
 							this.plugin.getLogger().warn("Error during the change of the scoreboard (type='INFORMATIONS') : Score Empty");
 						}
 					// Economy
-					} else if(type.equals(Type.ECONOMY)) {
-						if(this.plugin.getEverAPI().getManagerService().getTopEconomy().isPresent()) {
+					} else if (type.equals(Type.ECONOMY)) {
+						if (this.plugin.getEverAPI().getManagerService().getTopEconomy().isPresent()) {
 							String message = this.plugin.getChat().replace(config.getNode("message").getString("<player>"));
 							objectives.add(new SidebarEconomyObjective((EverInformations) this.plugin, stay, update, titles, message));
 						} else {
 							this.plugin.getLogger().warn("Error during the change of the scoreboard (type='ECONOMY') : There is no EverEconomy");
 						}
 					// Stats
-					} else if(type.equals(Type.STATS)) {
-						if(this.plugin.getEverAPI().getManagerService().getStats().isPresent()) {
+					} else if (type.equals(Type.STATS)) {
+						if (this.plugin.getEverAPI().getManagerService().getStats().isPresent()) {
 							try {
 								TypeTop top_type = TypeTop.valueOf(config.getNode("top").getString("").toUpperCase());
 								try {

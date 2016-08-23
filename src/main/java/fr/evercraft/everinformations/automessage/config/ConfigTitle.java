@@ -39,7 +39,7 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 		addDefault("fadeIn", 1, "Seconds");
 		addDefault("fadeOut", 1, "Seconds");
 		
-		if(this.get("messages").isVirtual()) {
+		if (this.get("messages").isVirtual()) {
 			List<HashMap<String, String>> messages = new ArrayList<HashMap<String, String>>();
 			HashMap<String, String> message = new HashMap<String, String>();
 			message.put("title", "&6✖ &1Title 1 &6✖");
@@ -75,7 +75,7 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 		double fadeIn_default = this.get("fadeIn").getDouble(1);
 		double fadeOut_default = this.get("fadeOut").getDouble(1);
 		
-		for(ConfigurationNode config : this.get("messages").getChildrenList()) {
+		for (ConfigurationNode config : this.get("messages").getChildrenList()) {
 			// Message avec config
 			double stay = config.getNode("stay").getDouble(stay_default);
 			double interval = config.getNode("next").getDouble(interval_default);
@@ -84,7 +84,7 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 			String title = this.plugin.getChat().replace(config.getNode("title").getString(""));
 			String subTitle = this.plugin.getChat().replace(config.getNode("subTitle").getString(""));
 			
-			if(!title.isEmpty() || !subTitle.isEmpty()) {
+			if (!title.isEmpty() || !subTitle.isEmpty()) {
 				messages.add(new TitleMessage(stay, interval, fadeIn, fadeOut, title, subTitle));
 			}
 		}

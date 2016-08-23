@@ -55,7 +55,7 @@ public class ConfigBelowName extends EConfig implements IConfig<BelowNameObjecti
 		double update_default = this.get("update").getDouble(20);
 		
 		// Objectif unique
-		if(this.get("objectives").isVirtual()) {
+		if (this.get("objectives").isVirtual()) {
 			try {
 				TypeScores type = TypeScores.valueOf(this.get("type").getString("").toUpperCase());
 				Text message = EChat.of(this.plugin.getChat().replace(this.get("name").getString("")));
@@ -64,7 +64,7 @@ public class ConfigBelowName extends EConfig implements IConfig<BelowNameObjecti
 			} catch (IllegalArgumentException e) {}
 		// Liste d'objectives
 		} else {
-			for(ConfigurationNode config : this.get("objectives").getChildrenList()) {				
+			for (ConfigurationNode config : this.get("objectives").getChildrenList()) {				
 				try {
 					TypeScores type = TypeScores.valueOf(config.getNode("type").getString("").toUpperCase());
 					double stay = config.getNode("stay").getDouble(stay_default);

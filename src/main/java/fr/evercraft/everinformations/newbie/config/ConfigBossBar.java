@@ -41,13 +41,13 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 	protected void loadDefault() {
 		addDefault(Newbie.PLAYER + ".enable", true);
 		
-		if(this.get(Newbie.PLAYER + ".messages").isVirtual()) {
+		if (this.get(Newbie.PLAYER + ".messages").isVirtual()) {
 			addDefault(Newbie.PLAYER + ".message", "&4Welcome &a<DISPLAYNAME_FORMAT> &4to the server!");
 		}
 		
 		addDefault(Newbie.OTHERS + ".enable", true);
 		
-		if(this.get(Newbie.OTHERS + ".messages").isVirtual()) {
+		if (this.get(Newbie.OTHERS + ".messages").isVirtual()) {
 			addDefault(Newbie.OTHERS + ".message", "&a<DISPLAYNAME_FORMAT> &4is a new player.");
 		}
 	}
@@ -103,16 +103,16 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 		boolean createFog_player = config.getNode("createFog").getBoolean(createFog_default);
 		
 		// Message unique
-		if(config.getNode("messages").isVirtual()) {
+		if (config.getNode("messages").isVirtual()) {
 			String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
 			
-			if(!message.isEmpty()) {
+			if (!message.isEmpty()) {
 				messages.add(new BossBarMessage(stay_player, next_player, message, percent_player, color_player, overlay_player,
 						darkenSky_player, playEndBossMusic_player, createFog_player));
 			}
 			// Liste de messages
 		} else {
-			for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
+			for (ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
 				double stay = config_messages.getNode("stay").getDouble(stay_player);
 				double next = config_messages.getNode("next").getDouble(config_messages.getNode("interval").getDouble(next_player));
 				float percent = config_messages.getNode("percent").getFloat(percent_player);
@@ -124,7 +124,7 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 				
 				String message = this.plugin.getChat().replace(config_messages.getNode("message").getString(""));
 				
-				if(!message.isEmpty()) {
+				if (!message.isEmpty()) {
 					messages.add(new BossBarMessage(stay, next, message, percent, color, overlay,
 							darkenSky, playEndBossMusic, createFog));
 				}

@@ -55,7 +55,7 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 
 	public void start() {
 		// Enable et n'est pas Start
-		if(this.enable && this.task == null) {
+		if (this.enable && this.task == null) {
 			this.numero = -1;
 			this.next();
 		}
@@ -77,11 +77,11 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 		this.view();
 		
 		// Si il y a encore un message
-		if(this.numero < this.messages.size() - 1) {
+		if (this.numero < this.messages.size() - 1) {
 			this.task();
-		} else if(this.type.equals(Type.BOSSBAR_OTHERS)) {
+		} else if (this.type.equals(Type.BOSSBAR_OTHERS)) {
 			// Si il y a pas de délai
-			if(((BossBarMessage) this.getMessage()).getNext() <= 0) {
+			if (((BossBarMessage) this.getMessage()).getNext() <= 0) {
 				this.remove();
 			// Il y a un délai
 			} else {
@@ -95,8 +95,8 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 		this.plugin.getLogger().debug("Newbie (type='" + this.type.name() + "';priority='" + this.priority + "';title='" + message + "')");
 
 		// Affiche le message à tous les autres joueurs
-		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-			if(!this.player.equals(player)) {
+		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+			if (!this.player.equals(player)) {
 				message.send(IDENTIFIER_OTHERS, this.priority, player, this.player);
 			}
 		}
@@ -105,9 +105,9 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 	public void task() {
 		T message = this.getMessage();
 		
-		if(this.type.equals(Type.BOSSBAR_OTHERS)) {
+		if (this.type.equals(Type.BOSSBAR_OTHERS)) {
 			// Si il y a pas de délai
-			if(((BossBarMessage) message).getTimeNext() <= 0) {
+			if (((BossBarMessage) message).getTimeNext() <= 0) {
 				this.taskNext();
 			// Il y a un délai
 			} else {
@@ -115,7 +115,7 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 			}
 		} else {
 			// Si il y a pas de délai
-			if(message.getNext() <= 0) {
+			if (message.getNext() <= 0) {
 				this.next();
 			// Il y a un délai
 			} else {
@@ -138,7 +138,7 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 	 * Le temps avant la prochaine bossbar
 	 */
 	public void taskNextBossBar() {
-		if(this.getMessage() instanceof BossBarMessage) {
+		if (this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
 					.execute(() -> this.next())
@@ -153,12 +153,12 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 	 * Si il y a un délai en 2 bossbars, il faut supprimer la première au bout d'un certain temps
 	 */
 	public void taskRemoveBossBar() {
-		if(this.getMessage() instanceof BossBarMessage) {
+		if (this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
 					.execute(() -> {
 						this.remove();
-						if(this.numero < this.messages.size() - 1) {
+						if (this.numero < this.messages.size() - 1) {
 							this.taskNextBossBar();
 						}
 					})
@@ -182,18 +182,18 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 
 	@Override
 	public void removePlayer(EPlayer player) {
-		if(this.player != null && this.player.equals(player)) {
+		if (this.player != null && this.player.equals(player)) {
 			this.stop();
 		}
 	}
 	
 	public void remove() {
-		if(this.enable && this.player != null && this.messages != null && !this.messages.isEmpty() && this.getMessage() instanceof BossBarMessage) {
+		if (this.enable && this.player != null && this.messages != null && !this.messages.isEmpty() && this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			
 			this.plugin.getLogger().debug("Newbie : RemoveBossbar (type='" + this.type.name() + "';priority='" + this.priority + "';message='" + message + "')");
-			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				if(!this.player.equals(player)) {
+			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+				if (!this.player.equals(player)) {
 					message.remove(IDENTIFIER_OTHERS, player);
 				}
 			}

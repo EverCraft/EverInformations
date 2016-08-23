@@ -89,7 +89,7 @@ public class BossBarMessage implements IMessage {
 		
 		Optional<ServerBossBar> bossbar = player.getBossBar(identifier);
 		// Si le joueur à déjà une bossbar
-		if(bossbar.isPresent()) {
+		if (bossbar.isPresent()) {
 			bossbar.get().setName(text);
 			bossbar.get().setPercent(this.percent);
 			bossbar.get().setColor(this.color);

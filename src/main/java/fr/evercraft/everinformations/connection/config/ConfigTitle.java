@@ -39,18 +39,18 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 	@Override
 	protected void loadDefault() {		
 		addDefault(Connection.PLAYER + ".enable", true);
-		if(this.get(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
 			addDefault(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".subTitle", "&7&l[&2+&7&l] <DISPLAYNAME_FORMAT> &7joined the game");
 		}
 		
 		addDefault(Connection.OTHERS + ".enable", true);
-		if(this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
 			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".subTitle", "&7&l[&2+&7&l] <DISPLAYNAME_FORMAT> &7joined the game");
 		}
-		if(this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".messages").isVirtual()) {
 			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".subTitle", "&7&l[&4-&7&l] <DISPLAYNAME_FORMAT> &7left the game");
 		}
-		if(this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".messages").isVirtual()) {
 			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".subTitle", "&7&l[&4-&7&l] <DISPLAYNAME_FORMAT> &7has been kicked out of the game for <reason>");
 		}
 	}
@@ -100,8 +100,8 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 		double fadeIn_default = this.get("fadeIn").getDouble(1);
 		double fadeOut_default = this.get("fadeOut").getDouble(1);
 		
-		for(Entry<Object, ? extends CommentedConfigurationNode> group : this.get(prefix).getChildrenMap().entrySet()) {
-			if(group.getKey() instanceof String && !((String) group.getKey()).equals("enable")) {  
+		for (Entry<Object, ? extends CommentedConfigurationNode> group : this.get(prefix).getChildrenMap().entrySet()) {
+			if (group.getKey() instanceof String && !((String) group.getKey()).equals("enable")) {  
 				CommentedConfigurationNode config = group.getValue().getNode(connections.name());
 				List<TitleMessage> messages = new ArrayList<TitleMessage>();
 				
@@ -111,16 +111,16 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 				double fadeOut_player = config.getNode("fadeOut").getDouble(fadeOut_default);
 				
 				// Message unique
-				if(config.getNode("messages").isVirtual()) {
+				if (config.getNode("messages").isVirtual()) {
 					String title = this.plugin.getChat().replace(config.getNode("title").getString(""));
 					String subTitle = this.plugin.getChat().replace(config.getNode("subTitle").getString(""));
 					
-					if(!title.isEmpty() || !subTitle.isEmpty()) {
+					if (!title.isEmpty() || !subTitle.isEmpty()) {
 						messages.add(new TitleMessage(stay_player, interval_player, fadeIn_player, fadeOut_player, title, subTitle));
 					}
 				// Liste de messages
 				} else {
-					for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
+					for (ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
 						double stay = config_messages.getNode("stay").getDouble(stay_player);
 						double interval = config_messages.getNode("next").getDouble(config_messages.getNode("interval").getDouble(interval_player));
 						double fadeIn = config_messages.getNode("fadeIn").getDouble(fadeIn_player);
@@ -129,7 +129,7 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 						String title = this.plugin.getChat().replace(config_messages.getNode("title").getString(""));
 						String subTitle = this.plugin.getChat().replace(config_messages.getNode("subTitle").getString(""));
 						
-						if(!title.isEmpty() || !subTitle.isEmpty()) {
+						if (!title.isEmpty() || !subTitle.isEmpty()) {
 							messages.add(new TitleMessage(stay, interval, fadeIn, fadeOut, title, subTitle));
 						}
 					}

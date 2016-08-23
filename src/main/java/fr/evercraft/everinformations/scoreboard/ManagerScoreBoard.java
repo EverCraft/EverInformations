@@ -74,11 +74,11 @@ public class ManagerScoreBoard {
 	}
 
 	public void eventScoreBoard(EPlayer player, DisplaySlot display, String berfore_identifier) {
-		if(display.equals(this.sidebar.getDisplaySlot())) {
+		if (display.equals(this.sidebar.getDisplaySlot())) {
 			this.sidebar.addPlayer(player);
-		} else if(display.equals(this.below_name.getDisplaySlot())) {
+		} else if (display.equals(this.below_name.getDisplaySlot())) {
 			this.below_name.addPlayer(player);
-		} else if(display.equals(this.list.getDisplaySlot())) {
+		} else if (display.equals(this.list.getDisplaySlot())) {
 			this.list.addPlayer(player);
 		}
 	}

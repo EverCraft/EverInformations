@@ -57,13 +57,13 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 		double interval_default = this.get("interval").getDouble(300);
 		String prefix_default = this.plugin.getChat().replace(this.get("prefix").getString("&f[&4Ever&6&lNews&f] "));
 		
-		for(ConfigurationNode config : this.get("messages").getChildrenList()) {
+		for (ConfigurationNode config : this.get("messages").getChildrenList()) {
 			// Message uniquement
-			if(config.getValue() instanceof String) {
+			if (config.getValue() instanceof String) {
 				String prefix_message = this.plugin.getChat().replace(prefix_default);
 				String message = this.plugin.getChat().replace(config.getString(""));
 				
-				if(!message.isEmpty()) {
+				if (!message.isEmpty()) {
 					messages.add(new ChatMessage(interval_default, TextSerializers.FORMATTING_CODE, prefix_message, message));
 				}
 			// Message avec config
@@ -74,13 +74,13 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 				
 				String format_string = config.getNode("format").getString("");
 				TextSerializer format = TextSerializers.FORMATTING_CODE;
-				if(format_string.equalsIgnoreCase("JSON")) {
+				if (format_string.equalsIgnoreCase("JSON")) {
 					format = TextSerializers.JSON;
-				} else if(format_string.equalsIgnoreCase("TEXT_XML")) {
+				} else if (format_string.equalsIgnoreCase("TEXT_XML")) {
 					format = TextSerializers.TEXT_XML;
 				}
 				
-				if(!message.isEmpty()) {
+				if (!message.isEmpty()) {
 					messages.add(new ChatMessage(interval, format, prefix, message));
 				}
 			}

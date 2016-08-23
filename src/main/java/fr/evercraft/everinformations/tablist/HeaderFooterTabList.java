@@ -71,7 +71,7 @@ public class HeaderFooterTabList {
 		this.stop();
 		this.view();
 		
-		if(this.tablists.size() > 1) {
+		if (this.tablists.size() > 1) {
 			this.task();
 		}
 	}
@@ -84,8 +84,8 @@ public class HeaderFooterTabList {
 			this.task = null;
 		}
 		
-		if(this.enable) {
-			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+		if (this.enable) {
+			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				player.removeTabList(ManagerTabList.IDENTIFIER);
 			}
 		}
@@ -101,7 +101,7 @@ public class HeaderFooterTabList {
 	public void task() {
 		TabListMessage objective = this.getTabList();
 		
-		if(objective.getNext() == 0) {
+		if (objective.getNext() == 0) {
 			this.next();
 		} else {
 			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
@@ -114,7 +114,7 @@ public class HeaderFooterTabList {
 	}
 	
 	public void addPlayer(EPlayer player) {
-		if(this.enable) {
+		if (this.enable) {
 			TabListMessage tablist = this.getTabList();
 			this.plugin.getLogger().debug("TabList add (player='" + player.getIdentifier() + "';"
 														+ "tablist='" + tablist + "')");
@@ -123,7 +123,7 @@ public class HeaderFooterTabList {
 	}
 	
 	public void removePlayer(EPlayer player) {
-		if(this.enable) {
+		if (this.enable) {
 			TabListMessage tablist = this.getTabList();
 			this.plugin.getLogger().debug("TabList remove (player='" + player.getIdentifier() + "';"
 														+ "tablist='" + tablist + "')");
@@ -136,7 +136,7 @@ public class HeaderFooterTabList {
 		this.getTabList().stop();
 
 		this.numero++;
-		if(this.numero >= this.tablists.size()){
+		if (this.numero >= this.tablists.size()){
 			this.numero = 0;
 		}
 		this.view();
@@ -144,7 +144,7 @@ public class HeaderFooterTabList {
 	}
 
 	protected void view() {
-		if(this.enable) {
+		if (this.enable) {
 			TabListMessage tablist = this.getTabList();
 			tablist.start();
 			this.plugin.getLogger().debug("TabList (objective='" + tablist + "')");
@@ -153,7 +153,7 @@ public class HeaderFooterTabList {
 
 			this.stopUpdate();
 			// Si l'Objective ne s'actualise pas tout seul
-			if(!tablist.isUpdate()) {
+			if (!tablist.isUpdate()) {
 				this.task_update = this.plugin.getGame().getScheduler().createTaskBuilder()
 						.execute(() -> {
 							this.plugin.getLogger().debug("TabList Update (tablist='" + tablist + "')");

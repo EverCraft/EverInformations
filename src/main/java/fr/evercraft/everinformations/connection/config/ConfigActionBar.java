@@ -39,18 +39,18 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 	@Override
 	protected void loadDefault() {		
 		addDefault(Connection.PLAYER + ".enable", true);
-		if(this.get(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
 			addDefault(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".message", "&7&l[&2+&7&l] <DISPLAYNAME_FORMAT> &7joined the game");
 		}
 		
 		addDefault(Connection.OTHERS + ".enable", true);
-		if(this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
 			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".message", "&7&l[&2+&7&l] <DISPLAYNAME_FORMAT> &7joined the game");
 		}
-		if(this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".messages").isVirtual()) {
 			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".message", "&7&l[&4-&7&l] <DISPLAYNAME_FORMAT> &7left the game");
 		}
-		if(this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".messages").isVirtual()) {
 			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".message", "&7&l[&4-&7&l] <DISPLAYNAME_FORMAT> &7has been kicked out of the game for <reason>");
 		}
 	}
@@ -98,8 +98,8 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 		double stay_default = this.get("stay").getDouble(10);
 		double interval_default = this.get("interval").getDouble(0);
 		
-		for(Entry<Object, ? extends CommentedConfigurationNode> group : this.get(prefix).getChildrenMap().entrySet()) {
-			if(group.getKey() instanceof String && !((String) group.getKey()).equals("enable")) {
+		for (Entry<Object, ? extends CommentedConfigurationNode> group : this.get(prefix).getChildrenMap().entrySet()) {
+			if (group.getKey() instanceof String && !((String) group.getKey()).equals("enable")) {
 				CommentedConfigurationNode config = group.getValue().getNode(connections.name());
 				List<ActionBarMessage> messages = new ArrayList<ActionBarMessage>();
 				
@@ -108,17 +108,17 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 				double interval_player = config.getNode("interval").getDouble(interval_default);
 				
 				// Message unique
-				if(config.getNode("messages").isVirtual()) {
+				if (config.getNode("messages").isVirtual()) {
 					String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
 					
-					if(!message.isEmpty()) {
+					if (!message.isEmpty()) {
 						messages.add(new ActionBarMessage(stay_player, interval_player, message));
 					}
 				// Liste de messages
 				} else {
-					for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
+					for (ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
 						// Message uniquement
-						if(config_messages.getValue() instanceof String) {
+						if (config_messages.getValue() instanceof String) {
 							messages.add(new ActionBarMessage(stay_player, interval_player, this.plugin.getChat().replace(config_messages.getString(""))));
 						// Message avec config
 						} else {
@@ -126,7 +126,7 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 							double interval = config_messages.getNode("next").getDouble(config_messages.getNode("interval").getDouble(interval_player));
 							String message = this.plugin.getChat().replace(config_messages.getNode("message").getString(""));
 							
-							if(!message.isEmpty()) {
+							if (!message.isEmpty()) {
 								messages.add(new ActionBarMessage(stay, interval, message));
 							}
 						}

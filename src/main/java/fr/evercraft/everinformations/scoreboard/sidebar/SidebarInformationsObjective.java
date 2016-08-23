@@ -51,10 +51,10 @@ public class SidebarInformationsObjective extends SidebarObjective {
 		this.type_scores = new ConcurrentHashMap<TypeScores, Set<Integer>>();
 		this.scores.putAll(scores);
 		
-		for(TypeScores type : TypeScores.values()) {
-			for(Entry<Integer, String> score : this.scores.entrySet()) {
-				if(score.getValue().contains("<" + type.name() + ">")) {
-					if(!this.type_scores.containsKey(type)) {
+		for (TypeScores type : TypeScores.values()) {
+			for (Entry<Integer, String> score : this.scores.entrySet()) {
+				if (score.getValue().contains("<" + type.name() + ">")) {
+					if (!this.type_scores.containsKey(type)) {
 						this.type_scores.put(type, Sets.newConcurrentHashSet());
 					}
 					this.type_scores.get(type).add(score.getKey());
@@ -70,7 +70,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 							.displayName(this.getSidebarTitle().getTitle())
 							.criterion(Criteria.DUMMY)
 							.build();
-		for(Entry<Integer, String> score : this.scores.entrySet()) {
+		for (Entry<Integer, String> score : this.scores.entrySet()) {
 			objective.getOrCreateScore(player.replaceVariable(score.getValue())).setScore(score.getKey());
 		}
 		return player.addObjective(priority, DisplaySlots.SIDEBAR, objective);
@@ -83,7 +83,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 
 	@Override
 	public boolean subStart() {
-		for(TypeScores type : this.type_scores.keySet()) {
+		for (TypeScores type : this.type_scores.keySet()) {
 			type.addListener(this.plugin, this);
 		}
 		return true;
@@ -91,7 +91,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 
 	@Override
 	public boolean subStop() {
-		for(TypeScores type : this.type_scores.keySet()) {
+		for (TypeScores type : this.type_scores.keySet()) {
 			type.removeListener(this.plugin, this);
 		}
 		return true;
@@ -99,8 +99,8 @@ public class SidebarInformationsObjective extends SidebarObjective {
 	
 	@Override
 	public void update() {
-		for(TypeScores score : this.type_scores.keySet()) {
-			if(!score.isUpdate()) {
+		for (TypeScores score : this.type_scores.keySet()) {
+			if (!score.isUpdate()) {
 				this.update(score);
 			}
 		}
@@ -109,13 +109,13 @@ public class SidebarInformationsObjective extends SidebarObjective {
 	@Override
 	public void update(TypeScores type) {
 		Set<Integer> line = this.type_scores.get(type);
-		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
-			if(objective.isPresent()) {
-				for(Entry<Text, Score> score : objective.get().getScores().entrySet()) {
-					if(line.contains(score.getValue().getScore())) {
+			if (objective.isPresent()) {
+				for (Entry<Text, Score> score : objective.get().getScores().entrySet()) {
+					if (line.contains(score.getValue().getScore())) {
 						Text text = player.replaceVariable(this.scores.get(score.getValue().getScore()));
-						if(!score.getKey().equals(text)) {
+						if (!score.getKey().equals(text)) {
 							objective.get().getOrCreateScore(text).setScore(score.getValue().getScore());
 							objective.get().removeScore(score.getKey());
 						}
@@ -128,14 +128,14 @@ public class SidebarInformationsObjective extends SidebarObjective {
 	@Override
 	public void update(UUID uuid, TypeScores type) {
 		Optional<EPlayer> player = this.plugin.getEServer().getEPlayer(uuid);
-		if(player.isPresent()) {
+		if (player.isPresent()) {
 			Optional<Objective> objective = player.get().getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
-			if(objective.isPresent()) {
+			if (objective.isPresent()) {
 				Set<Integer> line = this.type_scores.get(type);
-				for(Entry<Text, Score> score : objective.get().getScores().entrySet()) {
-					if(line.contains(score.getValue().getScore())) {
+				for (Entry<Text, Score> score : objective.get().getScores().entrySet()) {
+					if (line.contains(score.getValue().getScore())) {
 						Text text = player.get().replaceVariable(this.scores.get(score.getValue().getScore()));
-						if(!score.getKey().equals(text)) {
+						if (!score.getKey().equals(text)) {
 							objective.get().getOrCreateScore(text).setScore(score.getValue().getScore());
 							objective.get().removeScore(score.getKey());
 						}
@@ -148,8 +148,8 @@ public class SidebarInformationsObjective extends SidebarObjective {
 	@Override
 	public boolean isUpdate() {
 		boolean update = true;
-		for(TypeScores score : this.type_scores.keySet()) {
-			if(!score.isUpdate()) {
+		for (TypeScores score : this.type_scores.keySet()) {
+			if (!score.isUpdate()) {
 				update = false;
 			}
 		}
@@ -161,9 +161,9 @@ public class SidebarInformationsObjective extends SidebarObjective {
 		SidebarTitle title = this.getSidebarTitle();
 		this.plugin.getLogger().debug("SidebarTitle : View (title='" + title.getTitle().toPlain() + "';next='" + title.getNext() + "')");
 		
-		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
-			if(objective.isPresent()) {
+			if (objective.isPresent()) {
 				objective.get().setDisplayName(title.getTitle());
 			}
 		}

@@ -42,18 +42,18 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 	@Override
 	protected void loadDefault() {		
 		addDefault(Connection.PLAYER + ".enable", true);
-		if(this.get(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
 			addDefault(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".message", "&7&l[&2+&7&l] <DISPLAYNAME_FORMAT> &7joined the game");
 		}
 			
 		addDefault(Connection.OTHERS + ".enable", true);
-		if(this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
 			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".message", "&7&l[&2+&7&l] <DISPLAYNAME_FORMAT> &7joined the game");
 		}
-		if(this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".messages").isVirtual()) {
 			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".message", "&7&l[&4-&7&l] <DISPLAYNAME_FORMAT> &7left the game");
 		}
-		if(this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".messages").isVirtual()) {
 			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".message", "&7&l[&4-&7&l] <DISPLAYNAME_FORMAT> &7has been kicked out of the game for <reason>");
 		}
 	}
@@ -101,8 +101,8 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 		double interval_default = this.get("interval").getDouble(0);
 		String prefix_default = this.get("prefix").getString("");
 		
-		for(Entry<Object, ? extends CommentedConfigurationNode> group : this.get(prefix).getChildrenMap().entrySet()) {
-			if(group.getKey() instanceof String && !((String) group.getKey()).equals("enable")) {
+		for (Entry<Object, ? extends CommentedConfigurationNode> group : this.get(prefix).getChildrenMap().entrySet()) {
+			if (group.getKey() instanceof String && !((String) group.getKey()).equals("enable")) {
 				CommentedConfigurationNode config = group.getValue().getNode(connections.name());
 				List<ChatMessage> messages = new ArrayList<ChatMessage>();
 				
@@ -111,16 +111,16 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 				String prefix_player = config.getNode("prefix").getString(prefix_default);
 				
 				// Message unique
-				if(config.getNode("messages").isVirtual()) {
+				if (config.getNode("messages").isVirtual()) {
 					String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
-					if(!message.isEmpty()) {
+					if (!message.isEmpty()) {
 						messages.add(new ChatMessage(interval_player, TextSerializers.FORMATTING_CODE, prefix_player, message));
 					}
 				// Liste de messages
 				} else {
-					for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
+					for (ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
 						// Message uniquement
-						if(config_messages.getValue() instanceof String) {
+						if (config_messages.getValue() instanceof String) {
 							messages.add(new ChatMessage(interval_player, TextSerializers.FORMATTING_CODE, prefix_player, this.plugin.getChat().replace(config_messages.getString(""))));
 						// Message avec config
 						} else {							
@@ -130,12 +130,12 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 							
 							String type_string = config_messages.getNode("format").getString("");
 							TextSerializer type = TextSerializers.FORMATTING_CODE;
-							if(type_string.equalsIgnoreCase("JSON")) {
+							if (type_string.equalsIgnoreCase("JSON")) {
 								type = TextSerializers.JSON;
-							} else if(type_string.equalsIgnoreCase("TEXT_XML")) {
+							} else if (type_string.equalsIgnoreCase("TEXT_XML")) {
 								type = TextSerializers.TEXT_XML;
 							}
-							if(!message.isEmpty()) {
+							if (!message.isEmpty()) {
 								messages.add(new ChatMessage(interval, type, prefix_message, message));
 							}
 						}

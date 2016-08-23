@@ -51,14 +51,14 @@ public class ConfigList extends EConfig implements IConfig<ListObjective> {
 		double update_default = this.get("update").getDouble(20);
 		
 		// Objectif unique
-		if(this.get("objectives").isVirtual()) {
+		if (this.get("objectives").isVirtual()) {
 			try {
 				TypeScores type = TypeScores.valueOf(this.get("type").getString("").toUpperCase());
 				objectives.add(new ListObjective((EverInformations) this.plugin, stay_default, update_default, type));
 			} catch (IllegalArgumentException e) {}
 		// Liste d'objectives
 		} else {
-			for(ConfigurationNode config : this.get("objectives").getChildrenList()) {
+			for (ConfigurationNode config : this.get("objectives").getChildrenList()) {
 				try {
 					TypeScores type = TypeScores.valueOf(config.getNode("type").getString("").toUpperCase());
 					double stay = config.getNode("stay").getDouble(stay_default);

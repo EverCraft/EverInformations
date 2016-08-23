@@ -66,7 +66,7 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 
 	public void start() {
 		// Enable et n'est pas Start
-		if(this.enable && this.task == null && !this.messages.isEmpty()) {
+		if (this.enable && this.task == null && !this.messages.isEmpty()) {
 			this.numero = -1;
 			this.next();
 		}
@@ -89,11 +89,11 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 		this.view();
 		
 		// Si il y a encore un message
-		if(this.numero < this.messages.size() - 1) {
+		if (this.numero < this.messages.size() - 1) {
 			this.task();
-		} else if(this.type.equals(Type.BOSSBAR_OTHERS)) {
+		} else if (this.type.equals(Type.BOSSBAR_OTHERS)) {
 			// Si il y a pas de délai
-			if(((BossBarMessage) this.getMessage()).getNext() <= 0) {
+			if (((BossBarMessage) this.getMessage()).getNext() <= 0) {
 				this.remove();
 			// Il y a un délai
 			} else {
@@ -106,17 +106,17 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 		T message = this.getMessage();
 		this.plugin.getLogger().debug("Connection (type='" + this.type.name() + "';priority='" + this.priority + "';message='" + message + "')");
 
-		if(this.reason == null) {
+		if (this.reason == null) {
 			// Affiche le message à tous les autres joueurs
-			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				if(!this.player.equals(player)) {
+			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+				if (!this.player.equals(player)) {
 					message.send(IDENTIFIER_OTHERS, this.priority, player, this.player);
 				}
 			}
 		} else {
 			// Affiche le message à tous les autres joueurs
-			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				if(!this.player.equals(player)) {
+			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+				if (!this.player.equals(player)) {
 					message.send(IDENTIFIER_OTHERS, this.priority, player, this.player, this.reason);
 				}
 			}
@@ -126,9 +126,9 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 	public void task() {
 		T message = this.getMessage();
 		
-		if(this.type.equals(Type.BOSSBAR_OTHERS)) {
+		if (this.type.equals(Type.BOSSBAR_OTHERS)) {
 			// Si il y a pas de délai
-			if(((BossBarMessage) message).getTimeNext() <= 0) {
+			if (((BossBarMessage) message).getTimeNext() <= 0) {
 				this.taskNext();
 			// Il y a un délai
 			} else {
@@ -136,7 +136,7 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 			}
 		} else {
 			// Si il y a pas de délai
-			if(message.getNext() <= 0) {
+			if (message.getNext() <= 0) {
 				this.next();
 			// Il y a un délai
 			} else {
@@ -159,7 +159,7 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 	 * Le temps avant la prochaine bossbar
 	 */
 	public void taskNextBossBar() {
-		if(this.getMessage() instanceof BossBarMessage) {
+		if (this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
 					.execute(() -> this.next())
@@ -174,12 +174,12 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 	 * Si il y a un délai en 2 bossbars, il faut supprimer la première au bout d'un certain temps
 	 */
 	public void taskRemoveBossBar() {
-		if(this.getMessage() instanceof BossBarMessage) {
+		if (this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
 					.execute(() -> {
 						this.remove();
-						if(this.numero < this.messages.size() - 1) {
+						if (this.numero < this.messages.size() - 1) {
 							this.taskNextBossBar();
 						}
 					})
@@ -196,7 +196,7 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 
 	@Override
 	public void joinPlayer(EPlayer player, Optional<Subject> subject) {
-		if(this.enable) {
+		if (this.enable) {
 			this.stop();
 			this.player = player;
 			this.messages = getMessagesJoin(subject);
@@ -206,7 +206,7 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 
 	@Override
 	public void quitPlayer(EPlayer player, Optional<Subject> subject) {
-		if(this.enable) {
+		if (this.enable) {
 			this.stop();
 			this.player = player;
 			this.messages = getMessagesQuit(subject);
@@ -216,7 +216,7 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 	
 	@Override
 	public void kickPlayer(EPlayer player, Optional<Subject> subject, Text reason) {
-		if(this.enable) {
+		if (this.enable) {
 			this.stop();
 			this.player = player;
 			this.messages = getMessagesKick(subject);
@@ -226,12 +226,12 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 	}
 	
 	public void remove() {
-		if(this.enable && this.player != null && this.messages != null && !this.messages.isEmpty() && this.getMessage() instanceof BossBarMessage) {
+		if (this.enable && this.player != null && this.messages != null && !this.messages.isEmpty() && this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			
 			this.plugin.getLogger().debug("Connection : RemoveBossbar (type='" + this.type.name() + "';priority='" + this.priority + "';message='" + message + "')");
-			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				if(!this.player.equals(player)) {
+			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+				if (!this.player.equals(player)) {
 					message.remove(IDENTIFIER_OTHERS, player);
 				}
 			}

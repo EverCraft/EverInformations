@@ -45,18 +45,18 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 	@Override
 	protected void loadDefault() {
 		addDefault(Connection.PLAYER + ".enable", true);
-		if(this.get(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
 			addDefault(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".message", "&7&l[&2+&7&l] <DISPLAYNAME_FORMAT> &7joined the game");
 		}
 		
 		addDefault(Connection.OTHERS + ".enable", true);
-		if(this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
 			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".message", "&7&l[&2+&7&l] <DISPLAYNAME_FORMAT> &7joined the game");
 		}
-		if(this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".messages").isVirtual()) {
 			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".message", "&7&l[&4-&7&l] <DISPLAYNAME_FORMAT> &7left the game");
 		}
-		if(this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".messages").isVirtual()) {
+		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".messages").isVirtual()) {
 			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".message", "&7&l[&4-&7&l] <DISPLAYNAME_FORMAT> &7has been kicked out of the game for <reason>");
 		}
 	}
@@ -110,8 +110,8 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 		boolean playEndBossMusic_default = this.get("playEndBossMusic").getBoolean(false);
 		boolean createFog_default = this.get("createFog").getBoolean(false);
 		
-		for(Entry<Object, ? extends CommentedConfigurationNode> group : this.get(prefix).getChildrenMap().entrySet()) {
-			if(group.getKey() instanceof String && !((String) group.getKey()).equals("enable")) {  
+		for (Entry<Object, ? extends CommentedConfigurationNode> group : this.get(prefix).getChildrenMap().entrySet()) {
+			if (group.getKey() instanceof String && !((String) group.getKey()).equals("enable")) {  
 				CommentedConfigurationNode config = group.getValue().getNode(connections.name());
 				List<BossBarMessage> messages = new ArrayList<BossBarMessage>();
 				
@@ -125,16 +125,16 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 				boolean createFog_player = config.getNode("createFog").getBoolean(createFog_default);
 				
 				// Message unique
-				if(config.getNode("messages").isVirtual()) {					
+				if (config.getNode("messages").isVirtual()) {					
 					String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
 					
-					if(!message.isEmpty()) {
+					if (!message.isEmpty()) {
 						messages.add(new BossBarMessage(stay_player, next_player, message, percent_player, color_player, overlay_player,
 								darkenSky_player, playEndBossMusic_player, createFog_player));
 					}
 				// Liste de messages
 				} else {
-					for(ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
+					for (ConfigurationNode config_messages : config.getNode("messages").getChildrenList()) {
 						double stay = config_messages.getNode("stay").getDouble(stay_player);
 						double next = config_messages.getNode("next").getDouble(config_messages.getNode("interval").getDouble(next_player));
 						float percent = config_messages.getNode("percent").getFloat(percent_player);
@@ -146,7 +146,7 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 						
 						String message = this.plugin.getChat().replace(config_messages.getNode("message").getString(""));
 						
-						if(!message.isEmpty()) {
+						if (!message.isEmpty()) {
 							messages.add(new BossBarMessage(stay, next, message, percent, color, overlay,
 									darkenSky, playEndBossMusic, createFog));
 						}

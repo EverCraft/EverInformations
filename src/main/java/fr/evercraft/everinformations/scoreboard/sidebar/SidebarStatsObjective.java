@@ -100,11 +100,11 @@ public class SidebarStatsObjective extends SidebarObjective {
 				.criterion(Criteria.DUMMY)
 				.build();
 		
-		if(this.plugin.getEverAPI().getManagerService().getTopEconomy().isPresent()) {
-			for(Entry<UUID, Double> player : this.getTop().entrySet()) {
+		if (this.plugin.getEverAPI().getManagerService().getTopEconomy().isPresent()) {
+			for (Entry<UUID, Double> player : this.getTop().entrySet()) {
 				Optional<User> user = this.plugin.getEServer().getUser(player.getKey());
 				// Si le User existe bien
-				if(user.isPresent()) {
+				if (user.isPresent()) {
 					objective.getOrCreateScore(EChat.of(this.message.replaceAll("<player>",user.get().getName()))).setScore(player.getValue().intValue());
 				}
 			}
@@ -112,27 +112,27 @@ public class SidebarStatsObjective extends SidebarObjective {
 			this.plugin.getLogger().warn("No EverStats");
 		}
 		
-		if(objective.getScores().isEmpty()) {
+		if (objective.getScores().isEmpty()) {
 			objective.getOrCreateScore(EIMessages.SCOREBOARD_EMPTY.getText()).setScore(0);
 		}
 		this.objective = objective;
 	}
 	
 	private LinkedHashMap<UUID, Double> getTop() {
-		if(this.score_type == TypeTop.DEATHS) {
+		if (this.score_type == TypeTop.DEATHS) {
 			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopDeaths(TOP_COUNT, this.getTime());
-		} else if(this.score_type == TypeTop.KILLS) {
+		} else if (this.score_type == TypeTop.KILLS) {
 			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopKills(TOP_COUNT, this.getTime());
-		} else if(this.score_type == TypeTop.RATIO) {
+		} else if (this.score_type == TypeTop.RATIO) {
 			return this.plugin.getEverAPI().getManagerService().getStats().get().getTopRatio(TOP_COUNT, this.getTime());
 		}
 		return new LinkedHashMap<UUID, Double>();
 	}
 	
 	private Long getTime() {
-		if(this.time_type == TypeTimes.ALL) {
+		if (this.time_type == TypeTimes.ALL) {
 			return (long) 0;
-		} else if(this.time_type == TypeTimes.MONTH) {
+		} else if (this.time_type == TypeTimes.MONTH) {
 			GregorianCalendar calendar = new GregorianCalendar();
 			calendar.setTimeInMillis(System.currentTimeMillis());
 			calendar.set(GregorianCalendar.MONTH, 1);
@@ -140,7 +140,7 @@ public class SidebarStatsObjective extends SidebarObjective {
 			calendar.set(GregorianCalendar.MINUTE, 0);
 			calendar.set(GregorianCalendar.SECOND, 0);
 			return calendar.getTimeInMillis();
-		} else if(this.time_type == TypeTimes.WEEK) {
+		} else if (this.time_type == TypeTimes.WEEK) {
 			GregorianCalendar calendar = new GregorianCalendar();
 			calendar.setTimeInMillis(System.currentTimeMillis());
 			while (calendar.get(GregorianCalendar.DAY_OF_WEEK) != GregorianCalendar.MONDAY) {
@@ -150,7 +150,7 @@ public class SidebarStatsObjective extends SidebarObjective {
 			calendar.set(GregorianCalendar.MINUTE, 0);
 			calendar.set(GregorianCalendar.SECOND, 0);
 			return calendar.getTimeInMillis();
-		} else if(this.time_type == TypeTimes.DAY) {
+		} else if (this.time_type == TypeTimes.DAY) {
 			GregorianCalendar calendar = new GregorianCalendar();
 			calendar.setTimeInMillis(System.currentTimeMillis());
 			calendar.set(GregorianCalendar.HOUR, 0);

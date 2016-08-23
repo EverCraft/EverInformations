@@ -54,12 +54,12 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 		double stay_default = this.get("stay").getDouble(300);
 		double interval_default = this.get("interval").getDouble(20);
 
-		for(ConfigurationNode config : this.get("messages").getChildrenList()) {
+		for (ConfigurationNode config : this.get("messages").getChildrenList()) {
 			// Message uniquement
-			if(config.getValue() instanceof String) {
+			if (config.getValue() instanceof String) {
 				String message = this.plugin.getChat().replace(config.getString(""));
 				
-				if(!message.isEmpty()) {
+				if (!message.isEmpty()) {
 					messages.add(new ActionBarMessage(stay_default, interval_default, message));
 				}
 			// Message avec config
@@ -68,7 +68,7 @@ public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage
 				double interval = config.getNode("next").getDouble(config.getNode("interval").getDouble(interval_default));
 				String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
 				
-				if(!message.isEmpty()) {
+				if (!message.isEmpty()) {
 					messages.add(new ActionBarMessage(stay, interval, message));
 				}
 			}

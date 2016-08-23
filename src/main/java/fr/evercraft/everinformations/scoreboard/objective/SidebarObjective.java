@@ -61,7 +61,7 @@ public abstract class SidebarObjective extends EObjective {
 	public boolean start() {
 		this.subStart();
 		
-		if(this.titles.size() > 1) {
+		if (this.titles.size() > 1) {
 			this.task();
 		}
 		
@@ -83,7 +83,7 @@ public abstract class SidebarObjective extends EObjective {
 		SidebarTitle title = this.getSidebarTitle();
 		
 		// Si il n'y a pas de délai
-		if(title.getNext() == 0) {
+		if (title.getNext() == 0) {
 			this.next();
 		// Il y a un délai
 		} else {
@@ -98,7 +98,7 @@ public abstract class SidebarObjective extends EObjective {
 	
 	public void next() {
 		this.numero++;
-		if(this.numero >= this.titles.size()){
+		if (this.numero >= this.titles.size()){
 			this.numero = 0;
 		}
 		this.updateTitle();

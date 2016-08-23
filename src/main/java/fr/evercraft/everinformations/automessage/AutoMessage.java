@@ -71,12 +71,12 @@ public class AutoMessage<T extends IMessage> {
 
 		// Priorité
 		this.priority = PriorityService.DEFAULT;
-		if(this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
-			if(this.type.equals(Type.ACTION_BAR)) {
+		if (this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
+			if (this.type.equals(Type.ACTION_BAR)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getActionBar(IDENTIFIER);
-			} else if(this.type.equals(Type.TITLE)) {
+			} else if (this.type.equals(Type.TITLE)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(IDENTIFIER);
-			} else if(this.type.equals(Type.BOSSBAR)) {
+			} else if (this.type.equals(Type.BOSSBAR)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getBossBar(IDENTIFIER);
 			}
 		}
@@ -87,7 +87,7 @@ public class AutoMessage<T extends IMessage> {
 		this.messages.addAll(this.config.getMessages());
 		
 		// Si il y est activé
-		if(this.enable) {
+		if (this.enable) {
 			// Si il y a aucun message
 			if (this.messages.size() == 0) {
 				this.plugin.getLogger().warn("AutoMessages (type='" + this.type.name() + "') : There is no message");
@@ -123,9 +123,9 @@ public class AutoMessage<T extends IMessage> {
 	public void task() {
 		T message = this.getMessage();
 		
-		if(this.type.equals(Type.BOSSBAR)) {
+		if (this.type.equals(Type.BOSSBAR)) {
 			// Si il y a pas de délai
-			if(((BossBarMessage) message).getTimeNext() <= 0) {
+			if (((BossBarMessage) message).getTimeNext() <= 0) {
 				this.taskNext();
 			// Il y a un délai
 			} else {
@@ -133,7 +133,7 @@ public class AutoMessage<T extends IMessage> {
 			}
 		} else {
 			// Si il y a pas de délai
-			if(message.getNext() <= 0) {
+			if (message.getNext() <= 0) {
 				this.next();
 			// Il y a un délai
 			} else {
@@ -156,7 +156,7 @@ public class AutoMessage<T extends IMessage> {
 	 * Le temps avant la prochaine bossbar
 	 */
 	public void taskNextBossBar() {
-		if(this.getMessage() instanceof BossBarMessage) {
+		if (this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
 					.execute(() -> this.next())
@@ -171,7 +171,7 @@ public class AutoMessage<T extends IMessage> {
 	 * Si il y a un délai en 2 bossbars, il faut supprimer la première au bout d'un certain temps
 	 */
 	public void taskRemoveBossBar() {
-		if(this.getMessage() instanceof BossBarMessage) {
+		if (this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
 					.execute(() -> {
@@ -187,7 +187,7 @@ public class AutoMessage<T extends IMessage> {
 	
 	public void next() {		
 		this.numero++;
-		if(this.numero >= this.messages.size()){
+		if (this.numero >= this.messages.size()){
 			this.numero = 0;
 		}
 		this.view();
@@ -195,10 +195,10 @@ public class AutoMessage<T extends IMessage> {
 	}
 	
 	protected void view() {
-		if(this.enable) {
+		if (this.enable) {
 			T message = this.getMessage();
 			this.plugin.getLogger().debug("AutoMessages (type='" + this.type.name() + "';priority='" + this.priority + "';actionBar='" + message + "')");
-			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				message.send(IDENTIFIER, this.priority, player);
 			}
 		}
@@ -209,22 +209,22 @@ public class AutoMessage<T extends IMessage> {
 	}
 	
 	public void addPlayer(EPlayer player) {
-		if(this.enable && this.getMessage() instanceof BossBarMessage) {
+		if (this.enable && this.getMessage() instanceof BossBarMessage) {
 			this.getMessage().send(IDENTIFIER, this.priority, player);
 		}
 	}
 	
 	public void remove() {
-		if(this.enable && this.getMessage() instanceof BossBarMessage) {
+		if (this.enable && this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
-			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				message.remove(IDENTIFIER, player);
 			}
 		}
 	}
 	
 	public void removePlayer(EPlayer player) {
-		if(this.enable && this.getMessage() instanceof BossBarMessage) {
+		if (this.enable && this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			message.remove(IDENTIFIER, player);
 		}

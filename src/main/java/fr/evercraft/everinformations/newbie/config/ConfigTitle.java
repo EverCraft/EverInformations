@@ -38,7 +38,7 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 		addDefault(Newbie.PLAYER + ".stay", 10, "Seconds");
 		addDefault(Newbie.PLAYER + ".fadeIn", 1, "Seconds");
 		addDefault(Newbie.PLAYER + ".fadeOut", 1, "Seconds");
-		if(this.get(Newbie.PLAYER + ".messages").isVirtual()) {
+		if (this.get(Newbie.PLAYER + ".messages").isVirtual()) {
 			addDefault(Newbie.PLAYER + ".title", "&4Welcome");
 			addDefault(Newbie.PLAYER + ".subTitle", "&4Welcome &a<DISPLAYNAME_FORMAT> &4to the server!");
 		}
@@ -49,7 +49,7 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 		addDefault(Newbie.OTHERS + ".fadeIn", 1, "Seconds");
 		addDefault(Newbie.OTHERS + ".fadeOut", 1, "Seconds");
 		
-		if(this.get(Newbie.OTHERS + ".messages").isVirtual()) {
+		if (this.get(Newbie.OTHERS + ".messages").isVirtual()) {
 			addDefault(Newbie.OTHERS + ".title", "");
 			addDefault(Newbie.OTHERS + ".subTitle", "&a<DISPLAYNAME_FORMAT> &4is a new player.");
 		}
@@ -97,16 +97,16 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 		double fadeOut_player = this.get(prefix + ".fadeOut").getDouble(fadeOut_default);
 		
 		// Message unique
-		if(this.get(prefix + ".messages").isVirtual()) {
+		if (this.get(prefix + ".messages").isVirtual()) {
 			String title = this.plugin.getChat().replace(this.get(prefix + ".title").getString(""));
 			String subTitle = this.plugin.getChat().replace(this.get(prefix + ".subTitle").getString(""));
 			
-			if(!title.isEmpty() || !subTitle.isEmpty()) {
+			if (!title.isEmpty() || !subTitle.isEmpty()) {
 				messages.add(new TitleMessage(stay_player, interval_player, fadeIn_player, fadeOut_player, title, subTitle));
 			}
 		// Liste de messages
 		} else {
-			for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
+			for (ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
 				double stay = config.getNode("stay").getDouble(stay_player);
 				double interval = config.getNode("next").getDouble(config.getNode("inverval").getDouble(interval_player));
 				double fadeIn = config.getNode("fadeIn").getDouble(fadeIn_player);
@@ -115,7 +115,7 @@ public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
 				String title = this.plugin.getChat().replace(config.getNode("title").getString(""));
 				String subTitle = this.plugin.getChat().replace(config.getNode("subTitle").getString(""));
 				
-				if(!title.isEmpty() || !subTitle.isEmpty()) {
+				if (!title.isEmpty() || !subTitle.isEmpty()) {
 					messages.add(new TitleMessage(stay, interval, fadeIn, fadeOut, title, subTitle));
 				}
 			}

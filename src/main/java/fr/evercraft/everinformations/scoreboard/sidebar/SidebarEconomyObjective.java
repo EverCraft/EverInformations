@@ -80,17 +80,17 @@ public class SidebarEconomyObjective extends SidebarObjective {
 				.criterion(Criteria.DUMMY)
 				.build();
 		
-		if(this.plugin.getEverAPI().getManagerService().getTopEconomy().isPresent()) {
-			for(Entry<UUID, BigDecimal> player : this.plugin.getEverAPI().getManagerService().getTopEconomy().get().topUniqueAccount(TOP_COUNT).entrySet()) {
+		if (this.plugin.getEverAPI().getManagerService().getTopEconomy().isPresent()) {
+			for (Entry<UUID, BigDecimal> player : this.plugin.getEverAPI().getManagerService().getTopEconomy().get().topUniqueAccount(TOP_COUNT).entrySet()) {
 				Optional<User> user = this.plugin.getEServer().getUser(player.getKey());
 				// Si le User existe bien
-				if(user.isPresent()){
+				if (user.isPresent()){
 					objective.getOrCreateScore(EChat.of(this.message.replaceAll("<player>",user.get().getName()))).setScore(player.getValue().intValue());
 				}
 			}
 		}
 		
-		if(objective.getScores().isEmpty()) {
+		if (objective.getScores().isEmpty()) {
 			objective.getOrCreateScore(EIMessages.SCOREBOARD_EMPTY.getText()).setScore(0);
 		}
 		this.objective = objective;

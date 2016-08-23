@@ -45,7 +45,7 @@ public class ManagerTabList {
 
 	public void load() {
 		this.priority = PriorityService.DEFAULT;
-		if(this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
+		if (this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
 			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTabList(IDENTIFIER);
 		}
 	}
@@ -83,7 +83,7 @@ public class ManagerTabList {
 	}
 
 	public void event(TabListEvent event) {
-		if(!event.getIdentifier().equalsIgnoreCase(IDENTIFIER)) {
+		if (!event.getIdentifier().equalsIgnoreCase(IDENTIFIER)) {
 			this.displayname.addPlayer(event.getPlayer());
 			this.header_footer.addPlayer(event.getPlayer());
 		}

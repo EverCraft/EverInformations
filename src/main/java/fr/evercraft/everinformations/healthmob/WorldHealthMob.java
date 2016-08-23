@@ -47,11 +47,11 @@ public class WorldHealthMob {
 	
 	public void reset() {
 		Optional<World> world = this.plugin.getGame().getServer().getWorld(this.world);
-		if(world.isPresent()) {
-			for(Entry<UUID, EntityHealthMob> healthmob : this.entities.entrySet()) {
+		if (world.isPresent()) {
+			for (Entry<UUID, EntityHealthMob> healthmob : this.entities.entrySet()) {
 				healthmob.getValue().cancel();
 				Optional<Entity> entity = world.get().getEntity(healthmob.getKey());
-				if(entity.isPresent()) {
+				if (entity.isPresent()) {
 					this.plugin.getLogger().debug("HealthMob : Remove (uuid='" + healthmob.getKey() + "';name='" + healthmob.getValue() + "'");
 					entity.get().offer(Keys.DISPLAY_NAME, healthmob.getValue().getName());
 				}
@@ -70,7 +70,7 @@ public class WorldHealthMob {
 	public boolean send(Entity entity, Double health) {
 		EntityHealthMob healthmob = this.entities.get(entity.getUniqueId());
 		// Si c'est une nouvelle entité
-		if(healthmob == null) {
+		if (healthmob == null) {
 			Optional<Text> display_name = entity.get(Keys.DISPLAY_NAME);
 			this.plugin.getLogger().debug("HealthMob : Add (uuid='" + entity.getUniqueId() + "';name='" + display_name + "'");
 			healthmob = new EntityHealthMob(display_name);
@@ -94,7 +94,7 @@ public class WorldHealthMob {
 	public void update(Entity entity, Double health) {
 		EntityHealthMob healthmob = this.entities.get(entity.getUniqueId());
 		// Si l'entité est déjà connu
-		if(healthmob != null) {
+		if (healthmob != null) {
 			entity.offer(Keys.DISPLAY_NAME, this.getName(entity, health));
 			
 			// Update task
@@ -111,10 +111,10 @@ public class WorldHealthMob {
 	public boolean remove(UUID uuid) {
 		Optional<World> world = this.plugin.getGame().getServer().getWorld(this.world);
 		// Si le monde existe
-		if(world.isPresent()) {
+		if (world.isPresent()) {
 			Optional<Entity> entity = world.get().getEntity(uuid);
 			// Si l'entité existe
-			if(entity.isPresent()) {
+			if (entity.isPresent()) {
 				return this.remove(entity.get());
 			}
 		}
@@ -129,7 +129,7 @@ public class WorldHealthMob {
 	public boolean remove(Entity entity) {
 		EntityHealthMob healthmob = this.entities.remove(entity.getUniqueId());
 		// Si l'entité est déjà connu
-		if(healthmob != null) {
+		if (healthmob != null) {
 			this.plugin.getLogger().debug("HealthMob : Remove (uuid='" + entity.getUniqueId() + "';name='" + healthmob.getName() + "'");
         	
 			healthmob.cancel();
@@ -148,7 +148,7 @@ public class WorldHealthMob {
 	public Text getName(final Entity entity, final Double health) {
 		String message = null;
 		Double max_health = entity.get(Keys.MAX_HEALTH).orElse(0.0);
-		if(this.plugin.getHealthMob().getMessage().size() == 1) {
+		if (this.plugin.getHealthMob().getMessage().size() == 1) {
 			message = this.plugin.getHealthMob().getMessage().get(0);
 		} else {
 			int size = this.plugin.getHealthMob().getMessage().size()-1;

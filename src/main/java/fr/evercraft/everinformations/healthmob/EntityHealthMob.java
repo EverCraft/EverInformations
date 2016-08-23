@@ -63,7 +63,7 @@ public class EntityHealthMob {
 	 * @return True si la Task a bien été annulé
 	 */
 	public boolean cancel() {
-		if(this.task != null) {
+		if (this.task != null) {
 			return this.task.cancel();
 		}
 		return false;

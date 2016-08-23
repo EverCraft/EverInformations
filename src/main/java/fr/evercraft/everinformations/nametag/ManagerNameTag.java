@@ -55,13 +55,13 @@ public class ManagerNameTag {
 	}
 
 	public void start() {
-		if(this.enable) {
-			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+		if (this.enable) {
+			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				Text prefix = EChat.of(player.getOption(this.prefix).orElse(""));
 				Text suffix = EChat.of(player.getOption(this.suffix).orElse(""));
 				Text teamRepresentation = player.getTeamRepresentation();
 				
-				for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
+				for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 					other.sendNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
 				}
 			}
@@ -69,21 +69,21 @@ public class ManagerNameTag {
 	}
 
 	public void stop() {
-		if(this.enable) {
-			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+		if (this.enable) {
+			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				player.clearNameTag(IDENTIFIER);
 			}
 		}
 	}
 	
 	public void addPlayer(EPlayer player) {
-		if(this.enable) {
+		if (this.enable) {
 			Text prefix = EChat.of(player.getOption(this.prefix).orElse(""));
 			Text suffix = EChat.of(player.getOption(this.suffix).orElse(""));
 			Text teamRepresentation = player.getTeamRepresentation();
 			
-			for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-				if(!player.equals(other)) {
+			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
+				if (!player.equals(other)) {
 					other.sendNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
 				}
 				player.sendNameTag(IDENTIFIER, other.getTeamRepresentation(), EChat.of(other.getOption(this.prefix).orElse("")), EChat.of(other.getOption(this.suffix).orElse("")));
@@ -92,9 +92,9 @@ public class ManagerNameTag {
 	}
 	
 	public void removePlayer(EPlayer player) {
-		if(this.enable) {
+		if (this.enable) {
 			Text teamRepresentation = player.getTeamRepresentation();
-			for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
+			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 				other.removeNameTag(IDENTIFIER, teamRepresentation);
 			}
 			

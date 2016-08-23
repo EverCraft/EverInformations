@@ -73,12 +73,12 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 		boolean playEndBossMusic_default = this.get("playEndBossMusic").getBoolean(false);
 		boolean createFog_default = this.get("createFog").getBoolean(false);
 		
-		for(ConfigurationNode config : this.get("messages").getChildrenList()) {
+		for (ConfigurationNode config : this.get("messages").getChildrenList()) {
 			// Message uniquement
-			if(config.getValue() instanceof String) {
+			if (config.getValue() instanceof String) {
 				String message = this.plugin.getChat().replace(config.getString(""));
 				
-				if(!message.isEmpty()) {
+				if (!message.isEmpty()) {
 					messages.add(new BossBarMessage(stay_default, next_default, message, percent_default, color_default, overlay_default,
 							darkenSky_default, playEndBossMusic_default, createFog_default));
 				}
@@ -95,7 +95,7 @@ public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
 				
 				String message = this.plugin.getChat().replace(config.getNode("message").getString(""));
 
-				if(!message.isEmpty()) {
+				if (!message.isEmpty()) {
 					messages.add(new BossBarMessage(stay, next, message, percent, color, overlay,
 							darkenSky, playEndBossMusic, createFog));
 				}

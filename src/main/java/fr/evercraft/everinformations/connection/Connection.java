@@ -89,18 +89,18 @@ public abstract class Connection<T extends IMessage> {
 	
 	protected void loadPriority() {
 		this.priority = PriorityService.DEFAULT;
-		if(this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
-			if(type.equals(Type.ACTION_BAR_PLAYER)) {
+		if (this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
+			if (type.equals(Type.ACTION_BAR_PLAYER)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getActionBar(Connection.IDENTIFIER_PLAYER);
-			} else if(type.equals(Type.ACTION_BAR_OTHERS)) {
+			} else if (type.equals(Type.ACTION_BAR_OTHERS)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getActionBar(Connection.IDENTIFIER_OTHERS);
-			} else if(type.equals(Type.TITLE_PLAYER)) {
+			} else if (type.equals(Type.TITLE_PLAYER)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(Connection.IDENTIFIER_PLAYER);
-			} else if(type.equals(Type.TITLE_OTHERS)) {
+			} else if (type.equals(Type.TITLE_OTHERS)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(Connection.IDENTIFIER_OTHERS);
-			} else if(type.equals(Type.BOSSBAR_PLAYER)) {
+			} else if (type.equals(Type.BOSSBAR_PLAYER)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(Connection.IDENTIFIER_PLAYER);
-			} else if(type.equals(Type.BOSSBAR_OTHERS)) {
+			} else if (type.equals(Type.BOSSBAR_OTHERS)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(Connection.IDENTIFIER_OTHERS);
 			}
 		}
@@ -119,10 +119,10 @@ public abstract class Connection<T extends IMessage> {
 	}
 	
 	protected List<T> getMessages(Map<String, List<T>> map, Optional<Subject> subject) {
-		if(subject.isPresent() && map.containsKey(subject.get().getIdentifier())) {
+		if (subject.isPresent() && map.containsKey(subject.get().getIdentifier())) {
 			return map.get(subject.get().getIdentifier());
 		}
-		if(map.containsKey(Connection.DEFAULT)) {
+		if (map.containsKey(Connection.DEFAULT)) {
 			return map.get(Connection.DEFAULT);
 		}
 		return Arrays.asList();

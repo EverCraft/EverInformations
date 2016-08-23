@@ -45,7 +45,7 @@ public class DisplayNameTabList {
 	}
 
 	public void reload() {
-		if(this.enable) {
+		if (this.enable) {
 			stop();
 		}
 		
@@ -63,13 +63,13 @@ public class DisplayNameTabList {
 	}
 
 	public void start() {
-		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			String prefix = this.plugin.getChat().replace(player.getOption(this.prefix).orElse(""));
 			String suffix = this.plugin.getChat().replace(player.getOption(this.suffix).orElse(""));
 			
-			for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
+			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 				Optional<TabListEntry> entry = other.getTabList().getEntry(player.getUniqueId());
-				if(entry.isPresent() && other.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
+				if (entry.isPresent() && other.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
 					entry.get().setDisplayName(EChat.of(prefix + player.getName() + suffix));
 				}
 			}
@@ -77,12 +77,12 @@ public class DisplayNameTabList {
 	}
 
 	public void stop() {
-		if(this.enable) {
-			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				if(player.hasTabList(ManagerTabList.IDENTIFIER)) {
-					for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
+		if (this.enable) {
+			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+				if (player.hasTabList(ManagerTabList.IDENTIFIER)) {
+					for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 						Optional<TabListEntry> entry = player.getTabList().getEntry(other.getUniqueId());
-						if(entry.isPresent()) {
+						if (entry.isPresent()) {
 							entry.get().setDisplayName(null);
 						}
 					}
@@ -96,11 +96,11 @@ public class DisplayNameTabList {
 	 * @param player
 	 */
 	public void addPlayer(EPlayer player) {
-		if(this.enable && player.hasTabList(ManagerTabList.IDENTIFIER)) {
-			for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
+		if (this.enable && player.hasTabList(ManagerTabList.IDENTIFIER)) {
+			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 				// TabList du joueur
 				Optional<TabListEntry> entry_player = player.getTabList().getEntry(other.getUniqueId());
-				if(entry_player.isPresent()) {
+				if (entry_player.isPresent()) {
 					String prefix_other = this.plugin.getChat().replace(other.getOption(this.prefix).orElse(""));
 					String suffix_other = this.plugin.getChat().replace(other.getOption(this.suffix).orElse(""));
 					entry_player.get().setDisplayName(EChat.of(prefix_other + other.getName() + suffix_other));
@@ -114,15 +114,15 @@ public class DisplayNameTabList {
 	 * @param player
 	 */
 	public void addOther(EPlayer player) {
-		if(this.enable) {
+		if (this.enable) {
 			String prefix_player = this.plugin.getChat().replace(player.getOption(this.prefix).orElse(""));
 			String suffix_player = this.plugin.getChat().replace(player.getOption(this.suffix).orElse(""));
 			
-			for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
+			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 				// TabList des autres joueurs
-				if(other.hasTabList(ManagerTabList.IDENTIFIER)) {
+				if (other.hasTabList(ManagerTabList.IDENTIFIER)) {
 					Optional<TabListEntry> entry_other = other.getTabList().getEntry(player.getUniqueId());
-					if(entry_other.isPresent()) {
+					if (entry_other.isPresent()) {
 						entry_other.get().setDisplayName(EChat.of(prefix_player + player.getName() + suffix_player));
 					}
 				}
@@ -135,10 +135,10 @@ public class DisplayNameTabList {
 	 * @param player
 	 */
 	public void removePlayer(EPlayer player) {
-		if(this.enable && player.hasTabList(ManagerTabList.IDENTIFIER)) {
-			for(EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
+		if (this.enable && player.hasTabList(ManagerTabList.IDENTIFIER)) {
+			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 				Optional<TabListEntry> entry = player.getTabList().getEntry(other.getUniqueId());
-				if(entry.isPresent()) {
+				if (entry.isPresent()) {
 					entry.get().setDisplayName(null);
 				}
 			}

@@ -54,7 +54,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 							.displayName(this.getSidebarTitle().getTitle())
 							.criterion(Criteria.DUMMY)
 							.build();
-		for(Entry<Text, TypeScores> score : this.scores.entrySet()) {
+		for (Entry<Text, TypeScores> score : this.scores.entrySet()) {
 			objective.getOrCreateScore(score.getKey()).setScore(score.getValue().getValue(player));
 		}
 		return player.addObjective(priority, DisplaySlots.SIDEBAR, objective);
@@ -67,7 +67,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 
 	@Override
 	public boolean subStart() {
-		for(TypeScores type : new HashSet<TypeScores>(this.scores.values())) {
+		for (TypeScores type : new HashSet<TypeScores>(this.scores.values())) {
 			type.addListener(this.plugin, this);
 		}
 		return true;
@@ -75,7 +75,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 
 	@Override
 	public boolean subStop() {
-		for(TypeScores type : new HashSet<TypeScores>(this.scores.values())) {
+		for (TypeScores type : new HashSet<TypeScores>(this.scores.values())) {
 			type.removeListener(this.plugin, this);
 		}
 		return true;
@@ -83,11 +83,11 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	
 	@Override
 	public void update() {
-		for(Entry<Text, TypeScores> score : this.scores.entrySet()) {
-			if(!score.getValue().isUpdate()) {
-				for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+		for (Entry<Text, TypeScores> score : this.scores.entrySet()) {
+			if (!score.getValue().isUpdate()) {
+				for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 					Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
-					if(objective.isPresent()) {
+					if (objective.isPresent()) {
 						objective.get().getOrCreateScore(score.getKey()).setScore(score.getValue().getValue(player));
 					}
 				}
@@ -97,11 +97,11 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	
 	@Override
 	public void update(TypeScores type) {
-		for(Entry<Text, TypeScores> score : this.scores.entrySet()) {
-			if(score.getValue().equals(type)) {
-				for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+		for (Entry<Text, TypeScores> score : this.scores.entrySet()) {
+			if (score.getValue().equals(type)) {
+				for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 					Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
-					if(objective.isPresent()) {
+					if (objective.isPresent()) {
 						objective.get().getOrCreateScore(score.getKey()).setScore(score.getValue().getValue(player));
 					}
 				}
@@ -112,11 +112,11 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	@Override
 	public void update(UUID uuid, TypeScores type) {
 		Optional<EPlayer> player = this.plugin.getEServer().getEPlayer(uuid);
-		if(player.isPresent()) {
+		if (player.isPresent()) {
 			Optional<Objective> objective = player.get().getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
-			if(objective.isPresent()) {
-				for(Entry<Text, TypeScores> score : this.scores.entrySet()) {
-					if(score.getValue().equals(type)) {
+			if (objective.isPresent()) {
+				for (Entry<Text, TypeScores> score : this.scores.entrySet()) {
+					if (score.getValue().equals(type)) {
 						objective.get().getOrCreateScore(score.getKey()).setScore(type.getValue(player.get()));
 					}
 				}
@@ -127,8 +127,8 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	@Override
 	public boolean isUpdate() {
 		boolean update = true;
-		for(Entry<Text, TypeScores> score : this.scores.entrySet()) {
-			if(!score.getValue().isUpdate()) {
+		for (Entry<Text, TypeScores> score : this.scores.entrySet()) {
+			if (!score.getValue().isUpdate()) {
 				update = false;
 			}
 		}
@@ -140,9 +140,9 @@ public class SidebarNumbersObjective extends SidebarObjective {
 		SidebarTitle title = this.getSidebarTitle();
 		this.plugin.getLogger().debug("SidebarTitle : View (title='" + title.getTitle().toPlain() + "';next='" + title.getNext() + "')");
 		
-		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
-			if(objective.isPresent()) {
+			if (objective.isPresent()) {
 				objective.get().setDisplayName(title.getTitle());
 			}
 		}

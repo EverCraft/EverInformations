@@ -44,7 +44,7 @@ public class ConfigHealthMob extends EConfig {
 				EntityTypes.ENDER_DRAGON.getName().toUpperCase(), 
 				EntityTypes.WITHER.getName().toUpperCase()));
 		
-		if(this.get("message").isVirtual()) {
+		if (this.get("message").isVirtual()) {
 			addDefault("messages", Arrays.asList(
 				"&c▌                   ",
 				"&c▌                   ",
@@ -90,18 +90,18 @@ public class ConfigHealthMob extends EConfig {
 		List<String> messages = new ArrayList<String>();
 		
 		// Message unique
-		if(this.get("messages").isVirtual()) {
+		if (this.get("messages").isVirtual()) {
 			String message = this.plugin.getChat().replace(this.get("message").getString(""));
 			
-			if(!message.isEmpty()) {
+			if (!message.isEmpty()) {
 				messages.add(message);
 			}
 		// Liste de messages
 		} else {
-			for(ConfigurationNode config : this.get("messages").getChildrenList()) {
+			for (ConfigurationNode config : this.get("messages").getChildrenList()) {
 				String message = this.plugin.getChat().replace(config.getString(""));
 				
-				if(!message.isEmpty()) {
+				if (!message.isEmpty()) {
 					messages.add(message);
 				}
 			}

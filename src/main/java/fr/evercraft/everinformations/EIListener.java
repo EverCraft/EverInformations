@@ -46,14 +46,14 @@ public class EIListener {
 		Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
 		
 		// Chargement du EPlayer
-		if(optPlayer.isPresent()) {
+		if (optPlayer.isPresent()) {
 			EPlayer player = optPlayer.get();
 			
 			// Newbie
-			if(player.getFirstDatePlayed() == player.getLastDatePlayed()) {
+			if (player.getFirstDatePlayed() == player.getLastDatePlayed()) {
 				this.plugin.getNewbie().addPlayer(player);
 				
-				if(this.plugin.getConfigs().isNewbieAndConnection()) {
+				if (this.plugin.getConfigs().isNewbieAndConnection()) {
 					// Connection
 					this.plugin.getConnection().joinPlayer(player, player.getGroup());
 				}
@@ -63,7 +63,7 @@ public class EIListener {
 			}
 			
 			// Supprime le message par défaut
-			if(this.plugin.getConnection().isEnableChat()) {
+			if (this.plugin.getConnection().isEnableChat()) {
 				event.setMessageCancelled(true);
 			}
 			
@@ -78,7 +78,7 @@ public class EIListener {
 		}
 		
 		// Active l'AutoMessage
-		if(this.plugin.getGame().getServer().getOnlinePlayers().size() == 1) {
+		if (this.plugin.getGame().getServer().getOnlinePlayers().size() == 1) {
 			this.plugin.getAutoMessages().start();
 		}
 	}
@@ -88,11 +88,11 @@ public class EIListener {
 		Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
 		
 		// Chargement du EPlayer
-		if(optPlayer.isPresent()) {
+		if (optPlayer.isPresent()) {
 			EPlayer player = optPlayer.get();
 			
 			// Newbie
-			if(player.getFirstDatePlayed() == player.getLastDatePlayed()) {
+			if (player.getFirstDatePlayed() == player.getLastDatePlayed()) {
 				this.plugin.getNewbie().removePlayer(player);
 			}
 			
@@ -100,7 +100,7 @@ public class EIListener {
 			this.plugin.getConnection().quitPlayer(player, player.getGroup());
 			
 			// Supprime le message par défaut
-			if(this.plugin.getConnection().isEnableChat()) {
+			if (this.plugin.getConnection().isEnableChat()) {
 				event.setMessageCancelled(true);
 			}
 			
@@ -118,7 +118,7 @@ public class EIListener {
 		}
 		
 		// Désactive l'AutoMessage
-		if(this.plugin.getGame().getServer().getOnlinePlayers().size() == 1) {
+		if (this.plugin.getGame().getServer().getOnlinePlayers().size() == 1) {
 			this.plugin.getAutoMessages().stop();
 		}
 	}
@@ -131,11 +131,11 @@ public class EIListener {
 		Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
 		
 		// Chargement du EPlayer
-		if(optPlayer.isPresent()) {
+		if (optPlayer.isPresent()) {
 			EPlayer player = optPlayer.get();
 			this.plugin.getConnection().kickPlayer(player, player.getGroup(), event.getMessage());
 			
-			if(this.plugin.getConnection().isEnableChat()) {
+			if (this.plugin.getConnection().isEnableChat()) {
 				event.setMessageCancelled(true);
 			}
 		}
@@ -143,8 +143,8 @@ public class EIListener {
 	
 	@Listener
     public void vanishEvent(VanishEvent event) {
-		if(this.plugin.getConfigs().isVanishFake()) {
-			if(event.getValue()) {
+		if (this.plugin.getConfigs().isVanishFake()) {
+			if (event.getValue()) {
 				this.plugin.getConnection().quitPlayer(event.getPlayer(), event.getPlayer().getGroup());
 			} else {
 				this.plugin.getConnection().joinPlayer(event.getPlayer(), event.getPlayer().getGroup());
@@ -155,7 +155,7 @@ public class EIListener {
 	
 	@Listener
     public void permUserEvent(PermUserEvent event) {
-		if(event.getPlayer().isPresent() && (event.getAction().equals(PermUserEvent.Action.USER_OPTION_CHANGED) ||
+		if (event.getPlayer().isPresent() && (event.getAction().equals(PermUserEvent.Action.USER_OPTION_CHANGED) ||
 			event.getAction().equals(PermUserEvent.Action.USER_GROUP_CHANGED) ||
 			event.getAction().equals(PermUserEvent.Action.USER_SUBGROUP_CHANGED))) {
 			// NameTag
@@ -168,8 +168,8 @@ public class EIListener {
 	
 	@Listener
     public void permGroupEvent(PermGroupEvent event) {
-		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-			if(player.isChildOf(event.getSubject())) {
+		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+			if (player.isChildOf(event.getSubject())) {
 				// NameTag
 				this.plugin.getNameTag().updatePermission(player);
 				
@@ -181,7 +181,7 @@ public class EIListener {
 	
 	@Listener
     public void permSystemEvent(PermSystemEvent event) {
-		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			// NameTag
 			this.plugin.getNameTag().updatePermission(player);
 			
@@ -192,42 +192,42 @@ public class EIListener {
 	
 	@Listener
     public void scoreBoardEvent(ScoreBoardEvent.Remove event) {
-		if(!event.getPlayer().isDisconnected()) {
+		if (!event.getPlayer().isDisconnected()) {
 			this.plugin.getScoreBoard().eventScoreBoard(event.getPlayer(), event.getDisplaySlot(), event.getIdentifier());
 		}
 	}
 	
 	@Listener
     public void tabListEvent(TabListEvent.Remove event) {
-		if(!event.getPlayer().isDisconnected()) {
+		if (!event.getPlayer().isDisconnected()) {
 			this.plugin.getTabList().eventTabList(event.getPlayer(), event.getIdentifier());
 		}
 	}
 	
 	@Listener
     public void bossBarEvent(BossBarEvent.Remove event) {
-		if(!event.getPlayer().isDisconnected()) {
+		if (!event.getPlayer().isDisconnected()) {
 			this.plugin.getAutoMessages().eventBossBar(event.getPlayer(), event.getIdentifier());
 		}
 	}
 	
 	@Listener
     public void titleEvent(TitleEvent.Remove event) {
-		if(!event.getPlayer().isDisconnected()) {
+		if (!event.getPlayer().isDisconnected()) {
 			this.plugin.getAutoMessages().eventTitle(event.getPlayer(), event.getIdentifier());
 		}
 	}
 	
 	@Listener
     public void actionBarEvent(ActionBarEvent.Remove event) {
-		if(!event.getPlayer().isDisconnected()) {
+		if (!event.getPlayer().isDisconnected()) {
 			this.plugin.getAutoMessages().eventActionBar(event.getPlayer(), event.getIdentifier());
 		}
 	}
 	
 	@Listener
     public void nameTagEvent(NameTagEvent.Remove event) {
-		if(!event.getPlayer().isDisconnected()) {
+		if (!event.getPlayer().isDisconnected()) {
 			this.plugin.getNameTag().eventNameTag(event.getPlayer());
 		}
 	}

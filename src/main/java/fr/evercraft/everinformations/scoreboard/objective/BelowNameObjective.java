@@ -76,7 +76,7 @@ public class BelowNameObjective extends EObjective {
 
 	@Override
 	public void update(TypeScores score) {
-		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			this.objective.getOrCreateScore(player.getTeamRepresentation()).setScore(score.getValue(player));
 		}
 	}
@@ -84,7 +84,7 @@ public class BelowNameObjective extends EObjective {
 	@Override
 	public void update(UUID uuid, TypeScores score) {
 		Optional<EPlayer> player = this.plugin.getEServer().getEPlayer(uuid);
-		if(player.isPresent()) {
+		if (player.isPresent()) {
 			this.objective.getOrCreateScore(player.get().getTeamRepresentation()).setScore(score.getValue(player.get()));
 		}
 	}

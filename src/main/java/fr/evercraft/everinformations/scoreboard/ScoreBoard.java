@@ -69,12 +69,12 @@ public class ScoreBoard<T extends EObjective> {
 		this.stop();
 
 		this.priority = PriorityService.DEFAULT;
-		if(this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
-			if(this.display.equals(DisplaySlots.BELOW_NAME)) {
+		if (this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
+			if (this.display.equals(DisplaySlots.BELOW_NAME)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getScoreBoard(this.display, BELOW_NAME_IDENTIFIER);
-			} else if(this.display.equals(DisplaySlots.LIST)) {
+			} else if (this.display.equals(DisplaySlots.LIST)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getScoreBoard(this.display, LIST_IDENTIFIER);
-			} else if(this.display.equals(DisplaySlots.SIDEBAR)) {
+			} else if (this.display.equals(DisplaySlots.SIDEBAR)) {
 				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getScoreBoard(this.display, SIDEBAR_IDENTIFIER);
 			}
 		}
@@ -93,10 +93,10 @@ public class ScoreBoard<T extends EObjective> {
 	}
 
 	public boolean start() {		
-		if(this.task == null) {
+		if (this.task == null) {
 			this.view();
 			
-			if(this.objectives.size() > 1) {
+			if (this.objectives.size() > 1) {
 				this.task();
 			}
 			return true;
@@ -107,7 +107,7 @@ public class ScoreBoard<T extends EObjective> {
 	public void stop() {		
 		this.stopUpdate();
 		
-		if(!this.objectives.isEmpty()) {
+		if (!this.objectives.isEmpty()) {
 			this.getObjective().stop();
 		}
 		
@@ -116,9 +116,9 @@ public class ScoreBoard<T extends EObjective> {
 			this.task = null;
 		}
 		
-		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			Optional<Objective> objective = player.getScoreboard().getObjective(getIgentifier());
-			if(objective.isPresent()) {
+			if (objective.isPresent()) {
 				player.getScoreboard().removeObjective(objective.get());
 			}
 		}
@@ -134,7 +134,7 @@ public class ScoreBoard<T extends EObjective> {
 	public void task() {		
 		T objective = this.getObjective();
 		
-		if(objective.getNext() == 0) {
+		if (objective.getNext() == 0) {
 			this.next();
 		} else {
 			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
@@ -150,7 +150,7 @@ public class ScoreBoard<T extends EObjective> {
 	}
 	
 	public void addPlayer(EPlayer player) {
-		if(this.enable) {
+		if (this.enable) {
 			T objective = this.getObjective();
 			this.plugin.getLogger().debug("ScoreBoard add (player='" + player.getIdentifier() + "';"
 														+ "type='" + this.display.getName() + "';"
@@ -161,7 +161,7 @@ public class ScoreBoard<T extends EObjective> {
 	}
 	
 	public void removePlayer(EPlayer player) {
-		if(this.enable) {
+		if (this.enable) {
 			T objective = this.getObjective();
 			this.plugin.getLogger().debug("ScoreBoard remove (player='" + player.getIdentifier() + "';"
 														+ "type='" + this.display.getName() + "';"
@@ -176,7 +176,7 @@ public class ScoreBoard<T extends EObjective> {
 		this.getObjective().stop();
 		
 		this.numero++;
-		if(this.numero >= this.objectives.size()){
+		if (this.numero >= this.objectives.size()){
 			this.numero = 0;
 		}
 		this.view();
@@ -184,18 +184,18 @@ public class ScoreBoard<T extends EObjective> {
 	}
 
 	protected void view() {
-		if(this.enable) {			
+		if (this.enable) {			
 			T objective = this.getObjective();
 			objective.start();
 			this.plugin.getLogger().debug("ScoreBoard (type='" + this.display.getName() + "';priority='" + this.priority + "';objective='" + objective + "')");
 			
-			for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				objective.add(this.priority, player);
 			}
 			
 			this.stopUpdate();
 			// Si l'Objective ne s'actualise pas tout seul
-			if(!objective.isUpdate()) {
+			if (!objective.isUpdate()) {
 				this.task_update = this.plugin.getGame().getScheduler().createTaskBuilder()
 						.execute(() -> {
 							this.plugin.getLogger().debug("ScoreBoard Update (type='" + this.display.getName() + "';priority='" + this.priority + "';objective='" + this.getObjective() + "')");
@@ -215,11 +215,11 @@ public class ScoreBoard<T extends EObjective> {
 	}
 	
 	public String getIgentifier() {
-		if(this.display.equals(DisplaySlots.BELOW_NAME)) {
+		if (this.display.equals(DisplaySlots.BELOW_NAME)) {
 			return BELOW_NAME_IDENTIFIER;
-		} else if(this.display.equals(DisplaySlots.LIST)) {
+		} else if (this.display.equals(DisplaySlots.LIST)) {
 			return LIST_IDENTIFIER;		
-		} else if(this.display.equals(DisplaySlots.SIDEBAR)) {
+		} else if (this.display.equals(DisplaySlots.SIDEBAR)) {
 			return SIDEBAR_IDENTIFIER;
 		}
 		return "";

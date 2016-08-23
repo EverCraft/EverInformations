@@ -54,7 +54,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 		this.messages_quit.clear();
 		this.messages_kick.clear();
 		
-		if(this.type.equals(Type.CHAT_OTHERS)) {
+		if (this.type.equals(Type.CHAT_OTHERS)) {
 			this.messages_join.putAll(this.config.getOthersJoinMessages());
 			this.messages_quit.putAll(this.config.getOthersQuitMessages());
 			this.messages_kick.putAll(this.config.getOthersKickMessages());
@@ -70,7 +70,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 	
 	@Override
 	public void stop() {
-		for(Player player : this.players.values()) {
+		for (Player player : this.players.values()) {
 			player.stop();
 		}
 		this.players.clear();
@@ -78,7 +78,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 	
 	@Override
 	public void joinPlayer(EPlayer player, Optional<Subject> subject) {
-		if(this.enable) {
+		if (this.enable) {
 			this.remove(player);
 			Player player_connection = new Player(this, player);
 			this.players.put(player.getUniqueId(), player_connection);
@@ -88,7 +88,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 
 	@Override
 	public void quitPlayer(EPlayer player, Optional<Subject> subject) {
-		if(this.enable) {
+		if (this.enable) {
 			this.remove(player);
 			Player player_connection = new Player(this, player);
 			this.players.put(player.getUniqueId(), player_connection);
@@ -98,7 +98,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 	
 	@Override
 	public void kickPlayer(EPlayer player, Optional<Subject> subject, Text reason) {
-		if(this.enable) {
+		if (this.enable) {
 			this.remove(player);
 			Player player_connection = new Player(this, player);
 			this.players.put(player.getUniqueId(), player_connection);
@@ -108,7 +108,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 	
 	private void remove(EPlayer player) {
 		Player titlePlayer = this.players.get(player.getUniqueId());
-		if(titlePlayer != null) {
+		if (titlePlayer != null) {
 			titlePlayer.stop();
 			this.players.remove(player.getUniqueId());
 		}
@@ -150,23 +150,23 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 		public void stop() {
 			this.remove();
 			
-			if(this.task != null) {
+			if (this.task != null) {
 				this.task.cancel();
 				this.task = null;
 			}
 		}
 		
 		public void next() {
-			if(!this.messages.isEmpty()) {
+			if (!this.messages.isEmpty()) {
 				this.numero++;
 				this.view();
 				
 				//Si il y a encore un message
-				if(this.numero < this.messages.size() - 1){
+				if (this.numero < this.messages.size() - 1){
 					this.task();
-				} else if(this.connection.type.equals(Type.BOSSBAR_PLAYER)) {
+				} else if (this.connection.type.equals(Type.BOSSBAR_PLAYER)) {
 					// Si il y a pas de délai
-					if(((BossBarMessage) this.getMessage()).getNext() <= 0) {
+					if (((BossBarMessage) this.getMessage()).getNext() <= 0) {
 						this.remove();
 					// Il y a un délai
 					} else {
@@ -184,11 +184,11 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 			T message = this.getMessage();
 			this.connection.plugin.getLogger().debug("Connection (type='" + this.connection.type.name() + "';priority='" + this.connection.priority + ";player='" + player.getIdentifier() + "',message='" + message + "')");
 			
-			if(this.reason == null) {
-				if(this.connection.type.equals(Type.CHAT_OTHERS)) {
+			if (this.reason == null) {
+				if (this.connection.type.equals(Type.CHAT_OTHERS)) {
 					// Affiche le message à tous les autres joueurs
-					for(EPlayer player : this.connection.plugin.getEServer().getOnlineEPlayers()) {
-						if(!this.player.equals(player)) {
+					for (EPlayer player : this.connection.plugin.getEServer().getOnlineEPlayers()) {
+						if (!this.player.equals(player)) {
 							message.send(IDENTIFIER_PLAYER, this.connection.priority, player, this.player);
 						}
 					}
@@ -197,10 +197,10 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 					message.send(IDENTIFIER_PLAYER, this.connection.priority, this.player);
 				}
 			} else {
-				if(this.connection.type.equals(Type.CHAT_OTHERS)) {
+				if (this.connection.type.equals(Type.CHAT_OTHERS)) {
 					// Affiche le message à tous les autres joueurs
-					for(EPlayer player : this.connection.plugin.getEServer().getOnlineEPlayers()) {
-						if(!this.player.equals(player)) {
+					for (EPlayer player : this.connection.plugin.getEServer().getOnlineEPlayers()) {
+						if (!this.player.equals(player)) {
 							message.send(IDENTIFIER_PLAYER, this.connection.priority, player, this.player, this.reason);
 						}
 					}
@@ -214,9 +214,9 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 		public void task() {
 			T message = this.getMessage();
 			
-			if(this.connection.plugin.equals(Type.BOSSBAR_PLAYER)) {
+			if (this.connection.plugin.equals(Type.BOSSBAR_PLAYER)) {
 				// Si il y a pas de délai
-				if(((BossBarMessage) message).getTimeNext() <= 0) {
+				if (((BossBarMessage) message).getTimeNext() <= 0) {
 					this.taskNext();
 				// Il y a un délai
 				} else {
@@ -224,7 +224,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 				}
 			} else {
 				// Si il y a pas de délai
-				if(message.getNext() <= 0) {
+				if (message.getNext() <= 0) {
 					this.next();
 				// Il y a un délai
 				} else {
@@ -247,7 +247,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 		 * Le temps avant la prochaine bossbar
 		 */
 		public void taskNextBossBar() {
-			if(this.getMessage() instanceof BossBarMessage) {
+			if (this.getMessage() instanceof BossBarMessage) {
 				BossBarMessage message = ((BossBarMessage) this.getMessage());
 				this.task = this.connection.plugin.getGame().getScheduler().createTaskBuilder()
 						.execute(() -> this.next())
@@ -262,12 +262,12 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 		 * Si il y a un délai en 2 bossbars, il faut supprimer la première au bout d'un certain temps
 		 */
 		public void taskRemoveBossBar() {
-			if(this.getMessage() instanceof BossBarMessage) {
+			if (this.getMessage() instanceof BossBarMessage) {
 				BossBarMessage message = ((BossBarMessage) this.getMessage());
 				this.task = this.connection.plugin.getGame().getScheduler().createTaskBuilder()
 						.execute(() -> {
 							this.remove();
-							if(this.numero < this.messages.size() - 1) {
+							if (this.numero < this.messages.size() - 1) {
 								this.taskNextBossBar();
 							}
 						})
@@ -283,7 +283,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 		}
 		
 		public void remove() {
-			if(this.messages != null && !this.messages.isEmpty() && this.getMessage() instanceof BossBarMessage) {
+			if (this.messages != null && !this.messages.isEmpty() && this.getMessage() instanceof BossBarMessage) {
 				BossBarMessage message = ((BossBarMessage) this.getMessage());
 				
 				this.connection.plugin.getLogger().debug("Connection : RemoveBossbar (type='" + this.connection.type.name() + "';priority='" + this.connection.priority + "';message='" + message + "')");

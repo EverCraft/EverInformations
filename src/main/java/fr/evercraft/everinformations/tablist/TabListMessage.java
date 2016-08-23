@@ -44,10 +44,10 @@ public class TabListMessage extends EObjective {
 		this.scores = Sets.newConcurrentHashSet();
 		this.update = true;
 		
-		for(TypeScores score : TypeScores.values()) {
-			if(this.header.contains("<" + score.name() + ">") || this.footer.contains("<" + score.name() + ">")) {
+		for (TypeScores score : TypeScores.values()) {
+			if (this.header.contains("<" + score.name() + ">") || this.footer.contains("<" + score.name() + ">")) {
 				this.scores.add(score);
-				if(!score.isUpdate()) {
+				if (!score.isUpdate()) {
 					this.update = false;
 				}
 			}
@@ -60,7 +60,7 @@ public class TabListMessage extends EObjective {
 
 	@Override
 	public boolean start() {		
-		for(TypeScores score : this.scores) {
+		for (TypeScores score : this.scores) {
 			score.addListener(this.plugin, this);
 		}
 		return false;
@@ -68,7 +68,7 @@ public class TabListMessage extends EObjective {
 
 	@Override
 	public boolean stop() {		
-		for(TypeScores score : this.scores) {
+		for (TypeScores score : this.scores) {
 			score.removeListener(this.plugin, this);
 		}
 		return true;
@@ -80,7 +80,7 @@ public class TabListMessage extends EObjective {
 	
 	@Override
 	public boolean add(int priority, EPlayer player) {
-		if(player.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
+		if (player.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
 			player.getTabList().setHeaderAndFooter(player.replaceVariable(this.header), player.replaceVariable(this.footer));
 		}
 		return true;
@@ -98,8 +98,8 @@ public class TabListMessage extends EObjective {
 	
 	@Override
 	public void update() {
-		for(EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-			if(player.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
+		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+			if (player.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
 				this.add(PriorityService.DEFAULT, player);
 			}
 		}
@@ -113,7 +113,7 @@ public class TabListMessage extends EObjective {
 	@Override
 	public void update(UUID uuid, TypeScores score) {
 		Optional<EPlayer> player = this.plugin.getEServer().getEPlayer(uuid);
-		if(player.isPresent() && player.get().sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
+		if (player.isPresent() && player.get().sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
 			this.add(PriorityService.DEFAULT, player.get());
 		}
 	}

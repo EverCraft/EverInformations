@@ -73,7 +73,7 @@ public class ManagerHealthMob {
 	}
 
 	public void reset() {
-		for(WorldHealthMob world : this.worlds.values()) {
+		for (WorldHealthMob world : this.worlds.values()) {
 			world.reset();
 		}
 		this.worlds.clear();
@@ -81,11 +81,11 @@ public class ManagerHealthMob {
 	
 	public boolean add(Entity entity, double health) {
 		// Si ce type d'entité n'est pas désactivé
-		if(!this.disable_entities.contains(entity.getType().getName().toUpperCase())) {
+		if (!this.disable_entities.contains(entity.getType().getName().toUpperCase())) {
 			WorldHealthMob world = this.worlds.get(entity.getWorld().getUniqueId());
-			if(world == null) {
+			if (world == null) {
 				// Si le monde n'est pas désactivé
-				if(!this.disable_worlds.contains(entity.getWorld().getName())) {
+				if (!this.disable_worlds.contains(entity.getWorld().getName())) {
 					world = new WorldHealthMob(this.plugin, entity.getWorld().getUniqueId());
 					this.worlds.put(entity.getWorld().getUniqueId(), world);
 				} else {
@@ -101,7 +101,7 @@ public class ManagerHealthMob {
 	public void update(Entity entity, double health) {
 		WorldHealthMob world = this.worlds.get(entity.getWorld().getUniqueId());
 		// Si le monde existe
-		if(world != null) {
+		if (world != null) {
 			world.update(entity, health);
 		}
 	}
@@ -109,7 +109,7 @@ public class ManagerHealthMob {
 	public void remove(Entity entity) {
 		WorldHealthMob world = this.worlds.get(entity.getWorld().getUniqueId());
 		// Si le monde existe
-		if(world != null) {
+		if (world != null) {
 			world.remove(entity);
 		}
 	}

@@ -38,13 +38,13 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 	protected void loadDefault() {
 		addDefault(Newbie.PLAYER + ".enable", true);
 		addDefault(Newbie.PLAYER + ".prefix", "");
-		if(this.get(Newbie.PLAYER + ".messages").isVirtual()) {
+		if (this.get(Newbie.PLAYER + ".messages").isVirtual()) {
 			addDefault(Newbie.PLAYER + ".message", "&4Welcome &a<DISPLAYNAME_FORMAT> &4to the server!");
 		}
 		
 		addDefault(Newbie.OTHERS + ".enable", true);
 		addDefault(Newbie.OTHERS + ".prefix", "");
-		if(this.get(Newbie.OTHERS + ".messages").isVirtual()) {
+		if (this.get(Newbie.OTHERS + ".messages").isVirtual()) {
 			addDefault(Newbie.OTHERS + ".message", "&a<DISPLAYNAME_FORMAT> &4is a new player.");
 		}
 	}
@@ -87,20 +87,20 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 		String prefix_player = this.get(prefix + ".prefix").getString(prefix_default);
 		
 		// Message unique
-		if(this.get(prefix + ".messages").isVirtual()) {
+		if (this.get(prefix + ".messages").isVirtual()) {
 			String message = this.plugin.getChat().replace(this.get(prefix + ".message").getString(""));
-			if(!message.isEmpty()) {
+			if (!message.isEmpty()) {
 				messages.add(new ChatMessage(interval_player, TextSerializers.FORMATTING_CODE, prefix_player, message));
 			}
 		// Liste de messages
 		} else {
-			for(ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
+			for (ConfigurationNode config : this.get(prefix + ".messages").getChildrenList()) {
 				// Message uniquement
-				if(config.getValue() instanceof String) {
+				if (config.getValue() instanceof String) {
 					String prefix_message = this.plugin.getChat().replace(prefix_player);
 					String message = this.plugin.getChat().replace(config.getString(""));
 					
-					if(!message.isEmpty()) {
+					if (!message.isEmpty()) {
 						messages.add(new ChatMessage(interval_player, TextSerializers.FORMATTING_CODE, prefix_message, message));
 					}
 				// Message avec config
@@ -111,13 +111,13 @@ public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
 					
 					String type_string = config.getNode("format").getString("");
 					TextSerializer type = TextSerializers.FORMATTING_CODE;
-					if(type_string.equalsIgnoreCase("JSON")) {
+					if (type_string.equalsIgnoreCase("JSON")) {
 						type = TextSerializers.JSON;
-					} else if(type_string.equalsIgnoreCase("TEXT_XML")) {
+					} else if (type_string.equalsIgnoreCase("TEXT_XML")) {
 						type = TextSerializers.TEXT_XML;
 					}
 					
-					if(!message.isEmpty()) {
+					if (!message.isEmpty()) {
 						messages.add(new ChatMessage(interval, type, prefix_message, message));
 					}
 				}
