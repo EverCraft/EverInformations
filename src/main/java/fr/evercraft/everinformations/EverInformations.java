@@ -98,17 +98,17 @@ public class EverInformations extends EPlugin {
 	
 	@Override
 	protected void onStopServer() {
-		this.healthmob.reset();
+		if (this.healthmob != null) this.healthmob.reset();
 	}
 	
 	@Override
 	protected void onDisable() {
-		this.automessages.stop();
-		this.connection.stop();
-		this.newbie.stop();
-		this.scoreboard.stop();
-		this.nametag.stop();
-		this.tablist.stop();
+		if (this.automessages != null) this.automessages.stop();
+		if (this.connection != null) this.connection.stop();
+		if (this.newbie != null) this.newbie.stop();
+		if (this.scoreboard != null) this.scoreboard.stop();
+		if (this.nametag != null) this.nametag.stop();
+		if (this.tablist != null) this.tablist.stop();
 	}
 
 	/*
