@@ -19,6 +19,7 @@ package fr.evercraft.everinformations;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
+import fr.evercraft.everapi.EverAPI;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everinformations.automessage.ManagerAutoMessage;
 import fr.evercraft.everinformations.command.sub.EIReload;
@@ -29,14 +30,14 @@ import fr.evercraft.everinformations.newbie.ManagerNewbie;
 import fr.evercraft.everinformations.scoreboard.ManagerScoreBoard;
 import fr.evercraft.everinformations.tablist.ManagerTabList;
 
-@Plugin(id = "fr.evercraft.everinformations", 
+@Plugin(id = "everinformations", 
 		name = "EverInformations", 
-		version = "1.2", 
+		version = EverAPI.VERSION, 
 		description = "Manage informations",
 		url = "http://evercraft.fr/",
 		authors = {"rexbut"},
 		dependencies = {
-		    @Dependency(id = "fr.evercraft.everapi", version = "1.2")
+		    @Dependency(id = "everapi", version = EverAPI.VERSION)
 		})
 public class EverInformations extends EPlugin {
 	private EIConfig configs;
