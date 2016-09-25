@@ -37,7 +37,8 @@ import fr.evercraft.everinformations.tablist.ManagerTabList;
 		url = "http://evercraft.fr/",
 		authors = {"rexbut"},
 		dependencies = {
-		    @Dependency(id = "everapi", version = EverAPI.VERSION)
+		    @Dependency(id = "everapi", version = EverAPI.VERSION),
+		    @Dependency(id = "spongeapi", version = EverAPI.SPONGEAPI_VERSION)
 		})
 public class EverInformations extends EPlugin {
 	private EIConfig configs;
