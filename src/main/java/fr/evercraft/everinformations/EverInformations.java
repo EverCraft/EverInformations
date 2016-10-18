@@ -40,7 +40,7 @@ import fr.evercraft.everinformations.tablist.ManagerTabList;
 		    @Dependency(id = "everapi", version = EverAPI.VERSION),
 		    @Dependency(id = "spongeapi", version = EverAPI.SPONGEAPI_VERSION)
 		})
-public class EverInformations extends EPlugin {
+public class EverInformations extends EPlugin<EverInformations> {
 	private EIConfig configs;
 	
 	private EIMessage messages;	

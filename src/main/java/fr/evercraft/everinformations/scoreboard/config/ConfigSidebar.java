@@ -39,7 +39,7 @@ import fr.evercraft.everinformations.scoreboard.sidebar.SidebarStatsObjective.Ty
 import fr.evercraft.everinformations.scoreboard.sidebar.SidebarTitle;
 import fr.evercraft.everinformations.scoreboard.sidebar.SidebarStatsObjective.TypeTimes;
 
-public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> {
+public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<SidebarObjective> {
 	public ConfigSidebar(final EverInformations plugin) {
 		super(plugin, "scoreboard/scoreboard_sidebar");
 	}
@@ -183,7 +183,7 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 						}
 						
 						if (!scores.isEmpty()) {
-							objectives.add(new SidebarNumbersObjective((EverInformations) this.plugin, stay, update, titles, scores));
+							objectives.add(new SidebarNumbersObjective(this.plugin, stay, update, titles, scores));
 						} else {
 							this.plugin.getLogger().warn("Error during the change of the scoreboard (type='NUMBERS') : Score Empty");
 						}
@@ -203,7 +203,7 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 						}
 						
 						if (!scores.isEmpty()) {
-							objectives.add(new SidebarInformationsObjective((EverInformations) this.plugin, stay, update, titles, scores));
+							objectives.add(new SidebarInformationsObjective(this.plugin, stay, update, titles, scores));
 						} else {
 							this.plugin.getLogger().warn("Error during the change of the scoreboard (type='INFORMATIONS') : Score Empty");
 						}
@@ -211,7 +211,7 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 					} else if (type.equals(Type.ECONOMY)) {
 						if (this.plugin.getEverAPI().getManagerService().getTopEconomy().isPresent()) {
 							String message = this.plugin.getChat().replace(config.getNode("message").getString("<player>"));
-							objectives.add(new SidebarEconomyObjective((EverInformations) this.plugin, stay, update, titles, message));
+							objectives.add(new SidebarEconomyObjective(this.plugin, stay, update, titles, message));
 						} else {
 							this.plugin.getLogger().warn("Error during the change of the scoreboard (type='ECONOMY') : There is no EverEconomy");
 						}
@@ -224,7 +224,7 @@ public class ConfigSidebar extends EConfig implements IConfig<SidebarObjective> 
 									TypeTimes time_type = TypeTimes.valueOf(config.getNode("time").getString("").toUpperCase());
 									String message = this.plugin.getChat().replace(config.getNode("message").getString("<player>"));
 									
-									objectives.add(new SidebarStatsObjective((EverInformations) this.plugin, stay, titles, message, top_type, time_type));
+									objectives.add(new SidebarStatsObjective(this.plugin, stay, titles, message, top_type, time_type));
 								} catch (IllegalArgumentException e) {
 									this.plugin.getLogger().warn("Error during the change of the scoreboard (type='STATS') : time='" + config.getNode("time").getString("") + "'");
 								}

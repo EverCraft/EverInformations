@@ -27,7 +27,7 @@ import fr.evercraft.everapi.java.UtilsList;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
 
-public class ConfigHealthMob extends EConfig {
+public class ConfigHealthMob extends EConfig<EverInformations> {
 	public ConfigHealthMob(final EverInformations plugin) {
 		super(plugin, "health_mob");
 	}

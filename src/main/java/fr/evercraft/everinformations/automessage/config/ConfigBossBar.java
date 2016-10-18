@@ -31,7 +31,7 @@ import fr.evercraft.everapi.sponge.UtilsBossBar;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.message.BossBarMessage;
 
-public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
+public class ConfigBossBar extends EConfig<EverInformations> implements IConfig<BossBarMessage> {
 
 	public ConfigBossBar(final EverInformations plugin) {
 		super(plugin, "automessage/automessage_bossbar");

@@ -28,7 +28,7 @@ import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.message.ChatMessage;
 
-public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
+public class ConfigChat extends EConfig<EverInformations> implements IConfig<ChatMessage> {
 
 	public ConfigChat(final EverInformations plugin) {
 		super(plugin, "automessage/automessage_chat");

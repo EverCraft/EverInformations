@@ -25,7 +25,7 @@ import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.message.ActionBarMessage;
 import fr.evercraft.everinformations.newbie.Newbie;
 
-public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage> {
+public class ConfigActionBar extends EConfig<EverInformations> implements IConfig<ActionBarMessage> {
 
 	public ConfigActionBar(final EverInformations plugin) {
 		super(plugin, "newbie/newbie_actionbar");

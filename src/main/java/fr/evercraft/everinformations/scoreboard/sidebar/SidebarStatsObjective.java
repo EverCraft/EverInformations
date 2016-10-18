@@ -53,7 +53,7 @@ public class SidebarStatsObjective extends SidebarObjective {
 		DAY;
     }
 
-	private final EPlugin plugin;
+	private final EPlugin<EverInformations> plugin;
 	private Objective objective;
 	private final String message;
 	

@@ -34,7 +34,7 @@ import fr.evercraft.everinformations.connection.Connection;
 import fr.evercraft.everinformations.connection.Connection.Connections;
 import fr.evercraft.everinformations.message.ChatMessage;
 
-public class ConfigChat extends EConfig implements IConfig<ChatMessage> {
+public class ConfigChat extends EConfig<EverInformations> implements IConfig<ChatMessage> {
 	public ConfigChat(final EverInformations plugin) {
 		super(plugin, "connection/connection_chat");
 	}

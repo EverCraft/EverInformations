@@ -30,7 +30,7 @@ import fr.evercraft.everinformations.connection.Connection;
 import fr.evercraft.everinformations.connection.Connection.Connections;
 import fr.evercraft.everinformations.message.TitleMessage;
 
-public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
+public class ConfigTitle extends EConfig<EverInformations> implements IConfig<TitleMessage> {
 
 	public ConfigTitle(final EverInformations plugin) {
 		super(plugin, "connection/connection_title");

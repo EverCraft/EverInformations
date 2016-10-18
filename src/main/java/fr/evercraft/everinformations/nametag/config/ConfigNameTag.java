@@ -19,7 +19,7 @@ package fr.evercraft.everinformations.nametag.config;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
 
-public class ConfigNameTag extends EConfig {
+public class ConfigNameTag extends EConfig<EverInformations> {
 	public ConfigNameTag(final EverInformations plugin) {
 		super(plugin, "nametag");
 	}

@@ -28,7 +28,7 @@ import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.file.EMessage;
 import fr.evercraft.everapi.plugin.file.EnumMessage;
 
-public class EIMessage extends EMessage {
+public class EIMessage extends EMessage<EverInformations> {
 
 	public EIMessage(final EverInformations plugin) {
 		super(plugin, EIMessages.values());

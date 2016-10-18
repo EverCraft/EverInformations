@@ -25,7 +25,7 @@ import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.message.TitleMessage;
 
-public class ConfigTitle extends EConfig implements IConfig<TitleMessage> {
+public class ConfigTitle extends EConfig<EverInformations> implements IConfig<TitleMessage> {
 
 	public ConfigTitle(final EverInformations plugin) {
 		super(plugin, "automessage/automessage_title");

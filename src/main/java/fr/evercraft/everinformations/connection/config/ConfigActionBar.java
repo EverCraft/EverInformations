@@ -30,7 +30,7 @@ import fr.evercraft.everinformations.connection.Connection;
 import fr.evercraft.everinformations.connection.Connection.Connections;
 import fr.evercraft.everinformations.message.ActionBarMessage;
 
-public class ConfigActionBar extends EConfig implements IConfig<ActionBarMessage> {
+public class ConfigActionBar extends EConfig<EverInformations> implements IConfig<ActionBarMessage> {
 
 	public ConfigActionBar(final EverInformations plugin) {
 		super(plugin, "connection/connection_actionbar");

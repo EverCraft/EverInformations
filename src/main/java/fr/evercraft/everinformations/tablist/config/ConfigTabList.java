@@ -24,7 +24,7 @@ import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.tablist.TabListMessage;
 
-public class ConfigTabList extends EConfig {
+public class ConfigTabList extends EConfig<EverInformations> {
 	public ConfigTabList(final EverInformations plugin) {
 		super(plugin, "tablist");
 	}
@@ -75,7 +75,7 @@ public class ConfigTabList extends EConfig {
 				String header = this.plugin.getChat().replace(config.getNode("header").getString(""));
 				String footer = this.plugin.getChat().replace(config.getNode("footer").getString(""));
 				
-				tablists.add(new TabListMessage((EverInformations) this.plugin, stay, update, header, footer));
+				tablists.add(new TabListMessage(this.plugin, stay, update, header, footer));
 			}
 		}
 		return tablists;

@@ -19,7 +19,7 @@ package fr.evercraft.everinformations;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everapi.plugin.file.EMessage;
 
-public class EIConfig extends EConfig {
+public class EIConfig extends EConfig<EverInformations> {
 
 	public EIConfig(final EverInformations plugin) {
 		super(plugin);

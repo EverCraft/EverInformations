@@ -39,7 +39,7 @@ import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
 public class SidebarEconomyObjective extends SidebarObjective {
 	private final static int TOP_COUNT = 16;
 
-	private final EPlugin plugin;
+	private final EPlugin<EverInformations> plugin;
 	private Objective objective;
 	private final String message;
 	

@@ -36,7 +36,7 @@ import fr.evercraft.everinformations.connection.Connection;
 import fr.evercraft.everinformations.connection.Connection.Connections;
 import fr.evercraft.everinformations.message.BossBarMessage;
 
-public class ConfigBossBar extends EConfig implements IConfig<BossBarMessage> {
+public class ConfigBossBar extends EConfig<EverInformations> implements IConfig<BossBarMessage> {
 
 	public ConfigBossBar(final EverInformations plugin) {
 		super(plugin, "connection/connection_bossbar");
