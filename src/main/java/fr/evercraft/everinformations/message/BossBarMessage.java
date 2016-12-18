@@ -99,7 +99,7 @@ public class BossBarMessage implements IMessage {
 			bossbar.get().setCreateFog(this.createFog);
 			return true;
 		} else {
-			return player.addBossBar(identifier, priority, ServerBossBar.builder()
+			return player.sendBossBar(identifier, priority, ServerBossBar.builder()
 					.name(text)
 					.percent(this.percent)
 					.color(this.color)
