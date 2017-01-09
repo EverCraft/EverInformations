@@ -22,9 +22,11 @@ import java.util.Optional;
 
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializer;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 import fr.evercraft.everapi.message.format.EFormatString;
 import fr.evercraft.everapi.message.replace.EReplace;
+import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.server.player.EPlayer;
 
 public class ChatMessage implements IMessage {
@@ -55,7 +57,11 @@ public class ChatMessage implements IMessage {
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player) {
-		player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(player.getReplacesPlayer()));
+		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
+			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(player.getReplacesPlayer()));
+		} else {
+			player.sendMessage(EChat.of(this.prefix.orElse("")).concat(this.format.deserialize(this.message)));
+		}
 		return true;
 	}
 	
@@ -65,13 +71,21 @@ public class ChatMessage implements IMessage {
 		replaces.putAll(player.getReplacesPlayer());
 		replaces.put("<reason>", EReplace.of(reason));
 		
-		player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(replaces));
+		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
+			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(replaces));
+		} else {
+			player.sendMessage(EChat.of(this.prefix.orElse("")).concat(this.format.deserialize(this.message)));
+		}
 		return true;
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace) {
-		player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(replace.getReplacesPlayer()));
+		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
+			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(replace.getReplacesPlayer()));
+		} else {
+			player.sendMessage(EChat.of(this.prefix.orElse("")).concat(this.format.deserialize(this.message)));
+		}
 		return true;
 	}
 	
@@ -81,7 +95,11 @@ public class ChatMessage implements IMessage {
 		replaces.putAll(replace.getReplacesPlayer());
 		replaces.put("<reason>", EReplace.of(reason));
 		
-		player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(replaces));
+		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
+			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(replaces));
+		} else {
+			player.sendMessage(EChat.of(this.prefix.orElse("")).concat(this.format.deserialize(this.message)));
+		}
 		return true;
 	}
 
