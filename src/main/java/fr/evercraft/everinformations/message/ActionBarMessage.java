@@ -16,9 +16,13 @@
  */
 package fr.evercraft.everinformations.message;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.spongepowered.api.text.Text;
 
-import fr.evercraft.everapi.plugin.EChat;
+import fr.evercraft.everapi.message.format.EFormatString;
+import fr.evercraft.everapi.message.replace.EReplace;
 import fr.evercraft.everapi.server.player.EPlayer;
 
 public class ActionBarMessage implements IMessage {
@@ -51,21 +55,29 @@ public class ActionBarMessage implements IMessage {
 
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player) {
-		return player.sendActionBar(identifier, priority, this.getStay(), player.replaceVariable(this.message));
+		return player.sendActionBar(identifier, priority, this.getStay(), EFormatString.of(this.message).toText(player.getReplacesPlayer()));
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, Text reason) {
-		return player.sendActionBar(identifier, priority, this.getStay(), player.replaceVariable(this.message.replaceAll("<reason>", EChat.serialize(reason))));
+		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		replaces.putAll(player.getReplacesPlayer());
+		replaces.put("<reason>", EReplace.of(reason));
+		
+		return player.sendActionBar(identifier, priority, this.getStay(), EFormatString.of(this.message).toText(replaces));
 	}
 
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace) {
-		return player.sendActionBar(identifier, priority, this.getStay(), replace.replaceVariable(this.message));
+		return player.sendActionBar(identifier, priority, this.getStay(), EFormatString.of(this.message).toText(replace.getReplacesPlayer()));
 	}
 
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason) {
-		return player.sendActionBar(identifier, priority, this.getStay(), replace.replaceVariable(this.message.replaceAll("<reason>", EChat.serialize(reason))));
+		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		replaces.putAll(replace.getReplacesPlayer());
+		replaces.put("<reason>", EReplace.of(reason));
+		
+		return player.sendActionBar(identifier, priority, this.getStay(), EFormatString.of(this.message).toText(replaces));
 	}
 }

@@ -33,6 +33,7 @@ import org.spongepowered.api.text.Text;
 
 import com.google.common.collect.Sets;
 
+import fr.evercraft.everapi.message.format.EFormatString;
 import fr.evercraft.everapi.scoreboard.TypeScores;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
@@ -71,7 +72,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 							.criterion(Criteria.DUMMY)
 							.build();
 		for (Entry<Integer, String> score : this.scores.entrySet()) {
-			objective.getOrCreateScore(player.replaceVariable(score.getValue())).setScore(score.getKey());
+			objective.getOrCreateScore(EFormatString.of(score.getValue()).toText(player.getReplacesPlayer())).setScore(score.getKey());
 		}
 		return player.addObjective(priority, DisplaySlots.SIDEBAR, objective);
 	}
@@ -114,7 +115,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 			if (objective.isPresent()) {
 				for (Entry<Text, Score> score : objective.get().getScores().entrySet()) {
 					if (line.contains(score.getValue().getScore())) {
-						Text text = player.replaceVariable(this.scores.get(score.getValue().getScore()));
+						Text text = EFormatString.of(this.scores.get(score.getValue().getScore())).toText(player.getReplacesPlayer());
 						if (!score.getKey().equals(text)) {
 							objective.get().getOrCreateScore(text).setScore(score.getValue().getScore());
 							objective.get().removeScore(score.getKey());
@@ -134,7 +135,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 				Set<Integer> line = this.type_scores.get(type);
 				for (Entry<Text, Score> score : objective.get().getScores().entrySet()) {
 					if (line.contains(score.getValue().getScore())) {
-						Text text = player.get().replaceVariable(this.scores.get(score.getValue().getScore()));
+						Text text = EFormatString.of(this.scores.get(score.getValue().getScore())).toText(player.get().getReplacesPlayer());
 						if (!score.getKey().equals(text)) {
 							objective.get().getOrCreateScore(text).setScore(score.getValue().getScore());
 							objective.get().removeScore(score.getKey());

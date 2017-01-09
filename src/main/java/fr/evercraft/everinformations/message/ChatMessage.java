@@ -16,13 +16,15 @@
  */
 package fr.evercraft.everinformations.message;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializer;
-import org.spongepowered.api.text.serializer.TextSerializers;
 
-import fr.evercraft.everapi.plugin.EChat;
+import fr.evercraft.everapi.message.format.EFormatString;
+import fr.evercraft.everapi.message.replace.EReplace;
 import fr.evercraft.everapi.server.player.EPlayer;
 
 public class ChatMessage implements IMessage {
@@ -53,65 +55,33 @@ public class ChatMessage implements IMessage {
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player) {
-		// Format normal
-		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
-			player.sendMessageVariables(this.prefix.orElse("") + this.message);
-		// Format différent
-		} else {
-			if (this.prefix.isPresent()) {
-				player.sendMessage(player.replaceVariable(this.prefix.get()).concat(this.format.deserialize(this.message)));
-			} else {
-				player.sendMessage(this.format.deserialize(this.message));
-			}
-		}
+		player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(player.getReplacesPlayer()));
 		return true;
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, Text reason) {
-		// Format normal
-		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
-			player.sendMessageVariables((this.prefix.orElse("") + this.message).replaceAll("<reason>", EChat.serialize(reason)));
-		// Format différent
-		} else {
-			if (this.prefix.isPresent()) {
-				player.sendMessage(player.replaceVariable(this.prefix.get()).concat(this.format.deserialize(this.message)));
-			} else {
-				player.sendMessage(this.format.deserialize(this.message));
-			}
-		}
+		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		replaces.putAll(player.getReplacesPlayer());
+		replaces.put("<reason>", EReplace.of(reason));
+		
+		player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(replaces));
 		return true;
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace) {
-		// Format normal
-		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
-			player.sendMessage(replace.replaceVariable(this.prefix.orElse("") + this.message));
-		// Format différent
-		} else {
-			if (this.prefix.isPresent()) {
-				player.sendMessage(replace.replaceVariable(this.prefix.get()).concat(this.format.deserialize(this.message)));
-			} else {
-				player.sendMessage(this.format.deserialize(this.message));
-			}
-		}
+		player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(replace.getReplacesPlayer()));
 		return true;
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason) {
-		// Format normal
-		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
-			player.sendMessage(replace.replaceVariable((this.prefix.orElse("") + this.message).replaceAll("<reason>", EChat.serialize(reason))));
-		// Format différent
-		} else {
-			if (this.prefix.isPresent()) {
-				player.sendMessage(replace.replaceVariable(this.prefix.get()).concat(this.format.deserialize(this.message)));
-			} else {
-				player.sendMessage(this.format.deserialize(this.message));
-			}
-		}
+		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		replaces.putAll(replace.getReplacesPlayer());
+		replaces.put("<reason>", EReplace.of(reason));
+		
+		player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(replaces));
 		return true;
 	}
 

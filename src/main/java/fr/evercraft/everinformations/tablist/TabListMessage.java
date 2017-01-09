@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import com.google.common.collect.Sets;
 
+import fr.evercraft.everapi.message.format.EFormatString;
 import fr.evercraft.everapi.scoreboard.TypeScores;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.PriorityService;
@@ -81,7 +82,9 @@ public class TabListMessage extends EObjective {
 	@Override
 	public boolean add(int priority, EPlayer player) {
 		if (player.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
-			player.getTabList().setHeaderAndFooter(player.replaceVariable(this.header), player.replaceVariable(this.footer));
+			player.getTabList().setHeaderAndFooter(
+					EFormatString.of(this.header).toText(player.getReplacesPlayer()),
+					EFormatString.of(this.footer).toText(player.getReplacesPlayer()));
 		}
 		return true;
 	}

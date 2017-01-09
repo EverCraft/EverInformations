@@ -16,6 +16,8 @@
  */
 package fr.evercraft.everinformations.message;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import org.spongepowered.api.boss.BossBarColor;
@@ -23,7 +25,8 @@ import org.spongepowered.api.boss.BossBarOverlay;
 import org.spongepowered.api.boss.ServerBossBar;
 import org.spongepowered.api.text.Text;
 
-import fr.evercraft.everapi.plugin.EChat;
+import fr.evercraft.everapi.message.format.EFormatString;
+import fr.evercraft.everapi.message.replace.EReplace;
 import fr.evercraft.everapi.server.player.EPlayer;
 
 public class BossBarMessage implements IMessage {
@@ -67,22 +70,30 @@ public class BossBarMessage implements IMessage {
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player) {
-		return this.sendText(identifier, priority, player, player.replaceVariable(this.name));
+		return player.sendActionBar(identifier, priority, EFormatString.of(this.name).toText(player.getReplacesPlayer()));
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, Text reason) {
-		return this.sendText(identifier, priority, player, player.replaceVariable(this.name.replaceAll("<reason>", EChat.serialize(reason))));
+		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		replaces.putAll(player.getReplacesPlayer());
+		replaces.put("<reason>", EReplace.of(reason));
+		
+		return this.sendText(identifier, priority, player, EFormatString.of(this.name).toText(replaces));
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace) {
-		return this.sendText(identifier, priority, player, replace.replaceVariable(this.name));
+		return this.sendText(identifier, priority, player, EFormatString.of(this.name).toText(replace.getReplacesPlayer()));
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason) {
-		return this.sendText(identifier, priority, player, replace.replaceVariable(this.name.replaceAll("<reason>", EChat.serialize(reason))));
+		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		replaces.putAll(replace.getReplacesPlayer());
+		replaces.put("<reason>", EReplace.of(reason));
+		
+		return this.sendText(identifier, priority, player, EFormatString.of(this.name).toText(replaces));
 	}
 	
 	private boolean sendText(String identifier, int priority, EPlayer player, Text text) {

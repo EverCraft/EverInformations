@@ -16,10 +16,14 @@
  */
 package fr.evercraft.everinformations.message;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.title.Title;
 
-import fr.evercraft.everapi.plugin.EChat;
+import fr.evercraft.everapi.message.format.EFormatString;
+import fr.evercraft.everapi.message.replace.EReplace;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.sponge.UtilsTick;
 
@@ -68,19 +72,23 @@ public class TitleMessage implements IMessage {
 				.stay(this.getStay())
 				.fadeIn(this.getFadeIn())
 				.fadeOut(this.getFadeOut())
-				.title(player.replaceVariable(this.title))
-				.subtitle(player.replaceVariable(this.subTitle))
+				.title(EFormatString.of(this.title).toText(player.getReplacesPlayer()))
+				.subtitle(EFormatString.of(this.subTitle).toText(player.getReplacesPlayer()))
 				.build());
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, Text reason) {
+		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		replaces.putAll(player.getReplacesPlayer());
+		replaces.put("<reason>", EReplace.of(reason));
+		
 		return player.sendTitle(identifier, priority, Title.builder()
 				.stay(this.getStay())
 				.fadeIn(this.getFadeIn())
 				.fadeOut(this.getFadeOut())
-				.title(player.replaceVariable(this.title.replaceAll("<reason>", EChat.serialize(reason))))
-				.subtitle(player.replaceVariable(this.subTitle.replaceAll("<reason>", EChat.serialize(reason))))
+				.title(EFormatString.of(this.title).toText(replaces))
+				.subtitle(EFormatString.of(this.subTitle).toText(replaces))
 				.build());
 	}
 	
@@ -90,19 +98,23 @@ public class TitleMessage implements IMessage {
 				.stay(this.getStay())
 				.fadeIn(this.getFadeIn())
 				.fadeOut(this.getFadeOut())
-				.title(replace.replaceVariable(this.title))
-				.subtitle(replace.replaceVariable(this.subTitle))
+				.title(EFormatString.of(this.title).toText(replace.getReplacesPlayer()))
+				.subtitle(EFormatString.of(this.subTitle).toText(replace.getReplacesPlayer()))
 				.build());
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason) {
+		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		replaces.putAll(replace.getReplacesPlayer());
+		replaces.put("<reason>", EReplace.of(reason));
+		
 		return player.sendTitle(identifier, priority, Title.builder()
 				.stay(this.getStay())
 				.fadeIn(this.getFadeIn())
 				.fadeOut(this.getFadeOut())
-				.title(replace.replaceVariable(this.title.replaceAll("<reason>", EChat.serialize(reason))))
-				.subtitle(replace.replaceVariable(this.subTitle.replaceAll("<reason>", EChat.serialize(reason))))
+				.title(EFormatString.of(this.title).toText(replaces))
+				.subtitle(EFormatString.of(this.subTitle).toText(replaces))
 				.build());
 	}
 
