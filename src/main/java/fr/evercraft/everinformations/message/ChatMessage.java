@@ -58,7 +58,7 @@ public class ChatMessage implements IMessage {
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player) {
 		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
-			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(player.getReplacesPlayer()));
+			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.message).toText(player.getReplacesPlayer()));
 		} else {
 			player.sendMessage(EChat.of(this.prefix.orElse("")).concat(this.format.deserialize(this.message)));
 		}
@@ -72,7 +72,7 @@ public class ChatMessage implements IMessage {
 		replaces.put("<reason>", EReplace.of(reason));
 		
 		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
-			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(replaces));
+			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.message).toText(replaces));
 		} else {
 			player.sendMessage(EChat.of(this.prefix.orElse("")).concat(this.format.deserialize(this.message)));
 		}
@@ -82,7 +82,7 @@ public class ChatMessage implements IMessage {
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace) {
 		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
-			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(replace.getReplacesPlayer()));
+			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.message).toText(replace.getReplacesPlayer()));
 		} else {
 			player.sendMessage(EChat.of(this.prefix.orElse("")).concat(this.format.deserialize(this.message)));
 		}
@@ -96,7 +96,7 @@ public class ChatMessage implements IMessage {
 		replaces.put("<reason>", EReplace.of(reason));
 		
 		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
-			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.format.deserialize(this.message)).toText(replaces));
+			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.message).toText(replaces));
 		} else {
 			player.sendMessage(EChat.of(this.prefix.orElse("")).concat(this.format.deserialize(this.message)));
 		}
