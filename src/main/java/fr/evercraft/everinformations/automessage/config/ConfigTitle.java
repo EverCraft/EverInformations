@@ -54,7 +54,7 @@ public class ConfigTitle extends EConfig<EverInformations> implements IConfig<Ti
 			message.put("subTitle", "&aSubTitle 3");
 			messages.add(message);
 			
-			this.get("messages").setValue(messages);
+			addDefault("messages", messages);
 		}
 	}
 	
