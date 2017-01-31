@@ -72,7 +72,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 							.criterion(Criteria.DUMMY)
 							.build();
 		for (Entry<Integer, String> score : this.scores.entrySet()) {
-			objective.getOrCreateScore(EFormatString.of(score.getValue()).toText(player.getReplacesPlayer())).setScore(score.getKey());
+			objective.getOrCreateScore(EFormatString.of(score.getValue()).toText(player.getReplacesAll())).setScore(score.getKey());
 		}
 		return player.addObjective(priority, DisplaySlots.SIDEBAR, objective);
 	}
