@@ -83,7 +83,7 @@ public class ManagerNameTag {
 			Text teamRepresentation = player.getTeamRepresentation();
 			
 			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-				if (!player.equals(other)) {
+				if (!player.getUniqueId().equals(other.getUniqueId())) {
 					other.sendNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
 				}
 				player.sendNameTag(IDENTIFIER, other.getTeamRepresentation(), EChat.of(other.getOption(this.prefix).orElse("")), EChat.of(other.getOption(this.suffix).orElse("")));
