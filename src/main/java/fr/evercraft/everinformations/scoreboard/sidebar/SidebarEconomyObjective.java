@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.scoreboard.critieria.Criteria;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
@@ -102,7 +103,7 @@ public class SidebarEconomyObjective extends SidebarObjective {
 	}
 
 	@Override
-	public void update(UUID uniqueId, TypeScores type) {
+	public void update(Player player_sponge, TypeScores type) {
 		this.update();
 	}
 

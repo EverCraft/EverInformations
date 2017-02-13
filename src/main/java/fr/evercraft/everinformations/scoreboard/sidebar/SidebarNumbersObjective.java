@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scoreboard.critieria.Criteria;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.api.scoreboard.objective.Objective;
@@ -110,15 +110,13 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	}
 
 	@Override
-	public void update(UUID uuid, TypeScores type) {
-		Optional<EPlayer> player = this.plugin.getEServer().getEPlayer(uuid);
-		if (player.isPresent()) {
-			Optional<Objective> objective = player.get().getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
-			if (objective.isPresent()) {
-				for (Entry<Text, TypeScores> score : this.scores.entrySet()) {
-					if (score.getValue().equals(type)) {
-						objective.get().getOrCreateScore(score.getKey()).setScore(type.getValue(player.get()));
-					}
+	public void update(Player player_sponge, TypeScores type) {
+		EPlayer player = this.plugin.getEServer().getEPlayer(player_sponge);
+		Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
+		if (objective.isPresent()) {
+			for (Entry<Text, TypeScores> score : this.scores.entrySet()) {
+				if (score.getValue().equals(type)) {
+					objective.get().getOrCreateScore(score.getKey()).setScore(type.getValue(player));
 				}
 			}
 		}

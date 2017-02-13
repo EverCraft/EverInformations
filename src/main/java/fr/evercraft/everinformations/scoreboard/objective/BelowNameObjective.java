@@ -16,9 +16,7 @@
  */
 package fr.evercraft.everinformations.scoreboard.objective;
 
-import java.util.Optional;
-import java.util.UUID;
-
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scoreboard.critieria.Criteria;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.api.scoreboard.objective.Objective;
@@ -82,11 +80,9 @@ public class BelowNameObjective extends EObjective {
 	}
 
 	@Override
-	public void update(UUID uuid, TypeScores score) {
-		Optional<EPlayer> player = this.plugin.getEServer().getEPlayer(uuid);
-		if (player.isPresent()) {
-			this.objective.getOrCreateScore(player.get().getTeamRepresentation()).setScore(score.getValue(player.get()));
-		}
+	public void update(Player player_sponge, TypeScores score) {
+		EPlayer player = this.plugin.getEServer().getEPlayer(player_sponge);
+		this.objective.getOrCreateScore(player.getTeamRepresentation()).setScore(score.getValue(player));
 	}
 
 	@Override

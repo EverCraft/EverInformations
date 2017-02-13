@@ -21,10 +21,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scoreboard.Score;
 import org.spongepowered.api.scoreboard.critieria.Criteria;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
@@ -127,19 +127,17 @@ public class SidebarInformationsObjective extends SidebarObjective {
 	}
 
 	@Override
-	public void update(UUID uuid, TypeScores type) {
-		Optional<EPlayer> player = this.plugin.getEServer().getEPlayer(uuid);
-		if (player.isPresent()) {
-			Optional<Objective> objective = player.get().getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
-			if (objective.isPresent()) {
-				Set<Integer> line = this.type_scores.get(type);
-				for (Entry<Text, Score> score : objective.get().getScores().entrySet()) {
-					if (line.contains(score.getValue().getScore())) {
-						Text text = EFormatString.of(this.scores.get(score.getValue().getScore())).toText(player.get().getReplacesPlayer());
-						if (!score.getKey().equals(text)) {
-							objective.get().getOrCreateScore(text).setScore(score.getValue().getScore());
-							objective.get().removeScore(score.getKey());
-						}
+	public void update(Player player_sponge, TypeScores type) {
+		EPlayer player = this.plugin.getEServer().getEPlayer(player_sponge);
+		Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
+		if (objective.isPresent()) {
+			Set<Integer> line = this.type_scores.get(type);
+			for (Entry<Text, Score> score : objective.get().getScores().entrySet()) {
+				if (line.contains(score.getValue().getScore())) {
+					Text text = EFormatString.of(this.scores.get(score.getValue().getScore())).toText(player.getReplacesPlayer());
+					if (!score.getKey().equals(text)) {
+						objective.get().getOrCreateScore(text).setScore(score.getValue().getScore());
+						objective.get().removeScore(score.getKey());
 					}
 				}
 			}

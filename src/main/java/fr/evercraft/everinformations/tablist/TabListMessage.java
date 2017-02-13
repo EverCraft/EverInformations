@@ -16,9 +16,8 @@
  */
 package fr.evercraft.everinformations.tablist;
 
-import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
+import org.spongepowered.api.entity.living.player.Player;
 
 import com.google.common.collect.Sets;
 
@@ -114,10 +113,10 @@ public class TabListMessage extends EObjective {
 	}
 
 	@Override
-	public void update(UUID uuid, TypeScores score) {
-		Optional<EPlayer> player = this.plugin.getEServer().getEPlayer(uuid);
-		if (player.isPresent() && player.get().sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
-			this.add(PriorityService.DEFAULT, player.get());
+	public void update(Player player_sponge, TypeScores score) {
+		EPlayer player = this.plugin.getEServer().getEPlayer(player_sponge);
+		if (player.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
+			this.add(PriorityService.DEFAULT, player);
 		}
 	}
 

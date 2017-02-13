@@ -16,8 +16,6 @@
  */
 package fr.evercraft.everinformations;
 
-import java.util.Optional;
-
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.living.humanoid.player.KickPlayerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
@@ -43,40 +41,35 @@ public class EIListener {
 	
 	@Listener
 	public void onPlayerJoin(final ClientConnectionEvent.Join event) {
-		Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
-		
-		// Chargement du EPlayer
-		if (optPlayer.isPresent()) {
-			EPlayer player = optPlayer.get();
+		EPlayer player = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
+
+		// Newbie
+		if (player.getFirstDatePlayed() == player.getLastDatePlayed()) {
+			this.plugin.getNewbie().addPlayer(player);
 			
-			// Newbie
-			if (player.getFirstDatePlayed() == player.getLastDatePlayed()) {
-				this.plugin.getNewbie().addPlayer(player);
-				
-				if (this.plugin.getConfigs().isNewbieAndConnection()) {
-					// Connection
-					this.plugin.getConnection().joinPlayer(player, player.getGroup());
-				}
-			} else {
+			if (this.plugin.getConfigs().isNewbieAndConnection()) {
 				// Connection
 				this.plugin.getConnection().joinPlayer(player, player.getGroup());
 			}
-			
-			// Supprime le message par défaut
-			if (this.plugin.getConnection().isEnableChat()) {
-				event.setMessageCancelled(true);
-			}
-			
-			// ScoreBoard
-			this.plugin.getScoreBoard().addPlayer(player);
-			
-			// NameTag
-			this.plugin.getNameTag().addPlayer(player);
-			
-			// TabList
-			this.plugin.getTabList().addPlayer(player);
+		} else {
+			// Connection
+			this.plugin.getConnection().joinPlayer(player, player.getGroup());
 		}
 		
+		// Supprime le message par défaut
+		if (this.plugin.getConnection().isEnableChat()) {
+			event.setMessageCancelled(true);
+		}
+		
+		// ScoreBoard
+		this.plugin.getScoreBoard().addPlayer(player);
+		
+		// NameTag
+		this.plugin.getNameTag().addPlayer(player);
+		
+		// TabList
+		this.plugin.getTabList().addPlayer(player);
+
 		// Active l'AutoMessage
 		if (this.plugin.getGame().getServer().getOnlinePlayers().size() == 1) {
 			this.plugin.getAutoMessages().start();
@@ -85,37 +78,32 @@ public class EIListener {
 	
 	@Listener
 	public void onPlayerQuit(final ClientConnectionEvent.Disconnect event) {		
-		Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
+		EPlayer player = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
 		
-		// Chargement du EPlayer
-		if (optPlayer.isPresent()) {
-			EPlayer player = optPlayer.get();
-			
-			// Newbie
-			if (player.getFirstDatePlayed() == player.getLastDatePlayed()) {
-				this.plugin.getNewbie().removePlayer(player);
-			}
-			
-			// Connection
-			this.plugin.getConnection().quitPlayer(player, player.getGroup());
-			
-			// Supprime le message par défaut
-			if (this.plugin.getConnection().isEnableChat()) {
-				event.setMessageCancelled(true);
-			}
-			
-			// AutoMessage
-			this.plugin.getAutoMessages().removePlayer(player);
-			
-			// ScoreBoard
-			this.plugin.getScoreBoard().removePlayer(player);
-			
-			// NameTag
-			this.plugin.getNameTag().removePlayer(player);
-			
-			// TabList
-			this.plugin.getTabList().removePlayer(player);
+		// Newbie
+		if (player.getFirstDatePlayed() == player.getLastDatePlayed()) {
+			this.plugin.getNewbie().removePlayer(player);
 		}
+		
+		// Connection
+		this.plugin.getConnection().quitPlayer(player, player.getGroup());
+		
+		// Supprime le message par défaut
+		if (this.plugin.getConnection().isEnableChat()) {
+			event.setMessageCancelled(true);
+		}
+		
+		// AutoMessage
+		this.plugin.getAutoMessages().removePlayer(player);
+		
+		// ScoreBoard
+		this.plugin.getScoreBoard().removePlayer(player);
+		
+		// NameTag
+		this.plugin.getNameTag().removePlayer(player);
+		
+		// TabList
+		this.plugin.getTabList().removePlayer(player);
 		
 		// Désactive l'AutoMessage
 		if (this.plugin.getGame().getServer().getOnlinePlayers().size() == 1) {
@@ -128,16 +116,12 @@ public class EIListener {
 	 */
 	@Listener
 	public void onPlayerKick(final KickPlayerEvent event) {
-		Optional<EPlayer> optPlayer = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
+		EPlayer player = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
 		
-		// Chargement du EPlayer
-		if (optPlayer.isPresent()) {
-			EPlayer player = optPlayer.get();
-			this.plugin.getConnection().kickPlayer(player, player.getGroup(), event.getMessage());
-			
-			if (this.plugin.getConnection().isEnableChat()) {
-				event.setMessageCancelled(true);
-			}
+		this.plugin.getConnection().kickPlayer(player, player.getGroup(), event.getMessage());
+		
+		if (this.plugin.getConnection().isEnableChat()) {
+			event.setMessageCancelled(true);
 		}
 	}
 	
