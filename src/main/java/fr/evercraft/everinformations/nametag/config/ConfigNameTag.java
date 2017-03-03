@@ -26,7 +26,7 @@ public class ConfigNameTag extends EConfig<EverInformations> {
 	
 	@Override
 	protected void loadDefault() {
-		addDefault("enable", true);
+		addDefault("enable", true, "Note that the value of the prefix or suffix must be less than 16 characters!");
 		addDefault("prefix", "prefix", "PermissionService : Option");
 		addDefault("suffix", "suffix", "PermissionService : Option");
 	}

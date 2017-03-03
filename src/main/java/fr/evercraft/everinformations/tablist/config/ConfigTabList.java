@@ -31,7 +31,7 @@ public class ConfigTabList extends EConfig<EverInformations> {
 	
 	@Override
 	protected void loadDefault() {
-		addDefault("enable", true);
+		addDefault("enable", true, "There is no character limit for prefix and suffix values ​​in the TabList as opposed to NameTag");
 		addDefault("update", 20);
 		addDefault("header", "&4Header[RT]&aSubHeader");
 		addDefault("footer", "&4Footer[RT]&aSubFooter");
