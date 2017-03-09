@@ -17,8 +17,13 @@
 package fr.evercraft.everinformations.tablist;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
+import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.entity.living.player.tab.TabListEntry;
+import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.text.Text;
 
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.server.player.EPlayer;
@@ -31,6 +36,9 @@ public class DisplayNameTabList {
 	private boolean enable;
 	
 	private final ConfigTabList config;
+	
+	private long update;
+	private Task task;
 
 	private String prefix;
 	private String suffix;
@@ -41,18 +49,17 @@ public class DisplayNameTabList {
 		
 		this.enable = false;
 		
-		reload();
+		this.reload();
 	}
 
 	public void reload() {
-		if (this.enable) {
-			stop();
-		}
+		this.stop();
 		
 		this.enable = this.config.isEnable();
 		
-		this.prefix = this.config.getPrefix(); 
-		this.suffix = this.config.getSuffix();
+		this.prefix = this.config.getDisplayNamePrefix(); 
+		this.suffix = this.config.getDisplayNameSuffix();
+		this.update = this.config.getDisplayNameUpdate();
 		
 		if (this.prefix.isEmpty() && this.suffix.isEmpty() && this.enable) {
 			this.plugin.getLogger().warn("TabList DisplayName : There is empty");
@@ -61,32 +68,52 @@ public class DisplayNameTabList {
 			this.start();
 		}
 	}
-
+	
 	public void start() {
-		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-			String prefix = this.plugin.getChat().replace(player.getOption(this.prefix).orElse(""));
-			String suffix = this.plugin.getChat().replace(player.getOption(this.suffix).orElse(""));
-			
-			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-				Optional<TabListEntry> entry = other.getTabList().getEntry(player.getUniqueId());
-				if (entry.isPresent() && other.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
-					entry.get().setDisplayName(EChat.of(prefix + player.getName() + suffix));
-				}
-			}
+		if (this.enable) {
+			this.sendAll();
+			this.startScheduler();
+		}
+	}
+	
+	public void stop() {
+		if (this.enable) {
+			this.stopScheduler();
+			this.clearAll();
+		}
+	}
+	
+	public void startScheduler() {
+		this.stopScheduler();
+		
+		if (this.enable && this.update > 0) {
+			this.plugin.getGame().getScheduler().createTaskBuilder()
+				.execute(() -> {
+					this.sendAll();
+				})
+				.delay(this.update, TimeUnit.SECONDS)
+				.name("TabList : DisplayName")
+				.submit(this.plugin);
+		}
+	}
+	
+	public void stopScheduler() {
+		if (this.task != null) {
+			this.task.cancel();
+			this.task = null;
 		}
 	}
 
-	public void stop() {
+	public void sendAll() {
+		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+			this.sendAll(player);
+		}
+	}
+
+	public void clearAll() {
 		if (this.enable) {
 			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				if (player.hasTabList(ManagerTabList.IDENTIFIER)) {
-					for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-						Optional<TabListEntry> entry = player.getTabList().getEntry(other.getUniqueId());
-						if (entry.isPresent()) {
-							entry.get().setDisplayName(null);
-						}
-					}
-				}
+				this.clearPlayer(player);
 			}
 		}
 	}
@@ -95,15 +122,43 @@ public class DisplayNameTabList {
 	 * Ajoute le displayname de tous les joueurs à un joueur
 	 * @param player
 	 */
-	public void addPlayer(EPlayer player) {
-		if (this.enable && player.hasTabList(ManagerTabList.IDENTIFIER)) {
+	public void sendTo(EPlayer player) {
+		if (this.enable && player.sendTabList(ManagerTabList.IDENTIFIER)) {
 			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 				// TabList du joueur
-				Optional<TabListEntry> entry_player = player.getTabList().getEntry(other.getUniqueId());
-				if (entry_player.isPresent()) {
-					String prefix_other = this.plugin.getChat().replace(other.getOption(this.prefix).orElse(""));
-					String suffix_other = this.plugin.getChat().replace(other.getOption(this.suffix).orElse(""));
-					entry_player.get().setDisplayName(EChat.of(prefix_other + other.getName() + suffix_other));
+				Optional<TabListEntry> optEntry = player.getTabList().getEntry(other.getUniqueId());
+				String prefix_other = this.plugin.getChat().replace(other.getOption(this.prefix).orElse(""));
+				String suffix_other = this.plugin.getChat().replace(other.getOption(this.suffix).orElse(""));
+				Text displayName = EChat.of(prefix_other + other.getName() + suffix_other);
+				
+				if (!other.isVanish() || player.equals(other)) {
+					if (optEntry.isPresent()) {
+						optEntry.get()
+							.setDisplayName(displayName)
+							.setGameMode(other.getGameMode());
+					} else {
+						player.getTabList().addEntry(TabListEntry.builder()
+							.profile(other.getProfile())
+							.gameMode(other.getGameMode())
+							.list(player.getTabList())
+							.displayName(displayName)
+							.build());
+					}
+				} else if (player.canSeePlayer(other)) {
+					if (optEntry.isPresent()) {
+						optEntry.get()
+							.setGameMode(GameModes.SPECTATOR)
+							.setDisplayName(displayName);
+					} else {
+						player.getTabList().addEntry(TabListEntry.builder()
+							.profile(other.getProfile())
+							.gameMode(GameModes.SPECTATOR)
+							.list(player.getTabList())
+							.displayName(displayName)
+							.build());
+					}
+				} else {
+					player.getTabList().removeEntry(other.getUniqueId());
 				}
 			}
 		}
@@ -113,19 +168,72 @@ public class DisplayNameTabList {
 	 * Ajoute le displayname d'un joueur à tous les autres
 	 * @param player
 	 */
-	public void addOther(EPlayer player) {
+	public void sendAll(EPlayer player) {
 		if (this.enable) {
 			String prefix_player = this.plugin.getChat().replace(player.getOption(this.prefix).orElse(""));
 			String suffix_player = this.plugin.getChat().replace(player.getOption(this.suffix).orElse(""));
+			Text displayName = EChat.of(prefix_player + player.getName() + suffix_player);
 			
-			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-				// TabList des autres joueurs
-				if (other.hasTabList(ManagerTabList.IDENTIFIER)) {
-					Optional<TabListEntry> entry_other = other.getTabList().getEntry(player.getUniqueId());
-					if (entry_other.isPresent()) {
-						entry_other.get().setDisplayName(EChat.of(prefix_player + player.getName() + suffix_player));
+			boolean vanish = player.isVanish();
+			Stream<EPlayer> players = this.plugin.getEServer().getOnlineEPlayers().stream()
+				.filter(other -> other.hasTabList(ManagerTabList.IDENTIFIER));
+			
+			// Le joueur n'est pas en vanish
+			if (!vanish) {
+				players.forEach(other -> {
+					Optional<TabListEntry> optEntry = other.getTabList().getEntry(player.getUniqueId());
+					
+					if (optEntry.isPresent()) {
+						optEntry.get()
+							.setDisplayName(displayName)
+							.setGameMode(player.getGameMode());
+					} else {
+						other.getTabList().addEntry(TabListEntry.builder()
+							.profile(player.getProfile())
+							.gameMode(player.getGameMode())
+							.list(other.getTabList())
+							.displayName(displayName)
+							.build());
 					}
-				}
+				});
+				
+			// Le joueur est en vanish
+			} else {
+				players.filter(other -> !other.equals(player))
+					.forEach(other -> {
+						if (other.canSeePlayer(player)) {
+							Optional<TabListEntry> optEntry = other.getTabList().getEntry(player.getUniqueId());
+							if (optEntry.isPresent()) {
+								optEntry.get()
+									.setGameMode(GameModes.SPECTATOR)
+									.setDisplayName(displayName);
+							} else {
+								other.getTabList().addEntry(TabListEntry.builder()
+									.profile(player.getProfile())
+									.gameMode(GameModes.SPECTATOR)
+									.list(other.getTabList())
+									.displayName(displayName)
+									.build());
+							}
+						} else {
+							other.getTabList().removeEntry(player.getUniqueId());
+						}
+					});
+			}
+			
+			// Le joueur
+			Optional<TabListEntry> optEntry = player.getTabList().getEntry(player.getUniqueId());
+			if (optEntry.isPresent()) {
+				optEntry.get()
+					.setDisplayName(displayName)
+					.setGameMode(player.getGameMode());
+			} else {
+				player.getTabList().addEntry(TabListEntry.builder()
+					.profile(player.getProfile())
+					.gameMode(player.getGameMode())
+					.list(player.getTabList())
+					.displayName(displayName)
+					.build());
 			}
 		}
 	}
@@ -133,15 +241,8 @@ public class DisplayNameTabList {
 	/**
 	 * Supprime tous les displaynames d'un joueur
 	 * @param player
-	 */
-	public void removePlayer(EPlayer player) {
-		if (this.enable && player.hasTabList(ManagerTabList.IDENTIFIER)) {
-			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-				Optional<TabListEntry> entry = player.getTabList().getEntry(other.getUniqueId());
-				if (entry.isPresent()) {
-					entry.get().setDisplayName(null);
-				}
-			}
-		}
+	 */	
+	public void clearPlayer(EPlayer player) {
+		player.removeTabList(ManagerTabList.IDENTIFIER); 
 	}
 }

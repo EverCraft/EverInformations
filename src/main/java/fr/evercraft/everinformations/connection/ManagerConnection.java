@@ -125,6 +125,26 @@ public class ManagerConnection {
 		this.actionbarOthers.quitPlayer(player, subject);
 	}
 	
+	public void joinPlayerFake(EPlayer player, Optional<Subject> subject) {
+		this.chatOthers.joinPlayer(player, subject);
+		
+		this.titleOthers.joinPlayer(player, subject);
+		
+		this.bossbarOthers.joinPlayer(player, subject);
+		
+		this.actionbarOthers.joinPlayer(player, subject);
+	}
+	
+	public void quitPlayerFake(EPlayer player, Optional<Subject> subject) {
+		this.chatOthers.quitPlayer(player, subject);
+		
+		this.titleOthers.quitPlayer(player, subject);
+		
+		this.bossbarOthers.quitPlayer(player, subject);
+		
+		this.actionbarOthers.quitPlayer(player, subject);
+	}
+	
 	public void kickPlayer(EPlayer player, Optional<Subject> subject, Text reason) {
 		this.chatPlayer.kickPlayer(player, subject, reason);
 		this.chatOthers.kickPlayer(player, subject, reason);

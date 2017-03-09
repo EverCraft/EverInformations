@@ -16,6 +16,9 @@
  */
 package fr.evercraft.everinformations.nametag;
 
+import java.util.concurrent.TimeUnit;
+
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 
 import fr.evercraft.everapi.plugin.EChat;
@@ -31,6 +34,9 @@ public class ManagerNameTag {
 	private final ConfigNameTag config;
 
 	private boolean enable;
+	
+	private long update;
+	private Task task;
 	
 	private String prefix;
 	private String suffix;
@@ -50,29 +56,62 @@ public class ManagerNameTag {
 		this.enable = this.config.isEnable();
 		this.prefix = this.config.getPrefix(); 
 		this.suffix = this.config.getSuffix();
+		this.update = this.config.getUpdate();
 		
 		this.start();
 	}
 
 	public void start() {
 		if (this.enable) {
-			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				Text prefix = EChat.of(player.getOption(this.prefix).orElse(""));
-				Text suffix = EChat.of(player.getOption(this.suffix).orElse(""));
-				Text teamRepresentation = player.getTeamRepresentation();
-				
-				for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-					other.sendNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
-				}
-			}
+			this.sendAll();
+			this.startScheduler();
 		}
 	}
 
 	public void stop() {
 		if (this.enable) {
-			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				player.clearNameTag(IDENTIFIER);
+			this.stopScheduler();
+			this.clearAll();
+		}
+	}
+	
+	public void startScheduler() {
+		this.stopScheduler();
+		
+		if (this.enable && this.update > 0) {
+			this.plugin.getGame().getScheduler().createTaskBuilder()
+				.execute(() -> {
+					this.clearAll();
+					this.sendAll();
+				})
+				.delay(this.update, TimeUnit.SECONDS)
+				.name("NameTag")
+				.submit(this.plugin);
+		}
+	}
+	
+	public void stopScheduler() {
+		if (this.task != null) {
+			this.task.cancel();
+			this.task = null;
+		}
+	}
+	
+	public void sendAll() {
+		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+			Text prefix = EChat.of(player.getOption(this.prefix).orElse(""));
+			Text suffix = EChat.of(player.getOption(this.suffix).orElse(""));
+			Text teamRepresentation = player.getTeamRepresentation();
+			
+			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
+				other.sendNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
 			}
+		}
+	}
+	
+	public void clearAll() {
+		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+			player.clearNameTag(IDENTIFIER);
 		}
 	}
 	

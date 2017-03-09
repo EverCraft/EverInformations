@@ -16,8 +16,12 @@
  */
 package fr.evercraft.everinformations;
 
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.entity.MoveEntityEvent;
+import org.spongepowered.api.event.entity.living.humanoid.ChangeGameModeEvent;
 import org.spongepowered.api.event.entity.living.humanoid.player.KickPlayerEvent;
+import org.spongepowered.api.event.entity.living.humanoid.player.RespawnPlayerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 
 import fr.evercraft.everapi.event.ActionBarEvent;
@@ -51,7 +55,7 @@ public class EIListener {
 				// Connection
 				this.plugin.getConnection().joinPlayer(player, player.getGroup());
 			}
-		} else {
+		} else if (!player.isVanish()) {
 			// Connection
 			this.plugin.getConnection().joinPlayer(player, player.getGroup());
 		}
@@ -73,6 +77,8 @@ public class EIListener {
 		// Active l'AutoMessage
 		if (this.plugin.getGame().getServer().getOnlinePlayers().size() == 1) {
 			this.plugin.getAutoMessages().start();
+			this.plugin.getNameTag().startScheduler();
+			this.plugin.getTabList().getDisplayName().startScheduler();
 		}
 	}
 	
@@ -108,6 +114,8 @@ public class EIListener {
 		// Désactive l'AutoMessage
 		if (this.plugin.getGame().getServer().getOnlinePlayers().size() == 1) {
 			this.plugin.getAutoMessages().stop();
+			this.plugin.getNameTag().stopScheduler();
+			this.plugin.getTabList().getDisplayName().stopScheduler();
 		}
 	}
 	
@@ -123,18 +131,62 @@ public class EIListener {
 		if (this.plugin.getConnection().isEnableChat()) {
 			event.setMessageCancelled(true);
 		}
+	}	
+	
+	@Listener
+	public void onMoveEntity(MoveEntityEvent.Teleport event) {
+		if (!(event.getTargetEntity() instanceof Player)) return;
+		if (event.getFromTransform().getExtent().equals(event.getToTransform().getExtent())) return;
+		
+		final EPlayer player = this.plugin.getEServer().getEPlayer((Player) event.getTargetEntity());
+		
+		this.plugin.getGame().getScheduler().createTaskBuilder().execute(() -> {
+			// NameTag
+			this.plugin.getNameTag().updatePermission(player);
+			
+			// TabList
+			this.plugin.getTabList().updatePlayer(player);
+		}).submit(this.plugin);
+	}
+	
+	@Listener
+	public void onRespawnPlayer(RespawnPlayerEvent event) {
+		EPlayer player = this.plugin.getEServer().getEPlayer(event.getTargetEntity());
+		
+		if (player.isVanish()) {
+			// TabList : Permet de le remettre en Spectator
+			this.plugin.getTabList().updatePlayer(player);
+		}
+	}
+	
+	@Listener
+	public void onChangeGameMode(ChangeGameModeEvent.TargetPlayer event) {
+		if (!(event.getTargetEntity() instanceof Player)) return;		
+		EPlayer player = this.plugin.getEServer().getEPlayer((Player) event.getTargetEntity());
+		
+		if (player.isVanish()) {
+			this.plugin.getGame().getScheduler().createTaskBuilder().execute(() -> {
+				// TabList : Permet de le remettre en Spectator
+				this.plugin.getTabList().updatePlayer(player);
+			}).submit(this.plugin);
+		}
 	}
 	
 	@Listener
     public void vanishEvent(VanishEvent event) {
+		if (event.getPlayer().isDisconnected()) return;
+		
 		if (this.plugin.getConfigs().isVanishFake()) {
 			if (event.getValue()) {
-				this.plugin.getConnection().quitPlayer(event.getPlayer(), event.getPlayer().getGroup());
+				this.plugin.getConnection().quitPlayerFake(event.getPlayer(), event.getPlayer().getGroup());
 			} else {
-				this.plugin.getConnection().joinPlayer(event.getPlayer(), event.getPlayer().getGroup());
-				this.plugin.getTabList().updatePlayer(event.getPlayer());
+				this.plugin.getConnection().joinPlayerFake(event.getPlayer(), event.getPlayer().getGroup());
 			}
 		}
+		
+		this.plugin.getGame().getScheduler().createTaskBuilder().execute(() -> {
+			this.plugin.getTabList().updatePlayer(event.getPlayer());
+		}).submit(this.plugin);
 	}
 	
 	@Listener
@@ -142,36 +194,43 @@ public class EIListener {
 		if (event.getPlayer().isPresent() && (event.getAction().equals(PermUserEvent.Action.USER_OPTION_CHANGED) ||
 			event.getAction().equals(PermUserEvent.Action.USER_GROUP_CHANGED) ||
 			event.getAction().equals(PermUserEvent.Action.USER_SUBGROUP_CHANGED))) {
-			// NameTag
-			this.plugin.getNameTag().updatePermission(event.getPlayer().get());
 			
-			// TabList
-			this.plugin.getTabList().updatePlayer(event.getPlayer().get());
+			this.plugin.getGame().getScheduler().createTaskBuilder().execute(() -> {
+				// NameTag
+				this.plugin.getNameTag().updatePermission(event.getPlayer().get());
+				
+				// TabList
+				this.plugin.getTabList().updatePlayer(event.getPlayer().get());
+			}).submit(this.plugin);
 		}
 	}
 	
 	@Listener
     public void permGroupEvent(PermGroupEvent event) {
-		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-			if (player.isChildOf(event.getSubject())) {
+		this.plugin.getGame().getScheduler().createTaskBuilder().execute(() -> {
+			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
+				if (player.isChildOf(event.getSubject())) {
+					// NameTag
+					this.plugin.getNameTag().updatePermission(player);
+					
+					// TabList
+					this.plugin.getTabList().updatePlayer(player);
+				}
+			}
+		}).submit(this.plugin);
+	}
+	
+	@Listener
+    public void permSystemEvent(PermSystemEvent event) {
+		this.plugin.getGame().getScheduler().createTaskBuilder().execute(() -> {
+			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				// NameTag
 				this.plugin.getNameTag().updatePermission(player);
 				
 				// TabList
 				this.plugin.getTabList().updatePlayer(player);
 			}
-		}
-	}
-	
-	@Listener
-    public void permSystemEvent(PermSystemEvent event) {
-		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-			// NameTag
-			this.plugin.getNameTag().updatePermission(player);
-			
-			// TabList
-			this.plugin.getTabList().updatePlayer(player);
-		}
+		}).submit(this.plugin);
 	}
 	
 	@Listener

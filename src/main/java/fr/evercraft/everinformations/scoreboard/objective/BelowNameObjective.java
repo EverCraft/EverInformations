@@ -63,7 +63,7 @@ public class BelowNameObjective extends EObjective {
 
 	@Override
 	public boolean stop() {
-		this.type.removeListener(this.plugin, this);
+		this.type.removeListener(this);
 		return true;
 	}
 	
@@ -78,7 +78,7 @@ public class BelowNameObjective extends EObjective {
 			this.objective.getOrCreateScore(player.getTeamRepresentation()).setScore(score.getValue(player));
 		}
 	}
-
+	
 	@Override
 	public void update(Player player_sponge, TypeScores score) {
 		EPlayer player = this.plugin.getEServer().getEPlayer(player_sponge);

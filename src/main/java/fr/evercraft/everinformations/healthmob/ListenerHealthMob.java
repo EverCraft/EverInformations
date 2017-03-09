@@ -30,6 +30,7 @@ import org.spongepowered.api.event.cause.entity.health.source.EntityHealingSourc
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.entity.DestructEntityEvent;
 import org.spongepowered.api.event.entity.HealEntityEvent;
+import org.spongepowered.api.event.entity.MoveEntityEvent;
 
 import fr.evercraft.everinformations.EverInformations;
 
@@ -80,6 +81,15 @@ public class ListenerHealthMob {
 					}
 				}
 			}
+		}
+	}
+	
+	@Listener(order=Order.PRE)
+	public void onMoveEntity(MoveEntityEvent.Teleport event) {
+		if (event.getTargetEntity() instanceof Creature &&
+				!event.getFromTransform().getExtent().equals(event.getToTransform().getExtent()) &&
+				this.plugin.getHealthMob().isEnable()) {
+			this.plugin.getHealthMob().remove(event.getTargetEntity());
 		}
 	}
 	

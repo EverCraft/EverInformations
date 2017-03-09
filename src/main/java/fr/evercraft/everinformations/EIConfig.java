@@ -53,6 +53,6 @@ public class EIConfig extends EConfig<EverInformations> {
 	 * @return True si on affiche les messages
 	 */
 	public boolean isVanishFake() {
-		return this.get("vanish-connection-fake").getBoolean(false);
+		return this.get("vanish-connection-fake").getBoolean(true);
 	}
 }

@@ -68,23 +68,24 @@ public class ManagerTabList {
 	}
 	
 	public void addPlayer(EPlayer player) {
-		this.displayname.addPlayer(player);
-		this.displayname.addOther(player);
+		this.displayname.sendTo(player);
+		this.displayname.sendAll(player);
 		this.header_footer.addPlayer(player);
 	}
 	
 	public void removePlayer(EPlayer player) {
-		this.displayname.removePlayer(player);
+		this.displayname.clearPlayer(player);
 		this.header_footer.removePlayer(player);
 	}
 
 	public void updatePlayer(EPlayer player) {
-		this.displayname.addOther(player);
+		this.displayname.sendTo(player);
+		this.displayname.sendAll(player);
 	}
 
 	public void event(TabListEvent event) {
 		if (!event.getIdentifier().equalsIgnoreCase(IDENTIFIER)) {
-			this.displayname.addPlayer(event.getPlayer());
+			this.displayname.sendTo(event.getPlayer());
 			this.header_footer.addPlayer(event.getPlayer());
 		}
 	}
@@ -94,7 +95,11 @@ public class ManagerTabList {
 	}
 
 	public void eventTabList(EPlayer player, String before_identifier) {
-		this.displayname.addPlayer(player);
+		this.displayname.sendTo(player);
 		this.header_footer.addPlayer(player);
+	}
+
+	public DisplayNameTabList getDisplayName() {
+		return this.displayname;
 	}
 }

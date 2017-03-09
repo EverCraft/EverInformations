@@ -142,7 +142,6 @@ public class ScoreBoard<T extends EObjective> {
 								this.plugin.getLogger().debug("ScoreBoard Task (type='" + this.display.getName() + "';priority='" + this.priority + "')");
 								this.next();
 							})
-							.async()
 							.delay(objective.getNext(), TimeUnit.MILLISECONDS)
 							.name("ScoreBoard (type='" + this.display.getName() + "')")
 							.submit(this.plugin);
@@ -201,7 +200,6 @@ public class ScoreBoard<T extends EObjective> {
 							this.plugin.getLogger().debug("ScoreBoard Update (type='" + this.display.getName() + "';priority='" + this.priority + "';objective='" + this.getObjective() + "')");
 							this.getObjective().update();
 						})
-						.async()
 						.delay(objective.getUpdate(), TimeUnit.MILLISECONDS)
 						.interval(objective.getUpdate(), TimeUnit.MILLISECONDS)
 						.name("ScoreBoard Update (type='" + this.display.getName() + "')")

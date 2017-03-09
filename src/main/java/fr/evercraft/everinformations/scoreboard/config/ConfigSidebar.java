@@ -59,7 +59,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 			message.put("type", Type.NUMBERS.name());
 			
 			HashMap<String, String> scores = new HashMap<String, String>();
-			scores.put("&aOnline :", TypeScores.ONLINE_PLAYERS.name());
+			scores.put("&aOnline :", TypeScores.ONLINE_PLAYERS_CANSEE.name());
 			scores.put("&aBalance :", TypeScores.BALANCE.name());
 			scores.put("&aPing :", TypeScores.PING.name());
 			scores.put("&aFood :", TypeScores.FOOD.name());
@@ -80,7 +80,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 			
 			scores_int.put("9", "&1");
 			scores_int.put("8", "&aJoueur");
-			scores_int.put("7", "&4  <" + TypeScores.ONLINE_PLAYERS.name() + ">");
+			scores_int.put("7", "&4  <" + TypeScores.ONLINE_PLAYERS_CANSEE.name() + ">");
 			scores_int.put("6", "&2");
 			scores_int.put("5", "&aTeamSpeak :");
 			scores_int.put("4", "&4  ts.evercraft.fr");

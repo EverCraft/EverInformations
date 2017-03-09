@@ -93,7 +93,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 	@Override
 	public boolean subStop() {
 		for (TypeScores type : this.type_scores.keySet()) {
-			type.removeListener(this.plugin, this);
+			type.removeListener(this);
 		}
 		return true;
 	}
@@ -115,7 +115,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 			if (objective.isPresent()) {
 				for (Entry<Text, Score> score : objective.get().getScores().entrySet()) {
 					if (line.contains(score.getValue().getScore())) {
-						Text text = EFormatString.of(this.scores.get(score.getValue().getScore())).toText(player.getReplacesPlayer());
+						Text text = EFormatString.of(this.scores.get(score.getValue().getScore())).toText(player.getReplacesAll());
 						if (!score.getKey().equals(text)) {
 							objective.get().getOrCreateScore(text).setScore(score.getValue().getScore());
 							objective.get().removeScore(score.getKey());
@@ -134,7 +134,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 			Set<Integer> line = this.type_scores.get(type);
 			for (Entry<Text, Score> score : objective.get().getScores().entrySet()) {
 				if (line.contains(score.getValue().getScore())) {
-					Text text = EFormatString.of(this.scores.get(score.getValue().getScore())).toText(player.getReplacesPlayer());
+					Text text = EFormatString.of(this.scores.get(score.getValue().getScore())).toText(player.getReplacesAll());
 					if (!score.getKey().equals(text)) {
 						objective.get().getOrCreateScore(text).setScore(score.getValue().getScore());
 						objective.get().removeScore(score.getKey());

@@ -35,8 +35,10 @@ public class ConfigTabList extends EConfig<EverInformations> {
 		addDefault("update", 20);
 		addDefault("header", "&4Header[RT]&aSubHeader");
 		addDefault("footer", "&4Footer[RT]&aSubFooter");
-		addDefault("prefix", "prefix", "PermissionService : Option");
-		addDefault("suffix", "suffix", "PermissionService : Option");
+		
+		addDefault("displayname.prefix", "prefix", "PermissionService : Option");
+		addDefault("displayname.suffix", "suffix", "PermissionService : Option");
+		addDefault("displayname.update", -1, "PermissionService : Option");
 	}
 	
 	/*
@@ -47,12 +49,16 @@ public class ConfigTabList extends EConfig<EverInformations> {
 		return this.get("enable").getBoolean(false);
 	}
 	
-	public String getPrefix() {
-		return this.get("prefix").getString("prefix");
+	public String getDisplayNamePrefix() {
+		return this.get("displayname.prefix").getString("prefix");
 	}
 	
-	public String getSuffix() {
-		return this.get("suffix").getString("suffix");
+	public String getDisplayNameSuffix() {
+		return this.get("displayname.suffix").getString("suffix");
+	}
+	
+	public long getDisplayNameUpdate() {
+		return this.get("displayname.update").getLong(-1);
 	}
 	
 	public List<TabListMessage> getTabLists() {

@@ -29,6 +29,7 @@ public class ConfigNameTag extends EConfig<EverInformations> {
 		addDefault("enable", true, "Note that the value of the prefix or suffix must be less than 16 characters!");
 		addDefault("prefix", "prefix", "PermissionService : Option");
 		addDefault("suffix", "suffix", "PermissionService : Option");
+		addDefault("update", -1, "Seconds (-1 to disable updating)");
 	}
 	
 	/*
@@ -45,5 +46,9 @@ public class ConfigNameTag extends EConfig<EverInformations> {
 	
 	public String getSuffix() {
 		return this.get("suffix").getString("suffix");
+	}
+
+	public long getUpdate() {
+		return this.get("update").getLong(-1L);
 	}
 }
