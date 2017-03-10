@@ -38,7 +38,7 @@ public class ConfigTabList extends EConfig<EverInformations> {
 		
 		addDefault("displayname.prefix", "prefix", "PermissionService : Option");
 		addDefault("displayname.suffix", "suffix", "PermissionService : Option");
-		addDefault("displayname.update", -1, "PermissionService : Option");
+		addDefault("displayname.update", -1, "Seconds (-1 to disable updating)");
 	}
 	
 	/*
