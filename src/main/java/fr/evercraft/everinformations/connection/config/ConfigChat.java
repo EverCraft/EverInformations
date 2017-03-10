@@ -132,9 +132,8 @@ public class ConfigChat extends EConfig<EverInformations> implements IConfig<Cha
 							TextSerializer type = TextSerializers.FORMATTING_CODE;
 							if (type_string.equalsIgnoreCase("JSON")) {
 								type = TextSerializers.JSON;
-							} else if (type_string.equalsIgnoreCase("TEXT_XML")) {
-								type = TextSerializers.TEXT_XML;
 							}
+							
 							if (!message.isEmpty()) {
 								messages.add(new ChatMessage(interval, type, prefix_message, message));
 							}
