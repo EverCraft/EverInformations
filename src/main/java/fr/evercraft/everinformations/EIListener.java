@@ -69,7 +69,7 @@ public class EIListener {
 		this.plugin.getScoreBoard().addPlayer(player);
 		
 		// NameTag
-		this.plugin.getNameTag().addPlayer(player);
+		this.plugin.getNameTag().sendAll(player);
 		
 		// TabList
 		this.plugin.getTabList().addPlayer(player);
@@ -106,7 +106,7 @@ public class EIListener {
 		this.plugin.getScoreBoard().removePlayer(player);
 		
 		// NameTag
-		this.plugin.getNameTag().removePlayer(player);
+		this.plugin.getNameTag().clearAll(player);
 		
 		// TabList
 		this.plugin.getTabList().removePlayer(player);

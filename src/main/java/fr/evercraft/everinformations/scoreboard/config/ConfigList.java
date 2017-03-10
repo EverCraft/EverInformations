@@ -33,7 +33,7 @@ public class ConfigList extends EConfig<EverInformations> implements IConfig<Lis
 	@Override
 	protected void loadDefault() {
 		addDefault("enable", true);
-		addDefault("type", "HEALTH", "Type : HEALTH|DEATHS|PLAYER_KILLS|TOTAL_KILLS|ONLINE_PLAYERS|BALANCE|PING|FOOD|LEVEL|XP");
+		addDefault("type", "HEALTH_INTEGER", "Type : HEALTH|HEALTH_INTEGER|DEATHS|PLAYER_KILLS|TOTAL_KILLS|BALANCE|PING|FOOD|LEVEL|XP");
 	}
 	
 	/*

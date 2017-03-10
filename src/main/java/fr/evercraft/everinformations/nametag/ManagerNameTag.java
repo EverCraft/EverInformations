@@ -27,7 +27,7 @@ import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.nametag.config.ConfigNameTag;
 
 public class ManagerNameTag {
-	private final static String IDENTIFIER = "everinformations";
+	public final static String IDENTIFIER = "everinformations";
 	
 	private final EverInformations plugin;
 	
@@ -115,7 +115,24 @@ public class ManagerNameTag {
 		}
 	}
 	
-	public void addPlayer(EPlayer player) {
+	public void sendPlayer(EPlayer player) {
+		if (this.enable) {
+			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
+				player.sendNameTag(IDENTIFIER, 
+						other.getTeamRepresentation(), 
+						EChat.of(other.getOption(this.prefix).orElse("")), 
+						EChat.of(other.getOption(this.suffix).orElse("")));
+			}
+		}
+	}
+	
+	public void clearPlayer(EPlayer player) {
+		if (this.enable) {
+			player.clearNameTag(IDENTIFIER);
+		}
+	}
+	
+	public void sendAll(EPlayer player) {
 		if (this.enable) {
 			Text prefix = EChat.of(player.getOption(this.prefix).orElse(""));
 			Text suffix = EChat.of(player.getOption(this.suffix).orElse(""));
@@ -125,12 +142,16 @@ public class ManagerNameTag {
 				if (!player.getUniqueId().equals(other.getUniqueId())) {
 					other.sendNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
 				}
-				player.sendNameTag(IDENTIFIER, other.getTeamRepresentation(), EChat.of(other.getOption(this.prefix).orElse("")), EChat.of(other.getOption(this.suffix).orElse("")));
+				
+				player.sendNameTag(IDENTIFIER, 
+						other.getTeamRepresentation(), 
+						EChat.of(other.getOption(this.prefix).orElse("")), 
+						EChat.of(other.getOption(this.suffix).orElse("")));
 			}
 		}
 	}
 	
-	public void removePlayer(EPlayer player) {
+	public void clearAll(EPlayer player) {
 		if (this.enable) {
 			Text teamRepresentation = player.getTeamRepresentation();
 			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
@@ -142,11 +163,11 @@ public class ManagerNameTag {
 	}
 
 	public void updatePermission(EPlayer player) {
-		this.removePlayer(player);
-		this.addPlayer(player);
+		this.clearAll(player);
+		this.sendAll(player);
 	}
 
 	public void eventNameTag(EPlayer player) {
-		this.addPlayer(player);
+		this.sendPlayer(player);
 	}
 }
