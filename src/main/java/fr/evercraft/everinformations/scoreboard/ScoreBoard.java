@@ -104,7 +104,9 @@ public class ScoreBoard<T extends EObjective> {
 		return false;
 	}
 
-	public void stop() {		
+	public void stop() {
+		if (!this.enable) return;
+		
 		this.stopUpdate();
 		
 		if (!this.objectives.isEmpty()) {

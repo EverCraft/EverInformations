@@ -63,7 +63,7 @@ public class ListObjective extends EObjective {
 
 	@Override
 	public boolean stop() {
-		this.type.removeListener(this);
+		this.type.removeListener(this.plugin, this);
 		return true;
 	}
 	

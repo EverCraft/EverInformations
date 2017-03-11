@@ -69,7 +69,7 @@ public class TabListMessage extends EObjective {
 	@Override
 	public boolean stop() {		
 		for (TypeScores score : this.scores) {
-			score.removeListener(this);
+			score.removeListener(this.plugin, this);
 		}
 		return true;
 	}
