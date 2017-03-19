@@ -62,7 +62,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 			scores.put("&aOnline :", TypeScores.ONLINE_PLAYERS_CANSEE.name());
 			scores.put("&aBalance :", TypeScores.BALANCE.name());
 			scores.put("&aPing :", TypeScores.PING.name());
-			scores.put("&aFood :", TypeScores.FOOD.name());
+			scores.put("&aFood :", TypeScores.FEED.name());
 			scores.put("&aHealth :", TypeScores.HEALTH.name());
 			scores.put("&aLevel :", TypeScores.LEVEL.name());
 			scores.put("&aXP :", TypeScores.XP.name());
