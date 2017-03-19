@@ -29,6 +29,7 @@ import org.spongepowered.api.boss.BossBarOverlays;
 
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import fr.evercraft.everapi.message.replace.EReplacesPlayer;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everapi.sponge.UtilsBossBar;
 import fr.evercraft.everinformations.EverInformations;
@@ -46,18 +47,22 @@ public class ConfigBossBar extends EConfig<EverInformations> implements IConfig<
 	protected void loadDefault() {
 		addDefault(Connection.PLAYER + ".enable", true);
 		if (this.get(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
-			addDefault(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".message", "&7&l[&2+&7&l] <DISPLAYNAME_FORMAT> &7joined the game");
+			addDefault(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".message", 
+					"&7&l[&2+&7&l] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7joined the game");
 		}
 		
 		addDefault(Connection.OTHERS + ".enable", true);
 		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
-			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".message", "&7&l[&2+&7&l] <DISPLAYNAME_FORMAT> &7joined the game");
+			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".message", 
+					"&7&l[&2+&7&l] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7joined the game");
 		}
 		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".messages").isVirtual()) {
-			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".message", "&7&l[&4-&7&l] <DISPLAYNAME_FORMAT> &7left the game");
+			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.QUIT.name() + ".message", 
+					"&7&l[&4-&7&l] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7left the game");
 		}
 		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".messages").isVirtual()) {
-			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".message", "&7&l[&4-&7&l] <DISPLAYNAME_FORMAT> &7has been kicked out of the game for <reason>");
+			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".message", 
+					"&7&l[&4-&7&l] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7has been kicked out of the game for <reason>");
 		}
 	}
 	

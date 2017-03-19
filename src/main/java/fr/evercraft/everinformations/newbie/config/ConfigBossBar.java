@@ -25,6 +25,7 @@ import org.spongepowered.api.boss.BossBarOverlay;
 import org.spongepowered.api.boss.BossBarOverlays;
 
 import ninja.leaping.configurate.ConfigurationNode;
+import fr.evercraft.everapi.message.replace.EReplacesPlayer;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everapi.sponge.UtilsBossBar;
 import fr.evercraft.everinformations.EverInformations;
@@ -42,13 +43,13 @@ public class ConfigBossBar extends EConfig<EverInformations> implements IConfig<
 		addDefault(Newbie.PLAYER + ".enable", true);
 		
 		if (this.get(Newbie.PLAYER + ".messages").isVirtual()) {
-			addDefault(Newbie.PLAYER + ".message", "&4Welcome &a<DISPLAYNAME_FORMAT> &4to the server!");
+			addDefault(Newbie.PLAYER + ".message", "&4Welcome &a" + EReplacesPlayer.DISPLAYNAME.getName() + " &4to the server!");
 		}
 		
 		addDefault(Newbie.OTHERS + ".enable", true);
 		
 		if (this.get(Newbie.OTHERS + ".messages").isVirtual()) {
-			addDefault(Newbie.OTHERS + ".message", "&a<DISPLAYNAME_FORMAT> &4is a new player.");
+			addDefault(Newbie.OTHERS + ".message", "&a" + EReplacesPlayer.DISPLAYNAME.getName() + " &4is a new player.");
 		}
 	}
 	

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ninja.leaping.configurate.ConfigurationNode;
+import fr.evercraft.everapi.message.replace.EReplacesPlayer;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.message.TitleMessage;
@@ -40,7 +41,7 @@ public class ConfigTitle extends EConfig<EverInformations> implements IConfig<Ti
 		addDefault(Newbie.PLAYER + ".fadeOut", 1, "Seconds");
 		if (this.get(Newbie.PLAYER + ".messages").isVirtual()) {
 			addDefault(Newbie.PLAYER + ".title", "&4Welcome");
-			addDefault(Newbie.PLAYER + ".subTitle", "&4Welcome &a<DISPLAYNAME_FORMAT> &4to the server!");
+			addDefault(Newbie.PLAYER + ".subTitle", "&4Welcome &a" + EReplacesPlayer.DISPLAYNAME.getName() + " &4to the server!");
 		}
 		
 		addDefault(Newbie.OTHERS + ".enable", true);
@@ -51,7 +52,7 @@ public class ConfigTitle extends EConfig<EverInformations> implements IConfig<Ti
 		
 		if (this.get(Newbie.OTHERS + ".messages").isVirtual()) {
 			addDefault(Newbie.OTHERS + ".title", "");
-			addDefault(Newbie.OTHERS + ".subTitle", "&a<DISPLAYNAME_FORMAT> &4is a new player.");
+			addDefault(Newbie.OTHERS + ".subTitle", "&" + EReplacesPlayer.DISPLAYNAME.getName() + " &4is a new player.");
 		}
 	}
 	
