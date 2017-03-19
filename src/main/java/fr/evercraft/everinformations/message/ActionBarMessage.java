@@ -55,13 +55,13 @@ public class ActionBarMessage implements IMessage {
 
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player) {
-		return player.sendActionBar(identifier, priority, this.getStay(), EFormatString.of(this.message).toText(player.getReplacesPlayer()));
+		return player.sendActionBar(identifier, priority, this.getStay(), EFormatString.of(this.message).toText(player.getReplaces()));
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, Text reason) {
 		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
-		replaces.putAll(player.getReplacesPlayer());
+		replaces.putAll(player.getReplaces());
 		replaces.put("<reason>", EReplace.of(reason));
 		
 		return player.sendActionBar(identifier, priority, this.getStay(), EFormatString.of(this.message).toText(replaces));
@@ -69,13 +69,13 @@ public class ActionBarMessage implements IMessage {
 
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace) {
-		return player.sendActionBar(identifier, priority, this.getStay(), EFormatString.of(this.message).toText(replace.getReplacesPlayer()));
+		return player.sendActionBar(identifier, priority, this.getStay(), EFormatString.of(this.message).toText(replace.getReplaces()));
 	}
 
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason) {
 		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
-		replaces.putAll(replace.getReplacesPlayer());
+		replaces.putAll(replace.getReplaces());
 		replaces.put("<reason>", EReplace.of(reason));
 		
 		return player.sendActionBar(identifier, priority, this.getStay(), EFormatString.of(this.message).toText(replaces));

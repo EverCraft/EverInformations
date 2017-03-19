@@ -60,7 +60,7 @@ public class HeaderFooterTabList {
 		this.tablists.addAll(this.config.getTabLists());
 		
 		if (this.tablists.size() == 0 && this.enable) {
-			this.plugin.getLogger().warn("TabList : There is empty");
+			this.plugin.getELogger().warn("TabList : There is empty");
 			this.enable = false;
 		} else if (this.enable) {
 			this.start();
@@ -116,7 +116,7 @@ public class HeaderFooterTabList {
 	public void addPlayer(EPlayer player) {
 		if (this.enable) {
 			TabListMessage tablist = this.getTabList();
-			this.plugin.getLogger().debug("TabList add (player='" + player.getIdentifier() + "';"
+			this.plugin.getELogger().debug("TabList add (player='" + player.getIdentifier() + "';"
 														+ "tablist='" + tablist + "')");
 			tablist.add(this.plugin.getTabList().getPriority(), player);
 		}
@@ -125,7 +125,7 @@ public class HeaderFooterTabList {
 	public void removePlayer(EPlayer player) {
 		if (this.enable) {
 			TabListMessage tablist = this.getTabList();
-			this.plugin.getLogger().debug("TabList remove (player='" + player.getIdentifier() + "';"
+			this.plugin.getELogger().debug("TabList remove (player='" + player.getIdentifier() + "';"
 														+ "tablist='" + tablist + "')");
 			tablist.remove(player);
 		}
@@ -147,7 +147,7 @@ public class HeaderFooterTabList {
 		if (this.enable) {
 			TabListMessage tablist = this.getTabList();
 			tablist.start();
-			this.plugin.getLogger().debug("TabList (objective='" + tablist + "')");
+			this.plugin.getELogger().debug("TabList (objective='" + tablist + "')");
 			
 			tablist.update();
 
@@ -156,7 +156,7 @@ public class HeaderFooterTabList {
 			if (!tablist.isUpdate()) {
 				this.task_update = this.plugin.getGame().getScheduler().createTaskBuilder()
 						.execute(() -> {
-							this.plugin.getLogger().debug("TabList Update (tablist='" + tablist + "')");
+							this.plugin.getELogger().debug("TabList Update (tablist='" + tablist + "')");
 							this.getTabList().update();
 						})
 						.async()

@@ -72,15 +72,15 @@ public class TitleMessage implements IMessage {
 				.stay(this.getStay())
 				.fadeIn(this.getFadeIn())
 				.fadeOut(this.getFadeOut())
-				.title(EFormatString.of(this.title).toText(player.getReplacesPlayer()))
-				.subtitle(EFormatString.of(this.subTitle).toText(player.getReplacesPlayer()))
+				.title(EFormatString.of(this.title).toText(player.getReplaces()))
+				.subtitle(EFormatString.of(this.subTitle).toText(player.getReplaces()))
 				.build());
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, Text reason) {
 		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
-		replaces.putAll(player.getReplacesPlayer());
+		replaces.putAll(player.getReplaces());
 		replaces.put("<reason>", EReplace.of(reason));
 		
 		return player.sendTitle(identifier, priority, Title.builder()
@@ -98,15 +98,15 @@ public class TitleMessage implements IMessage {
 				.stay(this.getStay())
 				.fadeIn(this.getFadeIn())
 				.fadeOut(this.getFadeOut())
-				.title(EFormatString.of(this.title).toText(replace.getReplacesPlayer()))
-				.subtitle(EFormatString.of(this.subTitle).toText(replace.getReplacesPlayer()))
+				.title(EFormatString.of(this.title).toText(replace.getReplaces()))
+				.subtitle(EFormatString.of(this.subTitle).toText(replace.getReplaces()))
 				.build());
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason) {
 		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
-		replaces.putAll(replace.getReplacesPlayer());
+		replaces.putAll(replace.getReplaces());
 		replaces.put("<reason>", EReplace.of(reason));
 		
 		return player.sendTitle(identifier, priority, Title.builder()

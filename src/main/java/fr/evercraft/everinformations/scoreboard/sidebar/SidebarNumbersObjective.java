@@ -136,7 +136,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	@Override
 	protected void updateTitle() {		
 		SidebarTitle title = this.getSidebarTitle();
-		this.plugin.getLogger().debug("SidebarTitle : View (title='" + title.getTitle().toPlain() + "';next='" + title.getNext() + "')");
+		this.plugin.getELogger().debug("SidebarTitle : View (title='" + title.getTitle().toPlain() + "';next='" + title.getNext() + "')");
 		
 		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);

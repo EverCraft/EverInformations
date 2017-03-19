@@ -85,7 +85,7 @@ public class ScoreBoard<T extends EObjective> {
 		this.objectives.addAll(this.config.getObjectives());
 		
 		if (this.objectives.size() == 0 && this.enable) {
-			this.plugin.getLogger().warn("ScoreBoard (type='" + this.display.getName() + "') : There is no objective");
+			this.plugin.getELogger().warn("ScoreBoard (type='" + this.display.getName() + "') : There is no objective");
 			this.enable = false;
 		} else if (this.enable) {
 			this.start();
@@ -141,7 +141,7 @@ public class ScoreBoard<T extends EObjective> {
 		} else {
 			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
 							.execute(() -> {
-								this.plugin.getLogger().debug("ScoreBoard Task (type='" + this.display.getName() + "';priority='" + this.priority + "')");
+								this.plugin.getELogger().debug("ScoreBoard Task (type='" + this.display.getName() + "';priority='" + this.priority + "')");
 								this.next();
 							})
 							.delay(objective.getNext(), TimeUnit.MILLISECONDS)
@@ -153,7 +153,7 @@ public class ScoreBoard<T extends EObjective> {
 	public void addPlayer(EPlayer player) {
 		if (this.enable) {
 			T objective = this.getObjective();
-			this.plugin.getLogger().debug("ScoreBoard add (player='" + player.getIdentifier() + "';"
+			this.plugin.getELogger().debug("ScoreBoard add (player='" + player.getIdentifier() + "';"
 														+ "type='" + this.display.getName() + "';"
 														+ "priority='" + this.priority + "';"
 														+ "objective='" + objective + "')");
@@ -164,7 +164,7 @@ public class ScoreBoard<T extends EObjective> {
 	public void removePlayer(EPlayer player) {
 		if (this.enable) {
 			T objective = this.getObjective();
-			this.plugin.getLogger().debug("ScoreBoard remove (player='" + player.getIdentifier() + "';"
+			this.plugin.getELogger().debug("ScoreBoard remove (player='" + player.getIdentifier() + "';"
 														+ "type='" + this.display.getName() + "';"
 														+ "priority='" + this.priority + "';"
 														+ "objective='" + objective + "')");
@@ -188,7 +188,7 @@ public class ScoreBoard<T extends EObjective> {
 		if (this.enable) {			
 			T objective = this.getObjective();
 			objective.start();
-			this.plugin.getLogger().debug("ScoreBoard (type='" + this.display.getName() + "';priority='" + this.priority + "';objective='" + objective + "')");
+			this.plugin.getELogger().debug("ScoreBoard (type='" + this.display.getName() + "';priority='" + this.priority + "';objective='" + objective + "')");
 			
 			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				objective.add(this.priority, player);
@@ -199,7 +199,7 @@ public class ScoreBoard<T extends EObjective> {
 			if (!objective.isUpdate()) {
 				this.task_update = this.plugin.getGame().getScheduler().createTaskBuilder()
 						.execute(() -> {
-							this.plugin.getLogger().debug("ScoreBoard Update (type='" + this.display.getName() + "';priority='" + this.priority + "';objective='" + this.getObjective() + "')");
+							this.plugin.getELogger().debug("ScoreBoard Update (type='" + this.display.getName() + "';priority='" + this.priority + "';objective='" + this.getObjective() + "')");
 							this.getObjective().update();
 						})
 						.delay(objective.getUpdate(), TimeUnit.MILLISECONDS)

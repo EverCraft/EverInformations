@@ -72,7 +72,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 							.criterion(Criteria.DUMMY)
 							.build();
 		for (Entry<Integer, String> score : this.scores.entrySet()) {
-			objective.getOrCreateScore(EFormatString.of(score.getValue()).toText(player.getReplacesAll())).setScore(score.getKey());
+			objective.getOrCreateScore(EFormatString.of(score.getValue()).toText(player.getReplaces())).setScore(score.getKey());
 		}
 		return player.addObjective(priority, DisplaySlots.SIDEBAR, objective);
 	}
@@ -115,7 +115,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 			if (objective.isPresent()) {
 				for (Entry<Text, Score> score : objective.get().getScores().entrySet()) {
 					if (line.contains(score.getValue().getScore())) {
-						Text text = EFormatString.of(this.scores.get(score.getValue().getScore())).toText(player.getReplacesAll());
+						Text text = EFormatString.of(this.scores.get(score.getValue().getScore())).toText(player.getReplaces());
 						if (!score.getKey().equals(text)) {
 							objective.get().getOrCreateScore(text).setScore(score.getValue().getScore());
 							objective.get().removeScore(score.getKey());
@@ -134,7 +134,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 			Set<Integer> line = this.type_scores.get(type);
 			for (Entry<Text, Score> score : objective.get().getScores().entrySet()) {
 				if (line.contains(score.getValue().getScore())) {
-					Text text = EFormatString.of(this.scores.get(score.getValue().getScore())).toText(player.getReplacesAll());
+					Text text = EFormatString.of(this.scores.get(score.getValue().getScore())).toText(player.getReplaces());
 					if (!score.getKey().equals(text)) {
 						objective.get().getOrCreateScore(text).setScore(score.getValue().getScore());
 						objective.get().removeScore(score.getKey());
@@ -158,7 +158,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 	@Override
 	protected void updateTitle() {		
 		SidebarTitle title = this.getSidebarTitle();
-		this.plugin.getLogger().debug("SidebarTitle : View (title='" + title.getTitle().toPlain() + "';next='" + title.getNext() + "')");
+		this.plugin.getELogger().debug("SidebarTitle : View (title='" + title.getTitle().toPlain() + "';next='" + title.getNext() + "')");
 		
 		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);

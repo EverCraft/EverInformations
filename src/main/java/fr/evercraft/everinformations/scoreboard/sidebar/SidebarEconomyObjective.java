@@ -115,7 +115,7 @@ public class SidebarEconomyObjective extends SidebarObjective {
 	@Override
 	protected void updateTitle() {		
 		SidebarTitle title = this.getSidebarTitle();
-		this.plugin.getLogger().debug("SidebarTitle : View (title='" + title.getTitle().toPlain() + "';next='" + title.getNext() + "')");
+		this.plugin.getELogger().debug("SidebarTitle : View (title='" + title.getTitle().toPlain() + "';next='" + title.getNext() + "')");
 		
 		this.objective.setDisplayName(title.getTitle());
 	}

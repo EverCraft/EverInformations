@@ -62,7 +62,7 @@ public class DisplayNameTabList {
 		this.update = this.config.getDisplayNameUpdate();
 		
 		if (this.prefix.isEmpty() && this.suffix.isEmpty() && this.enable) {
-			this.plugin.getLogger().warn("TabList DisplayName : There is empty");
+			this.plugin.getELogger().warn("TabList DisplayName : There is empty");
 			this.enable = false;
 		} else if (this.enable) {
 			this.start();

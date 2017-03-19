@@ -48,7 +48,7 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 		this.messages.addAll(this.config.getOthersMessages());
 		
 		if (this.messages.size() == 0 && this.enable) {
-			this.plugin.getLogger().warn("Newbie (type='" + this.type.name() + "') : There is no message");
+			this.plugin.getELogger().warn("Newbie (type='" + this.type.name() + "') : There is no message");
 			this.enable = false;
 		}
 	}
@@ -92,7 +92,7 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 	
 	protected void view() {
 		T message = this.getMessage();
-		this.plugin.getLogger().debug("Newbie (type='" + this.type.name() + "';priority='" + this.priority + "';title='" + message + "')");
+		this.plugin.getELogger().debug("Newbie (type='" + this.type.name() + "';priority='" + this.priority + "';title='" + message + "')");
 
 		// Affiche le message à tous les autres joueurs
 		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
@@ -191,7 +191,7 @@ public class NewbieOthers<T extends IMessage> extends Newbie<T> {
 		if (this.enable && this.player != null && this.messages != null && !this.messages.isEmpty() && this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			
-			this.plugin.getLogger().debug("Newbie : RemoveBossbar (type='" + this.type.name() + "';priority='" + this.priority + "';message='" + message + "')");
+			this.plugin.getELogger().debug("Newbie : RemoveBossbar (type='" + this.type.name() + "';priority='" + this.priority + "';message='" + message + "')");
 			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				if (!this.player.equals(player)) {
 					message.remove(IDENTIFIER_OTHERS, player);

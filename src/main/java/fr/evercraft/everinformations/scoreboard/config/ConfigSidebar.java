@@ -177,7 +177,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 									TypeScores score_type = TypeScores.valueOf(config_score.getValue().getString("").toUpperCase());
 									scores.put(score_value, score_type);
 								} catch (IllegalArgumentException e) {
-									this.plugin.getLogger().warn("Error during the change of the scoreboard (type='NUMBERS') : score='" + config_score.getValue().getString("") + "'");
+									this.plugin.getELogger().warn("Error during the change of the scoreboard (type='NUMBERS') : score='" + config_score.getValue().getString("") + "'");
 								}
 							}
 						}
@@ -185,7 +185,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 						if (!scores.isEmpty()) {
 							objectives.add(new SidebarNumbersObjective(this.plugin, stay, update, titles, scores));
 						} else {
-							this.plugin.getLogger().warn("Error during the change of the scoreboard (type='NUMBERS') : Score Empty");
+							this.plugin.getELogger().warn("Error during the change of the scoreboard (type='NUMBERS') : Score Empty");
 						}
 					// Informations	
 					} else if (type.equals(Type.INFORMATIONS)) {
@@ -197,7 +197,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 									String score_text = this.plugin.getChat().replace(config_score.getValue().getString(""));
 									scores.put(score_int, score_text);
 								} catch (NumberFormatException e) {
-									this.plugin.getLogger().warn("Error during the change of the scoreboard (type='INFORMATIONS') : number='" + config_score.getValue().getString("") + "'");
+									this.plugin.getELogger().warn("Error during the change of the scoreboard (type='INFORMATIONS') : number='" + config_score.getValue().getString("") + "'");
 								}
 							}
 						}
@@ -205,7 +205,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 						if (!scores.isEmpty()) {
 							objectives.add(new SidebarInformationsObjective(this.plugin, stay, update, titles, scores));
 						} else {
-							this.plugin.getLogger().warn("Error during the change of the scoreboard (type='INFORMATIONS') : Score Empty");
+							this.plugin.getELogger().warn("Error during the change of the scoreboard (type='INFORMATIONS') : Score Empty");
 						}
 					// Economy
 					} else if (type.equals(Type.ECONOMY)) {
@@ -213,7 +213,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 							String message = this.plugin.getChat().replace(config.getNode("message").getString("<player>"));
 							objectives.add(new SidebarEconomyObjective(this.plugin, stay, update, titles, message));
 						} else {
-							this.plugin.getLogger().warn("Error during the change of the scoreboard (type='ECONOMY') : There is no EverEconomy");
+							this.plugin.getELogger().warn("Error during the change of the scoreboard (type='ECONOMY') : There is no EverEconomy");
 						}
 					// Stats
 					} else if (type.equals(Type.STATS)) {
@@ -226,20 +226,20 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 									
 									objectives.add(new SidebarStatsObjective(this.plugin, stay, titles, message, top_type, time_type));
 								} catch (IllegalArgumentException e) {
-									this.plugin.getLogger().warn("Error during the change of the scoreboard (type='STATS') : time='" + config.getNode("time").getString("") + "'");
+									this.plugin.getELogger().warn("Error during the change of the scoreboard (type='STATS') : time='" + config.getNode("time").getString("") + "'");
 								}
 							} catch (IllegalArgumentException e) {
-								this.plugin.getLogger().warn("Error during the change of the scoreboard (type='STATS') : top='" + config.getNode("top").getString("") + "'");
+								this.plugin.getELogger().warn("Error during the change of the scoreboard (type='STATS') : top='" + config.getNode("top").getString("") + "'");
 							}
 						} else {
-							this.plugin.getLogger().warn("Error during the change of the scoreboard (type='STATS') : There is no EverStats");
+							this.plugin.getELogger().warn("Error during the change of the scoreboard (type='STATS') : There is no EverStats");
 						}
 					}
 				} else {
-					this.plugin.getLogger().warn("Error during the change of the scoreboard (type='" + config.getNode("type").getString("") + "') : Title empty ");
+					this.plugin.getELogger().warn("Error during the change of the scoreboard (type='" + config.getNode("type").getString("") + "') : Title empty ");
 				}
 			} catch(IllegalArgumentException e) {
-				this.plugin.getLogger().warn("Error during the change of the scoreboard : type='" + config.getNode("type").getString("") + "'");
+				this.plugin.getELogger().warn("Error during the change of the scoreboard : type='" + config.getNode("type").getString("") + "'");
 			}
 		}
 		

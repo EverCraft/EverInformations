@@ -63,7 +63,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 		}
 		
 		if (this.enable && this.messages_join.isEmpty() && this.messages_quit.isEmpty() && this.messages_kick.isEmpty()) {
-			this.plugin.getLogger().warn("Connection (type='" + this.type.name() + "') : There is no message");
+			this.plugin.getELogger().warn("Connection (type='" + this.type.name() + "') : There is no message");
 			this.enable = false;
 		}
 	}
@@ -182,7 +182,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 		
 		protected void view() {
 			T message = this.getMessage();
-			this.connection.plugin.getLogger().debug("Connection (type='" + this.connection.type.name() + "';priority='" + this.connection.priority + ";player='" + player.getIdentifier() + "',message='" + message + "')");
+			this.connection.plugin.getELogger().debug("Connection (type='" + this.connection.type.name() + "';priority='" + this.connection.priority + ";player='" + player.getIdentifier() + "',message='" + message + "')");
 			
 			if (this.reason == null) {
 				if (this.connection.type.equals(Type.CHAT_OTHERS)) {
@@ -286,7 +286,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 			if (this.messages != null && !this.messages.isEmpty() && this.getMessage() instanceof BossBarMessage) {
 				BossBarMessage message = ((BossBarMessage) this.getMessage());
 				
-				this.connection.plugin.getLogger().debug("Connection : RemoveBossbar (type='" + this.connection.type.name() + "';priority='" + this.connection.priority + "';message='" + message + "')");
+				this.connection.plugin.getELogger().debug("Connection : RemoveBossbar (type='" + this.connection.type.name() + "';priority='" + this.connection.priority + "';message='" + message + "')");
 				message.remove(IDENTIFIER_PLAYER, this.player);
 			}
 			this.connection.players.remove(player.getUniqueId());

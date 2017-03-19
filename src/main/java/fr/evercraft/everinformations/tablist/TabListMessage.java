@@ -82,8 +82,8 @@ public class TabListMessage extends EObjective {
 	public boolean add(int priority, EPlayer player) {
 		if (player.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
 			player.getTabList().setHeaderAndFooter(
-					EFormatString.of(this.header).toText(player.getReplacesPlayer()),
-					EFormatString.of(this.footer).toText(player.getReplacesPlayer()));
+					EFormatString.of(this.header).toText(player.getReplaces()),
+					EFormatString.of(this.footer).toText(player.getReplaces()));
 		}
 		return true;
 	}

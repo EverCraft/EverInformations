@@ -90,16 +90,16 @@ public class AutoMessage<T extends IMessage> {
 		if (this.enable) {
 			// Si il y a aucun message
 			if (this.messages.size() == 0) {
-				this.plugin.getLogger().warn("AutoMessages (type='" + this.type.name() + "') : There is no message");
+				this.plugin.getELogger().warn("AutoMessages (type='" + this.type.name() + "') : There is no message");
 				this.enable = false;
 				this.stop();
 			// Si il y a des joueurs
 			} else if (!this.plugin.getGame().getServer().getOnlinePlayers().isEmpty()) {
 				this.start();
-				this.plugin.getLogger().debug("AutoMessages (type='" + this.type.name() + "') : Start (player='" + this.plugin.getGame().getServer().getOnlinePlayers().size() + "')");
+				this.plugin.getELogger().debug("AutoMessages (type='" + this.type.name() + "') : Start (player='" + this.plugin.getGame().getServer().getOnlinePlayers().size() + "')");
 			// Si il y a pas de joueurs
 			} else {
-				this.plugin.getLogger().debug("AutoMessages (type='" + this.type.name() + "') : No start (player='0')");
+				this.plugin.getELogger().debug("AutoMessages (type='" + this.type.name() + "') : No start (player='0')");
 			}
 		}
 	}
@@ -197,7 +197,7 @@ public class AutoMessage<T extends IMessage> {
 	protected void view() {
 		if (this.enable) {
 			T message = this.getMessage();
-			this.plugin.getLogger().debug("AutoMessages (type='" + this.type.name() + "';priority='" + this.priority + "';actionBar='" + message + "')");
+			this.plugin.getELogger().debug("AutoMessages (type='" + this.type.name() + "';priority='" + this.priority + "';actionBar='" + message + "')");
 			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				message.send(IDENTIFIER, this.priority, player);
 			}

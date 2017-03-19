@@ -27,7 +27,7 @@ public class EIConfig extends EConfig<EverInformations> {
 	
 	public void reload() {
 		super.reload();
-		this.plugin.getLogger().setDebug(this.isDebug());
+		this.plugin.getELogger().setDebug(this.isDebug());
 	}
 	
 	@Override

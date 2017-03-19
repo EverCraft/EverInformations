@@ -110,7 +110,7 @@ public class SidebarStatsObjective extends SidebarObjective {
 				}
 			}
 		} else {
-			this.plugin.getLogger().warn("No EverStats");
+			this.plugin.getELogger().warn("No EverStats");
 		}
 		
 		if (objective.getScores().isEmpty()) {
@@ -180,7 +180,7 @@ public class SidebarStatsObjective extends SidebarObjective {
 	@Override
 	protected void updateTitle() {		
 		SidebarTitle title = this.getSidebarTitle();
-		this.plugin.getLogger().debug("SidebarTitle : View (title='" + title.getTitle().toPlain() + "';next='" + title.getNext() + "')");
+		this.plugin.getELogger().debug("SidebarTitle : View (title='" + title.getTitle().toPlain() + "';next='" + title.getNext() + "')");
 		
 		this.objective.setDisplayName(title.getTitle());
 	}

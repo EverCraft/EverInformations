@@ -59,7 +59,7 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 		this.messages_kick.putAll(this.config.getOthersKickMessages());
 		
 		if (this.enable && this.messages_join.isEmpty() && this.messages_quit.isEmpty() && this.messages_kick.isEmpty()) {
-			this.plugin.getLogger().warn("Connection (type='" + this.type.name() + "') : There is no message");
+			this.plugin.getELogger().warn("Connection (type='" + this.type.name() + "') : There is no message");
 			this.enable = false;
 		}
 	}
@@ -104,7 +104,7 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 	
 	protected void view() {
 		T message = this.getMessage();
-		this.plugin.getLogger().debug("Connection (type='" + this.type.name() + "';priority='" + this.priority + "';message='" + message + "')");
+		this.plugin.getELogger().debug("Connection (type='" + this.type.name() + "';priority='" + this.priority + "';message='" + message + "')");
 
 		if (this.reason == null) {
 			// Affiche le message à tous les autres joueurs
@@ -229,7 +229,7 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 		if (this.enable && this.player != null && this.messages != null && !this.messages.isEmpty() && this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			
-			this.plugin.getLogger().debug("Connection : RemoveBossbar (type='" + this.type.name() + "';priority='" + this.priority + "';message='" + message + "')");
+			this.plugin.getELogger().debug("Connection : RemoveBossbar (type='" + this.type.name() + "';priority='" + this.priority + "';message='" + message + "')");
 			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				if (!this.player.equals(player)) {
 					message.remove(IDENTIFIER_OTHERS, player);

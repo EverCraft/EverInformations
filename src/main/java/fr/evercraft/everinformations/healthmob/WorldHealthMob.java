@@ -53,7 +53,7 @@ public class WorldHealthMob {
 				healthmob.getValue().cancel();
 				Optional<Entity> entity = world.get().getEntity(healthmob.getKey());
 				if (entity.isPresent()) {
-					this.plugin.getLogger().debug("HealthMob : Remove (uuid='" + healthmob.getKey() + "';name='" + healthmob.getValue() + "'");
+					this.plugin.getELogger().debug("HealthMob : Remove (uuid='" + healthmob.getKey() + "';name='" + healthmob.getValue() + "'");
 					entity.get().offer(Keys.DISPLAY_NAME, healthmob.getValue().getName());
 				}
 			}
@@ -73,7 +73,7 @@ public class WorldHealthMob {
 		// Si c'est une nouvelle entité
 		if (healthmob == null) {
 			Optional<Text> display_name = entity.get(Keys.DISPLAY_NAME);
-			this.plugin.getLogger().debug("HealthMob : Add (uuid='" + entity.getUniqueId() + "';name='" + display_name + "'");
+			this.plugin.getELogger().debug("HealthMob : Add (uuid='" + entity.getUniqueId() + "';name='" + display_name + "'");
 			healthmob = new EntityHealthMob(display_name);
 			this.entities.put(entity.getUniqueId(), new EntityHealthMob(display_name));
 		}
@@ -131,7 +131,7 @@ public class WorldHealthMob {
 		EntityHealthMob healthmob = this.entities.remove(entity.getUniqueId());
 		// Si l'entité est déjà connu
 		if (healthmob != null) {
-			this.plugin.getLogger().debug("HealthMob : Remove (uuid='" + entity.getUniqueId() + "';name='" + healthmob.getName() + "'");
+			this.plugin.getELogger().debug("HealthMob : Remove (uuid='" + entity.getUniqueId() + "';name='" + healthmob.getName() + "'");
         	
 			healthmob.cancel();
 			entity.offer(Keys.DISPLAY_NAME, healthmob.getName());

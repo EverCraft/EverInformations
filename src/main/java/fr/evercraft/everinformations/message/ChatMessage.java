@@ -58,7 +58,7 @@ public class ChatMessage implements IMessage {
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player) {
 		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
-			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.message).toText(player.getReplacesPlayer()));
+			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.message).toText(player.getReplaces()));
 		} else {
 			player.sendMessage(EChat.of(this.prefix.orElse("")).concat(this.format.deserialize(this.message)));
 		}
@@ -68,7 +68,7 @@ public class ChatMessage implements IMessage {
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, Text reason) {
 		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
-		replaces.putAll(player.getReplacesPlayer());
+		replaces.putAll(player.getReplaces());
 		replaces.put("<reason>", EReplace.of(reason));
 		
 		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
@@ -82,7 +82,7 @@ public class ChatMessage implements IMessage {
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace) {
 		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
-			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.message).toText(replace.getReplacesPlayer()));
+			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.message).toText(replace.getReplaces()));
 		} else {
 			player.sendMessage(EChat.of(this.prefix.orElse("")).concat(this.format.deserialize(this.message)));
 		}
@@ -92,7 +92,7 @@ public class ChatMessage implements IMessage {
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason) {
 		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
-		replaces.putAll(replace.getReplacesPlayer());
+		replaces.putAll(replace.getReplaces());
 		replaces.put("<reason>", EReplace.of(reason));
 		
 		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {

@@ -70,13 +70,13 @@ public class BossBarMessage implements IMessage {
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player) {
-		return player.sendActionBar(identifier, priority, EFormatString.of(this.name).toText(player.getReplacesPlayer()));
+		return player.sendActionBar(identifier, priority, EFormatString.of(this.name).toText(player.getReplaces()));
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, Text reason) {
 		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
-		replaces.putAll(player.getReplacesPlayer());
+		replaces.putAll(player.getReplaces());
 		replaces.put("<reason>", EReplace.of(reason));
 		
 		return this.sendText(identifier, priority, player, EFormatString.of(this.name).toText(replaces));
@@ -84,13 +84,13 @@ public class BossBarMessage implements IMessage {
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace) {
-		return this.sendText(identifier, priority, player, EFormatString.of(this.name).toText(replace.getReplacesPlayer()));
+		return this.sendText(identifier, priority, player, EFormatString.of(this.name).toText(replace.getReplaces()));
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason) {
 		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
-		replaces.putAll(replace.getReplacesPlayer());
+		replaces.putAll(replace.getReplaces());
 		replaces.put("<reason>", EReplace.of(reason));
 		
 		return this.sendText(identifier, priority, player, EFormatString.of(this.name).toText(replaces));

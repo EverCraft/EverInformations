@@ -55,7 +55,7 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 		}
 		
 		if (this.messages.size() == 0 && this.enable) {
-			this.plugin.getLogger().warn("Newbie (type='" + this.type.name() + "') : There is no message");
+			this.plugin.getELogger().warn("Newbie (type='" + this.type.name() + "') : There is no message");
 			this.enable = false;
 		}
 	}
@@ -133,7 +133,7 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 		
 		protected void view() {
 			T message = this.getMessage();
-			this.newbie.plugin.getLogger().debug("Newbie (type='" + this.newbie.type.name() + "';priority='" + this.newbie.priority + ";player='" + player.getIdentifier() + "',message='" + message + "')");
+			this.newbie.plugin.getELogger().debug("Newbie (type='" + this.newbie.type.name() + "';priority='" + this.newbie.priority + ";player='" + player.getIdentifier() + "',message='" + message + "')");
 			
 			if (this.newbie.type.equals(Type.CHAT_OTHERS)) {
 				// Affiche le message à tous les autres joueurs
@@ -223,7 +223,7 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 			if (this.getMessage() instanceof BossBarMessage) {
 				BossBarMessage message = ((BossBarMessage) this.getMessage());
 				
-				this.newbie.plugin.getLogger().debug("Newbie : RemoveBossbar (type='" + this.newbie.type.name() + "';priority='" + this.newbie.priority + "';message='" + message + "')");
+				this.newbie.plugin.getELogger().debug("Newbie : RemoveBossbar (type='" + this.newbie.type.name() + "';priority='" + this.newbie.priority + "';message='" + message + "')");
 				message.remove(IDENTIFIER_PLAYER, this.player);
 			}
 			this.newbie.players.remove(player.getUniqueId());
