@@ -19,6 +19,7 @@ package fr.evercraft.everinformations.message;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializer;
@@ -67,9 +68,9 @@ public class ChatMessage implements IMessage {
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, Text reason) {
-		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		Map<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
 		replaces.putAll(player.getReplaces());
-		replaces.put("<reason>", EReplace.of(reason));
+		replaces.put(Pattern.compile("<reason>"), EReplace.of(reason));
 		
 		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.message).toText(replaces));
@@ -91,9 +92,9 @@ public class ChatMessage implements IMessage {
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason) {
-		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		Map<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
 		replaces.putAll(replace.getReplaces());
-		replaces.put("<reason>", EReplace.of(reason));
+		replaces.put(Pattern.compile("<reason>"), EReplace.of(reason));
 		
 		if (this.format.equals(TextSerializers.FORMATTING_CODE)) {
 			player.sendMessage(EFormatString.of(this.prefix.orElse("") + this.message).toText(replaces));

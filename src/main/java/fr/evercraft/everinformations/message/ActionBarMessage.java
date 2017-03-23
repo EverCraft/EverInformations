@@ -18,6 +18,7 @@ package fr.evercraft.everinformations.message;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.spongepowered.api.text.Text;
 
@@ -60,9 +61,9 @@ public class ActionBarMessage implements IMessage {
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, Text reason) {
-		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		Map<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
 		replaces.putAll(player.getReplaces());
-		replaces.put("<reason>", EReplace.of(reason));
+		replaces.put(Pattern.compile("<reason>"), EReplace.of(reason));
 		
 		return player.sendActionBar(identifier, priority, this.getStay(), EFormatString.of(this.message).toText(replaces));
 	}
@@ -74,9 +75,9 @@ public class ActionBarMessage implements IMessage {
 
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason) {
-		Map<String, EReplace<?>> replaces = new HashMap<String, EReplace<?>>();
+		Map<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
 		replaces.putAll(replace.getReplaces());
-		replaces.put("<reason>", EReplace.of(reason));
+		replaces.put(Pattern.compile("<reason>"), EReplace.of(reason));
 		
 		return player.sendActionBar(identifier, priority, this.getStay(), EFormatString.of(this.message).toText(replaces));
 	}
