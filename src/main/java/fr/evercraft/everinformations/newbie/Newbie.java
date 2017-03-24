@@ -69,20 +69,18 @@ public abstract class Newbie<T extends IMessage> {
 	
 	protected void loadPriority() {
 		this.priority = PriorityService.DEFAULT;
-		if (this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
-			if (type.equals(Type.ACTION_BAR_PLAYER)) {
-				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getActionBar(Newbie.IDENTIFIER_PLAYER);
-			} else if (type.equals(Type.ACTION_BAR_OTHERS)) {
-				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getActionBar(Newbie.IDENTIFIER_OTHERS);
-			} else if (type.equals(Type.TITLE_PLAYER)) {
-				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(Newbie.IDENTIFIER_PLAYER);
-			} else if (type.equals(Type.TITLE_OTHERS)) {
-				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(Newbie.IDENTIFIER_OTHERS);
-			} else if (type.equals(Type.BOSSBAR_PLAYER)) {
-				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(Newbie.IDENTIFIER_PLAYER);
-			} else if (type.equals(Type.BOSSBAR_OTHERS)) {
-				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(Newbie.IDENTIFIER_OTHERS);
-			}
+		if (type.equals(Type.ACTION_BAR_PLAYER)) {
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getActionBar(Newbie.IDENTIFIER_PLAYER);
+		} else if (type.equals(Type.ACTION_BAR_OTHERS)) {
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getActionBar(Newbie.IDENTIFIER_OTHERS);
+		} else if (type.equals(Type.TITLE_PLAYER)) {
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTitle(Newbie.IDENTIFIER_PLAYER);
+		} else if (type.equals(Type.TITLE_OTHERS)) {
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTitle(Newbie.IDENTIFIER_OTHERS);
+		} else if (type.equals(Type.BOSSBAR_PLAYER)) {
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTitle(Newbie.IDENTIFIER_PLAYER);
+		} else if (type.equals(Type.BOSSBAR_OTHERS)) {
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTitle(Newbie.IDENTIFIER_OTHERS);
 		}
 	}
 }

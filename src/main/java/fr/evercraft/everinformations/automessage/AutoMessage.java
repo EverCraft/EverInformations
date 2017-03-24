@@ -71,14 +71,12 @@ public class AutoMessage<T extends IMessage> {
 
 		// Priorité
 		this.priority = PriorityService.DEFAULT;
-		if (this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
-			if (this.type.equals(Type.ACTION_BAR)) {
-				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getActionBar(IDENTIFIER);
-			} else if (this.type.equals(Type.TITLE)) {
-				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTitle(IDENTIFIER);
-			} else if (this.type.equals(Type.BOSSBAR)) {
-				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getBossBar(IDENTIFIER);
-			}
+		if (this.type.equals(Type.ACTION_BAR)) {
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getActionBar(IDENTIFIER);
+		} else if (this.type.equals(Type.TITLE)) {
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTitle(IDENTIFIER);
+		} else if (this.type.equals(Type.BOSSBAR)) {
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getBossBar(IDENTIFIER);
 		}
 		
 		this.numero = 0;

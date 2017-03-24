@@ -69,14 +69,12 @@ public class ScoreBoard<T extends EObjective> {
 		this.stop();
 
 		this.priority = PriorityService.DEFAULT;
-		if (this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
-			if (this.display.equals(DisplaySlots.BELOW_NAME)) {
-				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getScoreBoard(this.display, BELOW_NAME_IDENTIFIER);
-			} else if (this.display.equals(DisplaySlots.LIST)) {
-				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getScoreBoard(this.display, LIST_IDENTIFIER);
-			} else if (this.display.equals(DisplaySlots.SIDEBAR)) {
-				this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getScoreBoard(this.display, SIDEBAR_IDENTIFIER);
-			}
+		if (this.display.equals(DisplaySlots.BELOW_NAME)) {
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getScoreBoard(this.display, BELOW_NAME_IDENTIFIER);
+		} else if (this.display.equals(DisplaySlots.LIST)) {
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getScoreBoard(this.display, LIST_IDENTIFIER);
+		} else if (this.display.equals(DisplaySlots.SIDEBAR)) {
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getScoreBoard(this.display, SIDEBAR_IDENTIFIER);
 		}
 		
 		this.numero = 0;

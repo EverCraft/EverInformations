@@ -18,7 +18,6 @@ package fr.evercraft.everinformations.tablist;
 
 import fr.evercraft.everapi.event.TabListEvent;
 import fr.evercraft.everapi.server.player.EPlayer;
-import fr.evercraft.everapi.services.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.tablist.config.ConfigTabList;
 
@@ -44,10 +43,7 @@ public class ManagerTabList {
 	}
 
 	public void load() {
-		this.priority = PriorityService.DEFAULT;
-		if (this.plugin.getEverAPI().getManagerService().getPriority().isPresent()) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get().getTabList(IDENTIFIER);
-		}
+		this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTabList(IDENTIFIER);
 	}
 	
 	public void reload() {
