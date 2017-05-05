@@ -41,6 +41,7 @@ public class EIMessage extends EMessage<EverInformations> {
 	    private final EMessageBuilder french;
 	    private final EMessageBuilder english;
 	    private EMessageFormat message;
+	    private EMessageBuilder builder;
 	    
 	    private EIMessages(final String path, final String french) {   	
 	    	this(path, EMessageFormat.builder().chat(new EFormatString(french), true));
@@ -85,8 +86,13 @@ public class EIMessage extends EMessage<EverInformations> {
 			return this.message;
 		}
 		
-		public void set(EMessageFormat message) {
-			this.message = message;
+		public EMessageBuilder getBuilder() {
+			return this.builder;
+		}
+		
+		public void set(EMessageBuilder message) {
+			this.message = message.build();
+			this.builder = message;
 		}
 	}
 }
