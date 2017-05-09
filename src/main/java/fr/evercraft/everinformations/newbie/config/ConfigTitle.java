@@ -52,7 +52,7 @@ public class ConfigTitle extends EConfig<EverInformations> implements IConfig<Ti
 		
 		if (this.get(Newbie.OTHERS + ".messages").isVirtual()) {
 			addDefault(Newbie.OTHERS + ".title", "");
-			addDefault(Newbie.OTHERS + ".subTitle", "&" + EReplacesPlayer.DISPLAYNAME.getName() + " &4is a new player.");
+			addDefault(Newbie.OTHERS + ".subTitle", "&4" + EReplacesPlayer.DISPLAYNAME.getName() + " &4is a new player.");
 		}
 	}
 	
