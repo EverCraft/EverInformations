@@ -76,7 +76,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	@Override
 	public boolean subStop() {
 		for (TypeScores type : new HashSet<TypeScores>(this.scores.values())) {
-			type.removeListener(this.plugin, this);
+			type.removeListener(this);
 		}
 		return true;
 	}

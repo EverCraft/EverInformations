@@ -93,7 +93,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 	@Override
 	public boolean subStop() {
 		for (TypeScores type : this.type_scores.keySet()) {
-			type.removeListener(this.plugin, this);
+			type.removeListener(this);
 		}
 		return true;
 	}

@@ -63,7 +63,7 @@ public class BelowNameObjective extends EObjective {
 
 	@Override
 	public boolean stop() {
-		this.type.removeListener(this.plugin, this);
+		this.type.removeListener(this);
 		return true;
 	}
 	
