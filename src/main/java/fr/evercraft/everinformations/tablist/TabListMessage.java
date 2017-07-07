@@ -22,7 +22,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import com.google.common.collect.Sets;
 
 import fr.evercraft.everapi.message.format.EFormatString;
-import fr.evercraft.everapi.scoreboard.TypeScores;
+import fr.evercraft.everapi.registers.ScoreType;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everapi.services.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
@@ -30,7 +30,7 @@ import fr.evercraft.everinformations.scoreboard.objective.EObjective;
 
 public class TabListMessage extends EObjective {
 	
-	private final Set<TypeScores> scores;
+	private final Set<ScoreType> scores;
 	
 	private final String header;
 	private final String footer;
@@ -44,8 +44,8 @@ public class TabListMessage extends EObjective {
 		this.scores = Sets.newConcurrentHashSet();
 		this.update = true;
 		
-		for (TypeScores score : TypeScores.values()) {
-			if (this.header.contains("<" + score.name() + ">") || this.footer.contains("<" + score.name() + ">")) {
+		for (ScoreType score : this.plugin.getGame().getRegistry().getAllOf(ScoreType.class)) {
+			if (this.header.contains("<" + score.getName() + ">") || this.footer.contains("<" + score.getName() + ">")) {
 				this.scores.add(score);
 				if (!score.isUpdate()) {
 					this.update = false;
@@ -60,15 +60,15 @@ public class TabListMessage extends EObjective {
 
 	@Override
 	public boolean start() {		
-		for (TypeScores score : this.scores) {
-			score.addListener(this.plugin, this);
+		for (ScoreType score : this.scores) {
+			score.addListener(this);
 		}
 		return false;
 	}
 
 	@Override
 	public boolean stop() {		
-		for (TypeScores score : this.scores) {
+		for (ScoreType score : this.scores) {
 			score.removeListener(this);
 		}
 		return true;
@@ -108,12 +108,12 @@ public class TabListMessage extends EObjective {
 	}
 
 	@Override
-	public void update(TypeScores score) {
+	public void update(ScoreType score) {
 		this.update();
 	}
 
 	@Override
-	public void update(Player player_sponge, TypeScores score) {
+	public void update(Player player_sponge, ScoreType score) {
 		EPlayer player = this.plugin.getEServer().getEPlayer(player_sponge);
 		if (player.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
 			this.add(PriorityService.DEFAULT, player);

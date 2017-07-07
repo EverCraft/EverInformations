@@ -16,8 +16,8 @@
  */
 package fr.evercraft.everinformations.scoreboard.objective;
 
-import fr.evercraft.everapi.scoreboard.IObjective;
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.score.IObjective;
 import fr.evercraft.everinformations.EverInformations;
 
 public abstract class EObjective implements IObjective {

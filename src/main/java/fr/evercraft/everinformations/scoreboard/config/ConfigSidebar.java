@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Map.Entry;
 
 import org.spongepowered.api.text.Text;
@@ -27,7 +28,8 @@ import org.spongepowered.api.text.Text;
 import ninja.leaping.configurate.ConfigurationNode;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.file.EConfig;
-import fr.evercraft.everapi.scoreboard.TypeScores;
+import fr.evercraft.everapi.registers.ScoreType;
+import fr.evercraft.everapi.registers.ScoreType.ScoreTypes;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective.Type;
@@ -59,13 +61,13 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 			message.put("type", Type.NUMBERS.name());
 			
 			HashMap<String, String> scores = new HashMap<String, String>();
-			scores.put("&aOnline :", TypeScores.ONLINE_PLAYERS_CANSEE.name());
-			scores.put("&aBalance :", TypeScores.BALANCE.name());
-			scores.put("&aPing :", TypeScores.PING.name());
-			scores.put("&aFood :", TypeScores.FEED.name());
-			scores.put("&aHealth :", TypeScores.HEALTH.name());
-			scores.put("&aLevel :", TypeScores.LEVEL.name());
-			scores.put("&aXP :", TypeScores.XP.name());
+			scores.put("&aOnline :", ScoreTypes.ONLINE_PLAYERS_CANSEE.getName());
+			scores.put("&aBalance :", ScoreTypes.BALANCE.getName());
+			scores.put("&aPing :", ScoreTypes.PING.getName());
+			scores.put("&aFood :", ScoreTypes.FEED.getName());
+			scores.put("&aHealth :", ScoreTypes.HEALTH.getName());
+			scores.put("&aLevel :", ScoreTypes.LEVEL.getName());
+			scores.put("&aXP :", ScoreTypes.XP.getName());
 
 			message.put("scores", scores);
 			messages.add(message);
@@ -80,7 +82,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 			
 			scores_int.put("9", "&1");
 			scores_int.put("8", "&aJoueur");
-			scores_int.put("7", "&4  <" + TypeScores.ONLINE_PLAYERS_CANSEE.name() + ">");
+			scores_int.put("7", "&4  <" + ScoreTypes.ONLINE_PLAYERS_CANSEE.getName() + ">");
 			scores_int.put("6", "&2");
 			scores_int.put("5", "&aTeamSpeak :");
 			scores_int.put("4", "&4  ts.evercraft.fr");
@@ -169,14 +171,14 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 					
 					// Numbers
 					if (type.equals(Type.NUMBERS)) {
-						Map<Text, TypeScores> scores = new HashMap<Text, TypeScores>();
+						Map<Text, ScoreType> scores = new HashMap<Text, ScoreType>();
 						for (Entry<Object, ? extends ConfigurationNode> config_score : config.getNode("scores").getChildrenMap().entrySet()) {
 							if (config_score.getKey() instanceof String) {
-								try {
+								Optional<ScoreType> score_type = this.plugin.getGame().getRegistry().getType(ScoreType.class, config_score.getValue().getString("").toUpperCase());
+								if (score_type.isPresent()) {
 									Text score_value = EChat.of((String) config_score.getKey());
-									TypeScores score_type = TypeScores.valueOf(config_score.getValue().getString("").toUpperCase());
-									scores.put(score_value, score_type);
-								} catch (IllegalArgumentException e) {
+									scores.put(score_value, score_type.get());
+								} else {
 									this.plugin.getELogger().warn("Error during the change of the scoreboard (type='NUMBERS') : score='" + config_score.getValue().getString("") + "'");
 								}
 							}

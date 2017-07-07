@@ -30,7 +30,7 @@ import org.spongepowered.api.scoreboard.objective.Objective;
 
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.EPlugin;
-import fr.evercraft.everapi.scoreboard.TypeScores;
+import fr.evercraft.everapi.registers.ScoreType;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EIMessage.EIMessages;
 import fr.evercraft.everinformations.EverInformations;
@@ -98,12 +98,12 @@ public class SidebarEconomyObjective extends SidebarObjective {
 	}
 	
 	@Override
-	public void update(TypeScores type) {
+	public void update(ScoreType type) {
 		this.update();
 	}
 
 	@Override
-	public void update(Player player_sponge, TypeScores type) {
+	public void update(Player player_sponge, ScoreType type) {
 		this.update();
 	}
 

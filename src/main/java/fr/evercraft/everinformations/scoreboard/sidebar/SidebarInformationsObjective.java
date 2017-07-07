@@ -34,7 +34,7 @@ import org.spongepowered.api.text.Text;
 import com.google.common.collect.Sets;
 
 import fr.evercraft.everapi.message.format.EFormatString;
-import fr.evercraft.everapi.scoreboard.TypeScores;
+import fr.evercraft.everapi.registers.ScoreType;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
@@ -43,18 +43,18 @@ import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
 public class SidebarInformationsObjective extends SidebarObjective {
 	
 	private final ConcurrentMap<Integer, String> scores;
-	private final ConcurrentMap<TypeScores, Set<Integer>> type_scores;
+	private final ConcurrentMap<ScoreType, Set<Integer>> type_scores;
 
 	public SidebarInformationsObjective(final EverInformations plugin, final double stay, final double update, final List<SidebarTitle> titles, final Map<Integer, String> scores) {
 		super(plugin, stay, update, Type.INFORMATIONS, titles);
 		
 		this.scores = new ConcurrentHashMap<Integer, String>();
-		this.type_scores = new ConcurrentHashMap<TypeScores, Set<Integer>>();
+		this.type_scores = new ConcurrentHashMap<ScoreType, Set<Integer>>();
 		this.scores.putAll(scores);
 		
-		for (TypeScores type : TypeScores.values()) {
+		for (ScoreType type : this.plugin.getGame().getRegistry().getAllOf(ScoreType.class)) {
 			for (Entry<Integer, String> score : this.scores.entrySet()) {
-				if (score.getValue().contains("<" + type.name() + ">")) {
+				if (score.getValue().contains("<" + type.getName() + ">")) {
 					if (!this.type_scores.containsKey(type)) {
 						this.type_scores.put(type, Sets.newConcurrentHashSet());
 					}
@@ -84,15 +84,15 @@ public class SidebarInformationsObjective extends SidebarObjective {
 
 	@Override
 	public boolean subStart() {
-		for (TypeScores type : this.type_scores.keySet()) {
-			type.addListener(this.plugin, this);
+		for (ScoreType type : this.type_scores.keySet()) {
+			type.addListener(this);
 		}
 		return true;
 	}
 
 	@Override
 	public boolean subStop() {
-		for (TypeScores type : this.type_scores.keySet()) {
+		for (ScoreType type : this.type_scores.keySet()) {
 			type.removeListener(this);
 		}
 		return true;
@@ -100,7 +100,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 	
 	@Override
 	public void update() {
-		for (TypeScores score : this.type_scores.keySet()) {
+		for (ScoreType score : this.type_scores.keySet()) {
 			if (!score.isUpdate()) {
 				this.update(score);
 			}
@@ -108,7 +108,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 	}
 	
 	@Override
-	public void update(TypeScores type) {
+	public void update(ScoreType type) {
 		Set<Integer> line = this.type_scores.get(type);
 		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
@@ -127,7 +127,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 	}
 
 	@Override
-	public void update(Player player_sponge, TypeScores type) {
+	public void update(Player player_sponge, ScoreType type) {
 		EPlayer player = this.plugin.getEServer().getEPlayer(player_sponge);
 		Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
 		if (objective.isPresent()) {
@@ -147,7 +147,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 	@Override
 	public boolean isUpdate() {
 		boolean update = true;
-		for (TypeScores score : this.type_scores.keySet()) {
+		for (ScoreType score : this.type_scores.keySet()) {
 			if (!score.isUpdate()) {
 				update = false;
 			}

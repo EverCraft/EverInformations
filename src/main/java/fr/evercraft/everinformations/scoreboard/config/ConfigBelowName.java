@@ -18,13 +18,14 @@ package fr.evercraft.everinformations.scoreboard.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.spongepowered.api.text.Text;
 
 import ninja.leaping.configurate.ConfigurationNode;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.file.EConfig;
-import fr.evercraft.everapi.scoreboard.TypeScores;
+import fr.evercraft.everapi.registers.ScoreType;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.objective.BelowNameObjective;
 
@@ -56,23 +57,27 @@ public class ConfigBelowName extends EConfig<EverInformations> implements IConfi
 		
 		// Objectif unique
 		if (this.get("objectives").isVirtual()) {
-			try {
-				TypeScores type = TypeScores.valueOf(this.get("type").getString("").toUpperCase());
+			Optional<ScoreType> type = this.plugin.getGame().getRegistry().getType(ScoreType.class, this.get("type").getString(""));
+			if (type.isPresent()) {
 				Text message = EChat.of(this.plugin.getChat().replace(this.get("name").getString("")));
 				
-				objectives.add(new BelowNameObjective(this.plugin, stay_default, update_default, type, message));
-			} catch (IllegalArgumentException e) {}
+				objectives.add(new BelowNameObjective(this.plugin, stay_default, update_default, type.get(), message));
+			} else {
+				this.plugin.getELogger().warn("Error during the change of the BelowName : score='" + this.get("type").getString("") + "'");
+			}
 		// Liste d'objectives
 		} else {
-			for (ConfigurationNode config : this.get("objectives").getChildrenList()) {				
-				try {
-					TypeScores type = TypeScores.valueOf(config.getNode("type").getString("").toUpperCase());
+			for (ConfigurationNode config : this.get("objectives").getChildrenList()) {			
+				Optional<ScoreType> type = this.plugin.getGame().getRegistry().getType(ScoreType.class, config.getNode("type").getString("").toUpperCase());
+				if (type.isPresent()) {
 					double stay = config.getNode("stay").getDouble(stay_default);
 					double update = config.getNode("update").getDouble(update_default);
 					Text message = EChat.of(this.plugin.getChat().replace(config.getNode("name").getString("")));
 					
-					objectives.add(new BelowNameObjective(this.plugin, stay, update, type, message));
-				} catch (IllegalArgumentException e) {}
+					objectives.add(new BelowNameObjective(this.plugin, stay, update, type.get(), message));
+				} else {
+					this.plugin.getELogger().warn("Error during the change of the BelowName : score='" + this.get("type").getString("") + "'");
+				}
 			}
 		}
 		return objectives;

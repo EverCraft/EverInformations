@@ -30,7 +30,7 @@ import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.api.scoreboard.objective.Objective;
 import org.spongepowered.api.text.Text;
 
-import fr.evercraft.everapi.scoreboard.TypeScores;
+import fr.evercraft.everapi.registers.ScoreType;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
@@ -38,12 +38,12 @@ import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
 
 public class SidebarNumbersObjective extends SidebarObjective {
 	
-	private final ConcurrentMap<Text, TypeScores> scores;
+	private final ConcurrentMap<Text, ScoreType> scores;
 
-	public SidebarNumbersObjective(final EverInformations plugin, final double stay, final double update, final List<SidebarTitle> titles, final Map<Text, TypeScores> scores) {
+	public SidebarNumbersObjective(final EverInformations plugin, final double stay, final double update, final List<SidebarTitle> titles, final Map<Text, ScoreType> scores) {
 		super(plugin, stay, update, Type.NUMBERS, titles);
 		
-		this.scores = new ConcurrentHashMap<Text, TypeScores>();
+		this.scores = new ConcurrentHashMap<Text, ScoreType>();
 		this.scores.putAll(scores);
 	}
 	
@@ -54,7 +54,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 							.displayName(this.getSidebarTitle().getTitle())
 							.criterion(Criteria.DUMMY)
 							.build();
-		for (Entry<Text, TypeScores> score : this.scores.entrySet()) {
+		for (Entry<Text, ScoreType> score : this.scores.entrySet()) {
 			objective.getOrCreateScore(score.getKey()).setScore(score.getValue().getValue(player));
 		}
 		return player.addObjective(priority, DisplaySlots.SIDEBAR, objective);
@@ -67,15 +67,15 @@ public class SidebarNumbersObjective extends SidebarObjective {
 
 	@Override
 	public boolean subStart() {
-		for (TypeScores type : new HashSet<TypeScores>(this.scores.values())) {
-			type.addListener(this.plugin, this);
+		for (ScoreType type : new HashSet<ScoreType>(this.scores.values())) {
+			type.addListener(this);
 		}
 		return true;
 	}
 
 	@Override
 	public boolean subStop() {
-		for (TypeScores type : new HashSet<TypeScores>(this.scores.values())) {
+		for (ScoreType type : new HashSet<ScoreType>(this.scores.values())) {
 			type.removeListener(this);
 		}
 		return true;
@@ -83,7 +83,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	
 	@Override
 	public void update() {
-		for (Entry<Text, TypeScores> score : this.scores.entrySet()) {
+		for (Entry<Text, ScoreType> score : this.scores.entrySet()) {
 			if (!score.getValue().isUpdate()) {
 				for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 					Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
@@ -96,8 +96,8 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	}
 	
 	@Override
-	public void update(TypeScores type) {
-		for (Entry<Text, TypeScores> score : this.scores.entrySet()) {
+	public void update(ScoreType type) {
+		for (Entry<Text, ScoreType> score : this.scores.entrySet()) {
 			if (score.getValue().equals(type)) {
 				for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 					Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
@@ -110,11 +110,11 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	}
 
 	@Override
-	public void update(Player player_sponge, TypeScores type) {
+	public void update(Player player_sponge, ScoreType type) {
 		EPlayer player = this.plugin.getEServer().getEPlayer(player_sponge);
 		Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
 		if (objective.isPresent()) {
-			for (Entry<Text, TypeScores> score : this.scores.entrySet()) {
+			for (Entry<Text, ScoreType> score : this.scores.entrySet()) {
 				if (score.getValue().equals(type)) {
 					objective.get().getOrCreateScore(score.getKey()).setScore(type.getValue(player));
 				}
@@ -125,7 +125,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	@Override
 	public boolean isUpdate() {
 		boolean update = true;
-		for (Entry<Text, TypeScores> score : this.scores.entrySet()) {
+		for (Entry<Text, ScoreType> score : this.scores.entrySet()) {
 			if (!score.getValue().isUpdate()) {
 				update = false;
 			}

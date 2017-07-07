@@ -22,7 +22,7 @@ import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.api.scoreboard.objective.Objective;
 import org.spongepowered.api.text.Text;
 
-import fr.evercraft.everapi.scoreboard.TypeScores;
+import fr.evercraft.everapi.registers.ScoreType;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.ScoreBoard;
@@ -30,9 +30,9 @@ import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 public class ListObjective extends EObjective {
 
 	private final Objective objective;
-	private final TypeScores type;
+	private final ScoreType type;
 	
-	public ListObjective(final EverInformations plugin, final double stay, final double update, TypeScores type) {
+	public ListObjective(final EverInformations plugin, final double stay, final double update, ScoreType type) {
 		super(plugin, stay, update);
 		this.type = type;
 		
@@ -57,7 +57,7 @@ public class ListObjective extends EObjective {
 
 	@Override
 	public boolean start() {
-		this.type.addListener(this.plugin, this);
+		this.type.addListener(this);
 		return true;
 	}
 
@@ -73,14 +73,14 @@ public class ListObjective extends EObjective {
 	}
 
 	@Override
-	public void update(TypeScores score) {
+	public void update(ScoreType score) {
 		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			this.objective.getOrCreateScore(player.getTeamRepresentation()).setScore(score.getValue(player));
 		}
 	}
 
 	@Override
-	public void update(Player player_sponge, TypeScores score) {
+	public void update(Player player_sponge, ScoreType score) {
 		EPlayer player = this.plugin.getEServer().getEPlayer(player_sponge);
 		this.objective.getOrCreateScore(player.getTeamRepresentation()).setScore(score.getValue(player));
 	}
@@ -92,7 +92,7 @@ public class ListObjective extends EObjective {
 
 	@Override
 	public String toString() {
-		return "ListObjective [stay=" + stay + ", type=" + this.type.name()
+		return "ListObjective [stay=" + stay + ", type=" + this.type.getName()
 				+ ", objective=" + objective.getName() + "]";
 	}
 	
