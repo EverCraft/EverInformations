@@ -151,7 +151,7 @@ public class NewbiePlayer<T extends IMessage> extends Newbie<T> {
 		public void task() {
 			T message = this.getMessage();
 			
-			if (this.newbie.plugin.equals(Type.BOSSBAR_PLAYER)) {
+			if (this.newbie.type.equals(Type.BOSSBAR_PLAYER)) {
 				// Si il y a pas de délai
 				if (((BossBarMessage) message).getTimeNext() <= 0) {
 					this.taskNext();
