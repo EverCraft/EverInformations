@@ -21,7 +21,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.service.permission.Subject;
+import org.spongepowered.api.service.permission.SubjectReference;
 import org.spongepowered.api.text.Text;
 
 import fr.evercraft.everapi.server.player.EPlayer;
@@ -195,7 +195,7 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 	}
 
 	@Override
-	public void joinPlayer(EPlayer player, Optional<Subject> subject) {
+	public void joinPlayer(EPlayer player, Optional<SubjectReference> subject) {
 		if (this.enable) {
 			this.stop();
 			this.player = player;
@@ -205,7 +205,7 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 	}
 
 	@Override
-	public void quitPlayer(EPlayer player, Optional<Subject> subject) {
+	public void quitPlayer(EPlayer player, Optional<SubjectReference> subject) {
 		if (this.enable) {
 			this.stop();
 			this.player = player;
@@ -215,7 +215,7 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 	}
 	
 	@Override
-	public void kickPlayer(EPlayer player, Optional<Subject> subject, Text reason) {
+	public void kickPlayer(EPlayer player, Optional<SubjectReference> subject, Text reason) {
 		if (this.enable) {
 			this.stop();
 			this.player = player;

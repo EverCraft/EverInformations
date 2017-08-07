@@ -18,7 +18,7 @@ package fr.evercraft.everinformations.connection;
 
 import java.util.Optional;
 
-import org.spongepowered.api.service.permission.Subject;
+import org.spongepowered.api.service.permission.SubjectReference;
 import org.spongepowered.api.text.Text;
 
 import fr.evercraft.everapi.server.player.EPlayer;
@@ -33,6 +33,7 @@ import fr.evercraft.everinformations.message.ActionBarMessage;
 import fr.evercraft.everinformations.message.BossBarMessage;
 import fr.evercraft.everinformations.message.ChatMessage;
 import fr.evercraft.everinformations.message.TitleMessage;
+
 public class ManagerConnection {
 	private final EverInformations plugin;
 	
@@ -97,21 +98,21 @@ public class ManagerConnection {
 	}
 
 
-	public void joinPlayer(EPlayer player, Optional<Subject> subject) {
-		this.chatPlayer.joinPlayer(player, subject);
-		this.chatOthers.joinPlayer(player, subject);
+	public void joinPlayer(EPlayer player, Optional<SubjectReference> optional) {
+		this.chatPlayer.joinPlayer(player, optional);
+		this.chatOthers.joinPlayer(player, optional);
 		
-		this.titlePlayer.joinPlayer(player, subject);
-		this.titleOthers.joinPlayer(player, subject);
+		this.titlePlayer.joinPlayer(player, optional);
+		this.titleOthers.joinPlayer(player, optional);
 		
-		this.bossbarPlayer.joinPlayer(player, subject);
-		this.bossbarOthers.joinPlayer(player, subject);
+		this.bossbarPlayer.joinPlayer(player, optional);
+		this.bossbarOthers.joinPlayer(player, optional);
 		
-		this.actionbarPlayer.joinPlayer(player, subject);
-		this.actionbarOthers.joinPlayer(player, subject);
+		this.actionbarPlayer.joinPlayer(player, optional);
+		this.actionbarOthers.joinPlayer(player, optional);
 	}
 	
-	public void quitPlayer(EPlayer player, Optional<Subject> subject) {
+	public void quitPlayer(EPlayer player, Optional<SubjectReference> subject) {
 		this.chatPlayer.quitPlayer(player, subject);
 		this.chatOthers.quitPlayer(player, subject);
 		
@@ -125,7 +126,7 @@ public class ManagerConnection {
 		this.actionbarOthers.quitPlayer(player, subject);
 	}
 	
-	public void joinPlayerFake(EPlayer player, Optional<Subject> subject) {
+	public void joinPlayerFake(EPlayer player, Optional<SubjectReference> subject) {
 		this.chatOthers.joinPlayer(player, subject);
 		
 		this.titleOthers.joinPlayer(player, subject);
@@ -135,7 +136,7 @@ public class ManagerConnection {
 		this.actionbarOthers.joinPlayer(player, subject);
 	}
 	
-	public void quitPlayerFake(EPlayer player, Optional<Subject> subject) {
+	public void quitPlayerFake(EPlayer player, Optional<SubjectReference> subject) {
 		this.chatOthers.quitPlayer(player, subject);
 		
 		this.titleOthers.quitPlayer(player, subject);
@@ -145,7 +146,7 @@ public class ManagerConnection {
 		this.actionbarOthers.quitPlayer(player, subject);
 	}
 	
-	public void kickPlayer(EPlayer player, Optional<Subject> subject, Text reason) {
+	public void kickPlayer(EPlayer player, Optional<SubjectReference> subject, Text reason) {
 		this.chatPlayer.kickPlayer(player, subject, reason);
 		this.chatOthers.kickPlayer(player, subject, reason);
 		

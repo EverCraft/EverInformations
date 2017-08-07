@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.service.permission.Subject;
+import org.spongepowered.api.service.permission.SubjectReference;
 import org.spongepowered.api.text.Text;
 
 import fr.evercraft.everapi.server.player.EPlayer;
@@ -77,7 +77,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 	}
 	
 	@Override
-	public void joinPlayer(EPlayer player, Optional<Subject> subject) {
+	public void joinPlayer(EPlayer player, Optional<SubjectReference> subject) {
 		if (this.enable) {
 			this.remove(player);
 			Player player_connection = new Player(this, player);
@@ -87,7 +87,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 	}
 
 	@Override
-	public void quitPlayer(EPlayer player, Optional<Subject> subject) {
+	public void quitPlayer(EPlayer player, Optional<SubjectReference> subject) {
 		if (this.enable) {
 			this.remove(player);
 			Player player_connection = new Player(this, player);
@@ -97,7 +97,7 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 	}
 	
 	@Override
-	public void kickPlayer(EPlayer player, Optional<Subject> subject, Text reason) {
+	public void kickPlayer(EPlayer player, Optional<SubjectReference> subject, Text reason) {
 		if (this.enable) {
 			this.remove(player);
 			Player player_connection = new Player(this, player);
@@ -131,17 +131,17 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 			this.numero = -1;
 		}
 		
-		public void join(Optional<Subject> subject) {
+		public void join(Optional<SubjectReference> subject) {
 			this.messages = this.connection.getMessagesJoin(subject);
 			this.next();
 		}
 
-		public void quit(Optional<Subject> subject) {
+		public void quit(Optional<SubjectReference> subject) {
 			this.messages = this.connection.getMessagesQuit(subject);
 			this.next();
 		}
 		
-		public void kick(Optional<Subject> subject, Text reason) {
+		public void kick(Optional<SubjectReference> subject, Text reason) {
 			this.messages = this.connection.getMessagesKick(subject);
 			this.reason = reason;
 			this.next();

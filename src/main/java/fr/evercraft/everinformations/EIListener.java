@@ -209,7 +209,7 @@ public class EIListener {
     public void permGroupEvent(PermGroupEvent event) {
 		this.plugin.getGame().getScheduler().createTaskBuilder().execute(() -> {
 			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				if (player.isChildOf(event.getSubject())) {
+				if (player.isChildOf(event.getSubject().asSubjectReference())) {
 					// NameTag
 					this.plugin.getNameTag().updatePermission(player);
 					

@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.spongepowered.api.service.permission.Subject;
+import org.spongepowered.api.service.permission.SubjectReference;
 import org.spongepowered.api.text.Text;
 
 import fr.evercraft.everapi.server.player.EPlayer;
@@ -83,9 +83,9 @@ public abstract class Connection<T extends IMessage> {
 	public abstract void reload();
 	public abstract void stop();
 
-	public abstract void joinPlayer(EPlayer player, Optional<Subject> subject);
-	public abstract void quitPlayer(EPlayer player, Optional<Subject> subject);
-	public abstract void kickPlayer(EPlayer player, Optional<Subject> subject, Text text);
+	public abstract void joinPlayer(EPlayer player, Optional<SubjectReference> optional);
+	public abstract void quitPlayer(EPlayer player, Optional<SubjectReference> subject);
+	public abstract void kickPlayer(EPlayer player, Optional<SubjectReference> subject, Text text);
 	
 	protected void loadPriority() {
 		this.priority = PriorityService.DEFAULT;
@@ -104,21 +104,21 @@ public abstract class Connection<T extends IMessage> {
 		}
 	}
 	
-	protected List<T> getMessagesJoin(Optional<Subject> subject) {
+	protected List<T> getMessagesJoin(Optional<SubjectReference> subject) {
 		return getMessages(this.messages_join, subject);
 	}
 	
-	protected List<T> getMessagesQuit(Optional<Subject> subject) {
+	protected List<T> getMessagesQuit(Optional<SubjectReference> subject) {
 		return getMessages(this.messages_quit, subject);
 	}
 	
-	protected List<T> getMessagesKick(Optional<Subject> subject) {
+	protected List<T> getMessagesKick(Optional<SubjectReference> subject) {
 		return getMessages(this.messages_kick, subject);
 	}
 	
-	protected List<T> getMessages(Map<String, List<T>> map, Optional<Subject> subject) {
-		if (subject.isPresent() && map.containsKey(subject.get().getIdentifier())) {
-			return map.get(subject.get().getIdentifier());
+	protected List<T> getMessages(Map<String, List<T>> map, Optional<SubjectReference> subject) {
+		if (subject.isPresent() && map.containsKey(subject.get().getSubjectIdentifier())) {
+			return map.get(subject.get().getSubjectIdentifier());
 		}
 		if (map.containsKey(Connection.DEFAULT)) {
 			return map.get(Connection.DEFAULT);
