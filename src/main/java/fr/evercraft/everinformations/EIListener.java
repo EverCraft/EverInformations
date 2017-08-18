@@ -16,6 +16,8 @@
  */
 package fr.evercraft.everinformations;
 
+import java.util.Optional;
+
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
@@ -23,13 +25,16 @@ import org.spongepowered.api.event.entity.living.humanoid.ChangeGameModeEvent;
 import org.spongepowered.api.event.entity.living.humanoid.player.KickPlayerEvent;
 import org.spongepowered.api.event.entity.living.humanoid.player.RespawnPlayerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
+import org.spongepowered.api.service.permission.PermissionService;
+import org.spongepowered.api.service.permission.Subject;
+import org.spongepowered.api.service.permission.SubjectReference;
 
 import fr.evercraft.everapi.event.ActionBarEvent;
 import fr.evercraft.everapi.event.BossBarEvent;
 import fr.evercraft.everapi.event.NameTagEvent;
 import fr.evercraft.everapi.event.PermGroupEvent;
 import fr.evercraft.everapi.event.PermSystemEvent;
-import fr.evercraft.everapi.event.PermUserEvent;
+import fr.evercraft.everapi.event.SubjectDataUpdateEvent;
 import fr.evercraft.everapi.event.ScoreBoardEvent;
 import fr.evercraft.everapi.event.TabListEvent;
 import fr.evercraft.everapi.event.TitleEvent;
@@ -190,26 +195,22 @@ public class EIListener {
 	}
 	
 	@Listener
-    public void permUserEvent(PermUserEvent event) {
-		if (event.getPlayer().isPresent() && (event.getAction().equals(PermUserEvent.Action.USER_OPTION_CHANGED) ||
-			event.getAction().equals(PermUserEvent.Action.USER_GROUP_CHANGED) ||
-			event.getAction().equals(PermUserEvent.Action.USER_SUBGROUP_CHANGED))) {
-			
-			this.plugin.getGame().getScheduler().createTaskBuilder().execute(() -> {
+    public void subjectDataUpdateEvent(SubjectDataUpdateEvent event) {
+		Subject subject = event.getUpdatedData().getSubject();
+		String collectionIdentifier = subject.getContainingCollection().getIdentifier();
+		
+		if (collectionIdentifier.equals(PermissionService.SUBJECTS_USER)) {
+			this.plugin.getEServer().getEPlayer(subject.getIdentifier()).ifPresent(player -> {
 				// NameTag
-				this.plugin.getNameTag().updatePermission(event.getPlayer().get());
+				this.plugin.getNameTag().updatePermission(player);
 				
 				// TabList
-				this.plugin.getTabList().updatePlayer(event.getPlayer().get());
-			}).submit(this.plugin);
-		}
-	}
-	
-	@Listener
-    public void permGroupEvent(PermGroupEvent event) {
-		this.plugin.getGame().getScheduler().createTaskBuilder().execute(() -> {
+				this.plugin.getTabList().updatePlayer(player);
+			});
+		} else if (collectionIdentifier.equals(PermissionService.SUBJECTS_GROUP)) {
+			SubjectReference subjectReference = subject.asSubjectReference();
 			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				if (player.isChildOf(event.getSubject().asSubjectReference())) {
+				if (player.isChildOf(subjectReference)) {
 					// NameTag
 					this.plugin.getNameTag().updatePermission(player);
 					
@@ -217,20 +218,7 @@ public class EIListener {
 					this.plugin.getTabList().updatePlayer(player);
 				}
 			}
-		}).submit(this.plugin);
-	}
-	
-	@Listener
-    public void permSystemEvent(PermSystemEvent event) {
-		this.plugin.getGame().getScheduler().createTaskBuilder().execute(() -> {
-			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				// NameTag
-				this.plugin.getNameTag().updatePermission(player);
-				
-				// TabList
-				this.plugin.getTabList().updatePlayer(player);
-			}
-		}).submit(this.plugin);
+		}
 	}
 	
 	@Listener
