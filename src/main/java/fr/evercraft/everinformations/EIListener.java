@@ -16,8 +16,6 @@
  */
 package fr.evercraft.everinformations;
 
-import java.util.Optional;
-
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
@@ -25,15 +23,10 @@ import org.spongepowered.api.event.entity.living.humanoid.ChangeGameModeEvent;
 import org.spongepowered.api.event.entity.living.humanoid.player.KickPlayerEvent;
 import org.spongepowered.api.event.entity.living.humanoid.player.RespawnPlayerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
-import org.spongepowered.api.service.permission.PermissionService;
-import org.spongepowered.api.service.permission.Subject;
-import org.spongepowered.api.service.permission.SubjectReference;
 
 import fr.evercraft.everapi.event.ActionBarEvent;
 import fr.evercraft.everapi.event.BossBarEvent;
 import fr.evercraft.everapi.event.NameTagEvent;
-import fr.evercraft.everapi.event.PermGroupEvent;
-import fr.evercraft.everapi.event.PermSystemEvent;
 import fr.evercraft.everapi.event.SubjectDataUpdateEvent;
 import fr.evercraft.everapi.event.ScoreBoardEvent;
 import fr.evercraft.everapi.event.TabListEvent;
@@ -196,7 +189,8 @@ public class EIListener {
 	
 	@Listener
     public void subjectDataUpdateEvent(SubjectDataUpdateEvent event) {
-		Subject subject = event.getUpdatedData().getSubject();
+		// TODO 
+		/*Subject subject = event.getUpdatedData().getSubject();
 		String collectionIdentifier = subject.getContainingCollection().getIdentifier();
 		
 		if (collectionIdentifier.equals(PermissionService.SUBJECTS_USER)) {
@@ -218,7 +212,7 @@ public class EIListener {
 					this.plugin.getTabList().updatePlayer(player);
 				}
 			}
-		}
+		}*/
 	}
 	
 	@Listener
