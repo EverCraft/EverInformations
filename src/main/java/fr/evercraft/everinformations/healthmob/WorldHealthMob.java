@@ -155,8 +155,8 @@ public class WorldHealthMob {
 			int size = this.plugin.getHealthMob().getMessage().size()-1;
 			message = this.plugin.getHealthMob().getMessage().get(Math.min(size, Math.max(0, (int) Math.round((size*(health/max_health))))));
 		}
-		message = message.replaceAll(EReplacesPlayer.HEALTH.getName(), health.toString());
-		message = message.replaceAll(EReplacesPlayer.MAX_HEALTH.getName(), max_health.toString());
+		message = message.replace(EReplacesPlayer.HEALTH.getName(), health.toString());
+		message = message.replace(EReplacesPlayer.MAX_HEALTH.getName(), max_health.toString());
 		return EChat.of(this.plugin.getChat().replaceGlobal(message));
 	}
 	

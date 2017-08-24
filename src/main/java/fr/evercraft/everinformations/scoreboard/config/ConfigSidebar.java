@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import org.spongepowered.api.text.Text;
 
 import ninja.leaping.configurate.ConfigurationNode;
+import fr.evercraft.everapi.message.replace.EReplacesPlayer;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everapi.registers.ScoreType;
@@ -82,7 +83,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 			
 			scores_int.put("9", "&1");
 			scores_int.put("8", "&aJoueur");
-			scores_int.put("7", "&4  <" + ScoreTypes.ONLINE_PLAYERS_CANSEE.getName() + ">");
+			scores_int.put("7", "&4  " + EReplacesPlayer.ONLINE_PLAYERS_CANSEE.getName());
 			scores_int.put("6", "&2");
 			scores_int.put("5", "&aTeamSpeak :");
 			scores_int.put("4", "&4  ts.evercraft.fr");
