@@ -37,7 +37,7 @@ public class ConfigChat extends EConfig<EverInformations> implements IConfig<Cha
 	@Override
 	protected void loadDefault() {
 		addDefault("enable", true);
-		addDefault("format", 300, "Seconds");
+		addDefault("interval", 300, "Seconds");
 		addDefault("prefix", "&f[&4Ever&6&lNews&f] ");
 		addDefault("messages", Arrays.asList("&1Message 1 ......", "&bMessage 2 ......", "&cMessage 3 ......", "&aMessage 4 ......"));
 	}

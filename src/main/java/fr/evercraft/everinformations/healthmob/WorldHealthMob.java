@@ -28,8 +28,8 @@ import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.World;
 
+import fr.evercraft.everapi.message.format.EFormatString;
 import fr.evercraft.everapi.message.replace.EReplacesPlayer;
-import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everinformations.EverInformations;
 
 public class WorldHealthMob {
@@ -157,7 +157,7 @@ public class WorldHealthMob {
 		}
 		message = message.replace(EReplacesPlayer.HEALTH.getName(), health.toString());
 		message = message.replace(EReplacesPlayer.MAX_HEALTH.getName(), max_health.toString());
-		return EChat.of(this.plugin.getChat().replaceGlobal(message));
+		return EFormatString.of(message).toText(this.plugin.getChat().getReplaceServer());
 	}
 	
 	/**
