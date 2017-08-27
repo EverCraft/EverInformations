@@ -55,7 +55,7 @@ public class SidebarInformationsObjective extends SidebarObjective {
 		
 		for (ScoreType type : this.plugin.getGame().getRegistry().getAllOf(ScoreType.class)) {
 			for (Entry<Integer, String> score : this.scores.entrySet()) {
-				if (score.getValue().contains("<" + type.getName() + ">")) {
+				if (score.getValue().contains("{" + type.getName() + "}")) {
 					if (!this.type_scores.containsKey(type)) {
 						this.type_scores.put(type, Sets.newConcurrentHashSet());
 					}
