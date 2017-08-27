@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 
-import fr.evercraft.everapi.plugin.EChat;
+import fr.evercraft.everapi.message.format.EFormatString;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.nametag.config.ConfigNameTag;
@@ -99,8 +99,8 @@ public class ManagerNameTag {
 	
 	public void sendAll() {
 		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-			Text prefix = EChat.of(player.getOption(this.prefix).orElse(""));
-			Text suffix = EChat.of(player.getOption(this.suffix).orElse(""));
+			Text prefix = EFormatString.of(player.getOption(this.prefix).orElse("")).toText(player.getReplaces());
+			Text suffix = EFormatString.of(player.getOption(this.suffix).orElse("")).toText(player.getReplaces());
 			Text teamRepresentation = player.getTeamRepresentation();
 			
 			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
@@ -118,10 +118,11 @@ public class ManagerNameTag {
 	public void sendPlayer(EPlayer player) {
 		if (this.enable) {
 			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
+				System.out.println(player.getOption(this.prefix).orElse(""));
 				player.sendNameTag(IDENTIFIER, 
 						other.getTeamRepresentation(), 
-						EChat.of(other.getOption(this.prefix).orElse("")), 
-						EChat.of(other.getOption(this.suffix).orElse("")));
+						EFormatString.of(other.getOption(this.prefix).orElse("")).toText(player.getReplaces()), 
+						EFormatString.of(other.getOption(this.suffix).orElse("")).toText(player.getReplaces()));
 			}
 		}
 	}
@@ -134,8 +135,8 @@ public class ManagerNameTag {
 	
 	public void sendAll(EPlayer player) {
 		if (this.enable) {
-			Text prefix = EChat.of(player.getOption(this.prefix).orElse(""));
-			Text suffix = EChat.of(player.getOption(this.suffix).orElse(""));
+			Text prefix = EFormatString.of(player.getOption(this.prefix).orElse("")).toText(player.getReplaces());
+			Text suffix = EFormatString.of(player.getOption(this.suffix).orElse("")).toText(player.getReplaces());
 			Text teamRepresentation = player.getTeamRepresentation();
 			
 			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
@@ -145,8 +146,8 @@ public class ManagerNameTag {
 				
 				player.sendNameTag(IDENTIFIER, 
 						other.getTeamRepresentation(), 
-						EChat.of(other.getOption(this.prefix).orElse("")), 
-						EChat.of(other.getOption(this.suffix).orElse("")));
+						EFormatString.of(other.getOption(this.prefix).orElse("")).toText(player.getReplaces()), 
+						EFormatString.of(other.getOption(this.suffix).orElse("")).toText(player.getReplaces()));
 			}
 		}
 	}

@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import org.spongepowered.api.text.Text;
 
 import ninja.leaping.configurate.ConfigurationNode;
+import fr.evercraft.everapi.message.format.EFormatString;
 import fr.evercraft.everapi.message.replace.EReplacesPlayer;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.file.EConfig;
@@ -142,7 +143,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 			
 			// Titre unique
 			if (config.getNode("titles").isVirtual()) {
-				Text title = EChat.of(this.plugin.getChat().replace(config.getNode("title").getString("")));
+				EFormatString title = EFormatString.of(config.getNode("title").getString(""));
 				
 				titles.add(new SidebarTitle(stay_title_default_2, title));
 			// Liste de titres
@@ -150,13 +151,13 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 				for (ConfigurationNode config_title : config.getNode("titles").getChildrenList()) {
 					// Titre uniquement
 					if (config_title.getValue() instanceof String) {
-						Text title = EChat.of(this.plugin.getChat().replace(config_title.getString("")));
+						EFormatString title = EFormatString.of(config_title.getString(""));
 						
 						titles.add(new SidebarTitle(stay_title_default_2, title));
 					// Titre avec config
 					} else {
 						double stay_title = config_title.getNode("stay").getDouble(stay_title_default_2);
-						Text title = EChat.of(this.plugin.getChat().replace(config_title.getNode("title").getString("")));
+						EFormatString title = EFormatString.of(config_title.getNode("title").getString(""));
 						
 						titles.add(new SidebarTitle(stay_title, title));
 					}

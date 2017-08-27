@@ -16,15 +16,15 @@
  */
 package fr.evercraft.everinformations.scoreboard.sidebar;
 
-import org.spongepowered.api.text.Text;
+import fr.evercraft.everapi.message.format.EFormatString;
 
 public class SidebarTitle  {
 	// En secondes
 	private final double stay;
 	
-	private final Text title;
+	private final EFormatString title;
 	
-	public SidebarTitle(final double stay, Text title) {
+	public SidebarTitle(final double stay, EFormatString title) {
 		this.stay = stay;
 		this.title = title;
 	}
@@ -33,7 +33,7 @@ public class SidebarTitle  {
 		return (long) (this.stay * 1000);
 	}
 	
-	public Text getTitle() {
+	public EFormatString getTitle() {
 		return this.title;
 	}
 

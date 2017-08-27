@@ -97,7 +97,7 @@ public class SidebarStatsObjective extends SidebarObjective {
 	public void update() {
 		Objective objective = Objective.builder()
 				.name(ScoreBoard.SIDEBAR_IDENTIFIER)
-				.displayName(this.getSidebarTitle().getTitle())
+				.displayName(EChat.fixLength(this.getSidebarTitle().getTitle().toText(this.plugin.getChat().getReplaceAll()), 32))
 				.criterion(Criteria.DUMMY)
 				.build();
 		
@@ -180,8 +180,8 @@ public class SidebarStatsObjective extends SidebarObjective {
 	@Override
 	protected void updateTitle() {		
 		SidebarTitle title = this.getSidebarTitle();
-		this.plugin.getELogger().debug("SidebarTitle : View (title='" + title.getTitle().toPlain() + "';next='" + title.getNext() + "')");
+		this.plugin.getELogger().debug("SidebarTitle : View (title='" + title.getTitle().toString() + "';next='" + title.getNext() + "')");
 		
-		this.objective.setDisplayName(title.getTitle());
+		this.objective.setDisplayName(EChat.fixLength(title.getTitle().toText(this.plugin.getChat().getReplaceAll()), 32));
 	}
 }

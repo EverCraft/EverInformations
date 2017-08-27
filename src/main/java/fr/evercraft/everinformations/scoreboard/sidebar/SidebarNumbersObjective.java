@@ -30,6 +30,7 @@ import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.api.scoreboard.objective.Objective;
 import org.spongepowered.api.text.Text;
 
+import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.registers.ScoreType;
 import fr.evercraft.everapi.server.player.EPlayer;
 import fr.evercraft.everinformations.EverInformations;
@@ -51,7 +52,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	public boolean add(int priority, EPlayer player) {
 		Objective objective = Objective.builder()
 							.name(ScoreBoard.SIDEBAR_IDENTIFIER)
-							.displayName(this.getSidebarTitle().getTitle())
+							.displayName(EChat.fixLength(this.getSidebarTitle().getTitle().toText(player.getReplaces()), 32))
 							.criterion(Criteria.DUMMY)
 							.build();
 		for (Entry<Text, ScoreType> score : this.scores.entrySet()) {
@@ -136,12 +137,12 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	@Override
 	protected void updateTitle() {		
 		SidebarTitle title = this.getSidebarTitle();
-		this.plugin.getELogger().debug("SidebarTitle : View (title='" + title.getTitle().toPlain() + "';next='" + title.getNext() + "')");
+		this.plugin.getELogger().debug("SidebarTitle : View (title='" + title.getTitle().toString() + "';next='" + title.getNext() + "')");
 		
 		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 			Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
 			if (objective.isPresent()) {
-				objective.get().setDisplayName(title.getTitle());
+				objective.get().setDisplayName(EChat.fixLength(title.getTitle().toText(player.getReplaces()), 32));
 			}
 		}
 	}
