@@ -19,6 +19,7 @@ package fr.evercraft.everinformations.newbie;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.InformationService.Priorities;
 import fr.evercraft.everapi.services.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.message.IMessage;
@@ -38,9 +39,6 @@ public abstract class Newbie<T extends IMessage> {
 	
 	public final static String PLAYER = "player";
 	public final static String OTHERS = "others";
-	
-	public final static String IDENTIFIER_PLAYER = "everinformations.newbie.player";
-	public final static String IDENTIFIER_OTHERS = "everinformations.newbie.others";
 	
 	protected final EverInformations plugin;
 
@@ -68,19 +66,19 @@ public abstract class Newbie<T extends IMessage> {
 	public abstract void removePlayer(EPlayer player);
 	
 	protected void loadPriority() {
-		this.priority = PriorityService.DEFAULT;
+		this.priority = PriorityService.PRIORITY_DEFAULT;
 		if (type.equals(Type.ACTION_BAR_PLAYER)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getActionBar(Newbie.IDENTIFIER_PLAYER);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.NAMETAG, Priorities.NEWBIE_PLAYER);
 		} else if (type.equals(Type.ACTION_BAR_OTHERS)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getActionBar(Newbie.IDENTIFIER_OTHERS);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.NAMETAG, Priorities.NEWBIE_OTHERS);
 		} else if (type.equals(Type.TITLE_PLAYER)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTitle(Newbie.IDENTIFIER_PLAYER);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.TITLE, Priorities.NEWBIE_PLAYER);
 		} else if (type.equals(Type.TITLE_OTHERS)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTitle(Newbie.IDENTIFIER_OTHERS);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.TITLE, Priorities.NEWBIE_OTHERS);
 		} else if (type.equals(Type.BOSSBAR_PLAYER)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTitle(Newbie.IDENTIFIER_PLAYER);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.BOSSBAR, Priorities.NEWBIE_PLAYER);
 		} else if (type.equals(Type.BOSSBAR_OTHERS)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTitle(Newbie.IDENTIFIER_OTHERS);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.BOSSBAR, Priorities.NEWBIE_OTHERS);
 		}
 	}
 }

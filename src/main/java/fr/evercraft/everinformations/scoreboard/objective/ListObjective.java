@@ -24,8 +24,8 @@ import org.spongepowered.api.text.Text;
 
 import fr.evercraft.everapi.registers.ScoreType;
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.InformationService.Priorities;
 import fr.evercraft.everinformations.EverInformations;
-import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 
 public class ListObjective extends EObjective {
 
@@ -37,7 +37,7 @@ public class ListObjective extends EObjective {
 		this.type = type;
 		
 		this.objective = Objective.builder()
-				.name(ScoreBoard.LIST_IDENTIFIER)
+				.name(Priorities.SCOREBOARD_LIST)
 				.displayName(Text.of())
 				.criterion(type.getCriterion().orElse(Criteria.DUMMY))
 				.objectiveDisplayMode(type.getObjectiveDisplayMode())
@@ -52,7 +52,7 @@ public class ListObjective extends EObjective {
 	
 	@Override
 	public boolean remove(EPlayer player) {
-		return player.removeObjective(DisplaySlots.LIST, ScoreBoard.LIST_IDENTIFIER);
+		return player.removeObjective(DisplaySlots.LIST, Priorities.SCOREBOARD_LIST);
 	}
 
 	@Override

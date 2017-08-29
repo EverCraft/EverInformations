@@ -29,14 +29,19 @@ import fr.evercraft.everapi.server.player.EPlayer;
 public class ActionBarMessage implements IMessage {
 	// En secondes
 	private final double stay;
-	private final double next;
+	private final double interval;
 	
 	private final String message;
 
-	public ActionBarMessage(final double stay, double next, String message) {
+	public ActionBarMessage(final double stay, double interval, String message) {
 		this.stay = stay;
-		this.next = next;
+		this.interval = interval;
 		this.message = message;
+	}
+	
+	@Override
+	public long getNext() {
+		return (long) ((this.stay + this.interval) * 1000);
 	}
 	
 	public long getStay() {
@@ -44,13 +49,8 @@ public class ActionBarMessage implements IMessage {
 	}
 
 	@Override
-	public long getNext() {
-		return (long) ((this.next + this.stay) * 1000);
-	}
-
-	@Override
 	public String toString() {
-		return "ActionBarMessage [stay=" + stay + ", next=" + next
+		return "ActionBarMessage [stay=" + stay + ", next=" + interval
 				+ ", message=" + message + "]";
 	}
 

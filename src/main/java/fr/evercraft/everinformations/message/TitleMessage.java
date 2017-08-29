@@ -32,7 +32,7 @@ public class TitleMessage implements IMessage {
 	
 	// En Secondes
 	private final double stay;
-	private final double next;
+	private final double interval;
 	private final double fadeIn;
 	private final double fadeOut;
 	
@@ -41,7 +41,7 @@ public class TitleMessage implements IMessage {
 
 	public TitleMessage(double stay, double interval, double fadeIn, double fadeOut, String title, String subTitle) {
 		this.stay = stay;
-		this.next = interval;
+		this.interval = interval;
 		
 		this.fadeIn = fadeIn;
 		this.fadeOut = fadeOut;
@@ -52,7 +52,7 @@ public class TitleMessage implements IMessage {
 
 	@Override
 	public long getNext() {
-		return (long) ((this.next + this.stay) * 1000);
+		return (long) ((this.stay + this.interval) * 1000);
 	}
 	
 	public int getStay() {
@@ -121,7 +121,7 @@ public class TitleMessage implements IMessage {
 
 	@Override
 	public String toString() {
-		return "TitleMessage [stay=" + stay + ", next=" + next
+		return "TitleMessage [stay=" + stay + ", interval=" + interval
 				+ ", fadeIn=" + fadeIn + ", fadeOut=" + fadeOut + ", title="
 				+ title + ", subTitle=" + subTitle + "]";
 	}

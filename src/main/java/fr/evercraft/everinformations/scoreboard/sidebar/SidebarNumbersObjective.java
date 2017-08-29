@@ -33,8 +33,8 @@ import org.spongepowered.api.text.Text;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.registers.ScoreType;
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.InformationService.Priorities;
 import fr.evercraft.everinformations.EverInformations;
-import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
 
 public class SidebarNumbersObjective extends SidebarObjective {
@@ -51,7 +51,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	@Override
 	public boolean add(int priority, EPlayer player) {
 		Objective objective = Objective.builder()
-							.name(ScoreBoard.SIDEBAR_IDENTIFIER)
+							.name(Priorities.SCOREBOARD_SIDEBAR)
 							.displayName(EChat.fixLength(this.getSidebarTitle().getTitle().toText(player.getReplaces()), 32))
 							.criterion(Criteria.DUMMY)
 							.build();
@@ -63,7 +63,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 
 	@Override
 	public boolean remove(EPlayer player) {
-		return player.removeObjective(DisplaySlots.SIDEBAR, ScoreBoard.SIDEBAR_IDENTIFIER);
+		return player.removeObjective(DisplaySlots.SIDEBAR, Priorities.SCOREBOARD_SIDEBAR);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 		for (Entry<Text, ScoreType> score : this.scores.entrySet()) {
 			if (!score.getValue().isUpdate()) {
 				for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-					Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
+					Optional<Objective> objective = player.getScoreboard().getObjective(Priorities.SCOREBOARD_SIDEBAR);
 					if (objective.isPresent()) {
 						objective.get().getOrCreateScore(score.getKey()).setScore(score.getValue().getValue(player));
 					}
@@ -101,7 +101,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 		for (Entry<Text, ScoreType> score : this.scores.entrySet()) {
 			if (score.getValue().equals(type)) {
 				for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-					Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
+					Optional<Objective> objective = player.getScoreboard().getObjective(Priorities.SCOREBOARD_SIDEBAR);
 					if (objective.isPresent()) {
 						objective.get().getOrCreateScore(score.getKey()).setScore(score.getValue().getValue(player));
 					}
@@ -113,7 +113,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 	@Override
 	public void update(Player player_sponge, ScoreType type) {
 		EPlayer player = this.plugin.getEServer().getEPlayer(player_sponge);
-		Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
+		Optional<Objective> objective = player.getScoreboard().getObjective(Priorities.SCOREBOARD_SIDEBAR);
 		if (objective.isPresent()) {
 			for (Entry<Text, ScoreType> score : this.scores.entrySet()) {
 				if (score.getValue().equals(type)) {
@@ -140,7 +140,7 @@ public class SidebarNumbersObjective extends SidebarObjective {
 		this.plugin.getELogger().debug("SidebarTitle : View (title='" + title.getTitle().toString() + "';next='" + title.getNext() + "')");
 		
 		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-			Optional<Objective> objective = player.getScoreboard().getObjective(ScoreBoard.SIDEBAR_IDENTIFIER);
+			Optional<Objective> objective = player.getScoreboard().getObjective(Priorities.SCOREBOARD_SIDEBAR);
 			if (objective.isPresent()) {
 				objective.get().setDisplayName(EChat.fixLength(title.getTitle().toText(player.getReplaces()), 32));
 			}

@@ -23,11 +23,11 @@ import org.spongepowered.api.text.Text;
 
 import fr.evercraft.everapi.message.format.EFormatString;
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.InformationService.Priorities;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.nametag.config.ConfigNameTag;
 
 public class ManagerNameTag {
-	public final static String IDENTIFIER = "everinformations";
 	
 	private final EverInformations plugin;
 	
@@ -104,14 +104,14 @@ public class ManagerNameTag {
 			Text teamRepresentation = player.getTeamRepresentation();
 			
 			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-				other.sendNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
+				other.sendNameTag(Priorities.NAMETAG, teamRepresentation, prefix, suffix);
 			}
 		}
 	}
 	
 	public void clearAll() {
 		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-			player.clearNameTag(IDENTIFIER);
+			player.clearNameTag(Priorities.NAMETAG);
 		}
 	}
 	
@@ -119,7 +119,7 @@ public class ManagerNameTag {
 		if (this.enable) {
 			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 				System.out.println(player.getOption(this.prefix).orElse(""));
-				player.sendNameTag(IDENTIFIER, 
+				player.sendNameTag(Priorities.NAMETAG, 
 						other.getTeamRepresentation(), 
 						EFormatString.of(other.getOption(this.prefix).orElse("")).toText(player.getReplaces()), 
 						EFormatString.of(other.getOption(this.suffix).orElse("")).toText(player.getReplaces()));
@@ -129,7 +129,7 @@ public class ManagerNameTag {
 	
 	public void clearPlayer(EPlayer player) {
 		if (this.enable) {
-			player.clearNameTag(IDENTIFIER);
+			player.clearNameTag(Priorities.NAMETAG);
 		}
 	}
 	
@@ -141,10 +141,10 @@ public class ManagerNameTag {
 			
 			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 				if (!player.getUniqueId().equals(other.getUniqueId())) {
-					other.sendNameTag(IDENTIFIER, teamRepresentation, prefix, suffix);
+					other.sendNameTag(Priorities.NAMETAG, teamRepresentation, prefix, suffix);
 				}
 				
-				player.sendNameTag(IDENTIFIER, 
+				player.sendNameTag(Priorities.NAMETAG, 
 						other.getTeamRepresentation(), 
 						EFormatString.of(other.getOption(this.prefix).orElse("")).toText(player.getReplaces()), 
 						EFormatString.of(other.getOption(this.suffix).orElse("")).toText(player.getReplaces()));
@@ -156,10 +156,10 @@ public class ManagerNameTag {
 		if (this.enable) {
 			Text teamRepresentation = player.getTeamRepresentation();
 			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
-				other.removeNameTag(IDENTIFIER, teamRepresentation);
+				other.removeNameTag(Priorities.NAMETAG, teamRepresentation);
 			}
 			
-			player.clearNameTag(IDENTIFIER);
+			player.clearNameTag(Priorities.NAMETAG);
 		}
 	}
 

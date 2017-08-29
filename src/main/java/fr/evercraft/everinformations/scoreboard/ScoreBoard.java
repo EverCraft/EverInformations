@@ -26,16 +26,14 @@ import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.api.scoreboard.objective.Objective;
 
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.InformationService.Priorities;
 import fr.evercraft.everapi.services.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.config.IConfig;
 import fr.evercraft.everinformations.scoreboard.objective.EObjective;
 
 public class ScoreBoard<T extends EObjective> {
-	public final static String BELOW_NAME_IDENTIFIER = "everinfo.below";
-	public final static String LIST_IDENTIFIER = "everinfo.list";
-	public final static String SIDEBAR_IDENTIFIER = "everinfo.side";
-
+	
 	private final EverInformations plugin;
 	
 	private final DisplaySlot display;
@@ -68,13 +66,13 @@ public class ScoreBoard<T extends EObjective> {
 	public void reload(){		
 		this.stop();
 
-		this.priority = PriorityService.DEFAULT;
+		this.priority = PriorityService.PRIORITY_DEFAULT;
 		if (this.display.equals(DisplaySlots.BELOW_NAME)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getScoreBoard(this.display, BELOW_NAME_IDENTIFIER);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(this.display, Priorities.SCOREBOARD_BELOW_NAME);
 		} else if (this.display.equals(DisplaySlots.LIST)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getScoreBoard(this.display, LIST_IDENTIFIER);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(this.display, Priorities.SCOREBOARD_LIST);
 		} else if (this.display.equals(DisplaySlots.SIDEBAR)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getScoreBoard(this.display, SIDEBAR_IDENTIFIER);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(this.display, Priorities.SCOREBOARD_SIDEBAR);
 		}
 		
 		this.numero = 0;
@@ -214,11 +212,11 @@ public class ScoreBoard<T extends EObjective> {
 	
 	public String getIgentifier() {
 		if (this.display.equals(DisplaySlots.BELOW_NAME)) {
-			return BELOW_NAME_IDENTIFIER;
+			return Priorities.SCOREBOARD_BELOW_NAME;
 		} else if (this.display.equals(DisplaySlots.LIST)) {
-			return LIST_IDENTIFIER;		
+			return Priorities.SCOREBOARD_LIST;		
 		} else if (this.display.equals(DisplaySlots.SIDEBAR)) {
-			return SIDEBAR_IDENTIFIER;
+			return Priorities.SCOREBOARD_SIDEBAR;
 		}
 		return "";
 	}

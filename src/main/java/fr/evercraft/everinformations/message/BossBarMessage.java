@@ -34,7 +34,7 @@ public class BossBarMessage implements IMessage {
 	
 	// En Secondes
 	private final double stay;
-	private final double next;
+	private final double interval;
 	
 	private final String name;
 	
@@ -45,10 +45,10 @@ public class BossBarMessage implements IMessage {
 	private final boolean playEndBossMusic;
 	private final boolean createFog;
 	
-	public BossBarMessage(double stay, double next, String name, float percent, 
+	public BossBarMessage(double stay, double interval, String name, float percent, 
 			BossBarColor color, BossBarOverlay overlay, boolean darkenSky, boolean playEndBossMusic, boolean createFog) {
 		this.stay = stay;
-		this.next = next;
+		this.interval = interval;
 		
 		this.name = name;
 		
@@ -60,18 +60,18 @@ public class BossBarMessage implements IMessage {
 		this.createFog = createFog;
 	}
 
-	public long getTimeNext() {
-		return (long) ((this.next) * 1000);
-	}
-	
 	@Override
 	public long getNext() {
+		return (long) ((this.stay + this.interval) * 1000);
+	}
+	
+	public long getStay() {
 		return (long) ((this.stay) * 1000);
 	}
 	
 	@Override
 	public boolean send(String identifier, int priority, EPlayer player) {
-		return player.sendActionBar(identifier, priority, EFormatString.of(this.name).toText(player.getReplaces()));
+		return this.sendText(identifier, priority, player, EFormatString.of(this.name).toText(player.getReplaces()));
 	}
 	
 	@Override
@@ -111,7 +111,7 @@ public class BossBarMessage implements IMessage {
 			bossbar.get().setCreateFog(this.createFog);
 			return true;
 		} else {
-			return player.sendBossBar(identifier, priority, ServerBossBar.builder()
+			return player.sendBossBar(identifier, ServerBossBar.builder()
 					.name(text)
 					.percent(this.percent)
 					.color(this.color)
@@ -119,7 +119,9 @@ public class BossBarMessage implements IMessage {
 					.darkenSky(this.darkenSky)
 					.playEndBossMusic(this.playEndBossMusic)
 					.createFog(this.createFog)
-					.build());
+					.build(),
+					Optional.of(priority),
+					Optional.of(this.getStay()));
 		}
 	}
 	
@@ -129,7 +131,7 @@ public class BossBarMessage implements IMessage {
 
 	@Override
 	public String toString() {
-		return "BossBarMessage [stay=" + stay + ", next=" + getTimeNext() + ", name="
+		return "BossBarMessage [stay=" + stay + ", interval=" + interval + ", name="
 				+ name + ", percent=" + percent + ", color=" + color
 				+ ", overlay=" + overlay + ", darkenSky=" + darkenSky
 				+ ", playEndBossMusic=" + playEndBossMusic + ", createFog="

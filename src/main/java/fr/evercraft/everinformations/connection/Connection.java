@@ -27,6 +27,7 @@ import org.spongepowered.api.service.permission.SubjectReference;
 import org.spongepowered.api.text.Text;
 
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.InformationService.Priorities;
 import fr.evercraft.everapi.services.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.connection.config.IConfig;
@@ -54,9 +55,6 @@ public abstract class Connection<T extends IMessage> {
 	
 	public final static String PLAYER = "player";
 	public final static String OTHERS = "others";
-	
-	public final static String IDENTIFIER_PLAYER = "everinformations.connection.player";
-	public final static String IDENTIFIER_OTHERS = "everinformations.connection.others";
 	
 	protected final EverInformations plugin;
 
@@ -88,19 +86,19 @@ public abstract class Connection<T extends IMessage> {
 	public abstract void kickPlayer(EPlayer player, Optional<SubjectReference> subject, Text text);
 	
 	protected void loadPriority() {
-		this.priority = PriorityService.DEFAULT;
+		this.priority = PriorityService.PRIORITY_DEFAULT;
 		if (type.equals(Type.ACTION_BAR_PLAYER)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getActionBar(Connection.IDENTIFIER_PLAYER);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.ACTIONBAR, Priorities.CONNECTION_PLAYER);
 		} else if (type.equals(Type.ACTION_BAR_OTHERS)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getActionBar(Connection.IDENTIFIER_OTHERS);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.ACTIONBAR, Priorities.CONNECTION_OTHERS);
 		} else if (type.equals(Type.TITLE_PLAYER)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTitle(Connection.IDENTIFIER_PLAYER);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.TITLE, Priorities.CONNECTION_PLAYER);
 		} else if (type.equals(Type.TITLE_OTHERS)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTitle(Connection.IDENTIFIER_OTHERS);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.TITLE, Priorities.CONNECTION_OTHERS);
 		} else if (type.equals(Type.BOSSBAR_PLAYER)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTitle(Connection.IDENTIFIER_PLAYER);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.BOSSBAR, Priorities.CONNECTION_PLAYER);
 		} else if (type.equals(Type.BOSSBAR_OTHERS)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTitle(Connection.IDENTIFIER_OTHERS);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.BOSSBAR, Priorities.CONNECTION_OTHERS);
 		}
 	}
 	

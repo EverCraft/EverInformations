@@ -24,6 +24,7 @@ import com.google.common.collect.Sets;
 import fr.evercraft.everapi.message.format.EFormatString;
 import fr.evercraft.everapi.registers.ScoreType;
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.InformationService.Priorities;
 import fr.evercraft.everapi.services.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.objective.EObjective;
@@ -80,7 +81,7 @@ public class TabListMessage extends EObjective {
 	
 	@Override
 	public boolean add(int priority, EPlayer player) {
-		if (player.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
+		if (player.sendTabList(Priorities.TABLIST, this.plugin.getTabList().getPriority())) {
 			player.getTabList().setHeaderAndFooter(
 					EFormatString.of(this.header).toText(player.getReplaces()),
 					EFormatString.of(this.footer).toText(player.getReplaces()));
@@ -90,7 +91,7 @@ public class TabListMessage extends EObjective {
 	
 	@Override
 	public boolean remove(EPlayer player) {
-		player.removeTabList(ManagerTabList.IDENTIFIER);
+		player.removeTabList(Priorities.TABLIST);
 		return true;
 	}
 	
@@ -101,8 +102,8 @@ public class TabListMessage extends EObjective {
 	@Override
 	public void update() {
 		for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-			if (player.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
-				this.add(PriorityService.DEFAULT, player);
+			if (player.sendTabList(Priorities.TABLIST, this.plugin.getTabList().getPriority())) {
+				this.add(PriorityService.PRIORITY_DEFAULT, player);
 			}
 		}
 	}
@@ -115,8 +116,8 @@ public class TabListMessage extends EObjective {
 	@Override
 	public void update(Player player_sponge, ScoreType score) {
 		EPlayer player = this.plugin.getEServer().getEPlayer(player_sponge);
-		if (player.sendTabList(ManagerTabList.IDENTIFIER, this.plugin.getTabList().getPriority())) {
-			this.add(PriorityService.DEFAULT, player);
+		if (player.sendTabList(Priorities.TABLIST, this.plugin.getTabList().getPriority())) {
+			this.add(PriorityService.PRIORITY_DEFAULT, player);
 		}
 	}
 

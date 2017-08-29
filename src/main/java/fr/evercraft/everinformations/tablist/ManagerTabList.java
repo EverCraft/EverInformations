@@ -18,11 +18,12 @@ package fr.evercraft.everinformations.tablist;
 
 import fr.evercraft.everapi.event.TabListEvent;
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.InformationService.Priorities;
+import fr.evercraft.everapi.services.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.tablist.config.ConfigTabList;
 
 public class ManagerTabList {
-	public final static String IDENTIFIER = "everinformations";
 	
 	private final EverInformations plugin;
 	
@@ -43,7 +44,7 @@ public class ManagerTabList {
 	}
 
 	public void load() {
-		this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTabList(IDENTIFIER);
+		this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.TABLIST, Priorities.TABLIST);
 	}
 	
 	public void reload() {
@@ -80,7 +81,7 @@ public class ManagerTabList {
 	}
 
 	public void event(TabListEvent event) {
-		if (!event.getIdentifier().equalsIgnoreCase(IDENTIFIER)) {
+		if (!event.getIdentifier().equalsIgnoreCase(Priorities.TABLIST)) {
 			this.displayname.sendTo(event.getPlayer());
 			this.header_footer.addPlayer(event.getPlayer());
 		}

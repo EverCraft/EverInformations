@@ -32,15 +32,15 @@ import fr.evercraft.everapi.server.player.EPlayer;
 
 public class ChatMessage implements IMessage {
 	// En Secondes
-	private final double next;
+	private final double interval;
 	
 	private final TextSerializer format;
 	
 	private final Optional<String> prefix;
 	private final String message;
 	
-	public ChatMessage(final double next, final TextSerializer format, final String prefix, final String message) {
-		this.next = next;
+	public ChatMessage(final double interval, final TextSerializer format, final String prefix, final String message) {
+		this.interval = interval;
 		this.format = format;
 		this.message = message;
 		
@@ -53,7 +53,7 @@ public class ChatMessage implements IMessage {
 
 	@Override
 	public long getNext() {
-		return (long) (this.next * 1000);
+		return (long) (this.interval * 1000);
 	}
 	
 	@Override
@@ -106,6 +106,6 @@ public class ChatMessage implements IMessage {
 
 	@Override
 	public String toString() {
-		return "ActionBarMessage [next=" + next  + ", message=" + message + "]";
+		return "ActionBarMessage [interval=" + interval  + ", message=" + message + "]";
 	}
 }

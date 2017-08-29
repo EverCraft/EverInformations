@@ -25,6 +25,7 @@ import org.spongepowered.api.service.permission.SubjectReference;
 import org.spongepowered.api.text.Text;
 
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.InformationService.Priorities;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.connection.config.IConfig;
 import fr.evercraft.everinformations.message.BossBarMessage;
@@ -91,14 +92,6 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 		// Si il y a encore un message
 		if (this.numero < this.messages.size() - 1) {
 			this.task();
-		} else if (this.type.equals(Type.BOSSBAR_OTHERS)) {
-			// Si il y a pas de délai
-			if (((BossBarMessage) this.getMessage()).getNext() <= 0) {
-				this.remove();
-			// Il y a un délai
-			} else {
-				this.taskRemoveBossBar();
-			}
 		}
 	}
 	
@@ -110,14 +103,14 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 			// Affiche le message à tous les autres joueurs
 			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				if (!this.player.equals(player)) {
-					message.send(IDENTIFIER_OTHERS, this.priority, player, this.player);
+					message.send(Priorities.CONNECTION_OTHERS, this.priority, player, this.player);
 				}
 			}
 		} else {
 			// Affiche le message à tous les autres joueurs
 			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				if (!this.player.equals(player)) {
-					message.send(IDENTIFIER_OTHERS, this.priority, player, this.player, this.reason);
+					message.send(Priorities.CONNECTION_OTHERS, this.priority, player, this.player, this.reason);
 				}
 			}
 		}
@@ -126,22 +119,12 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 	public void task() {
 		T message = this.getMessage();
 		
-		if (this.type.equals(Type.BOSSBAR_OTHERS)) {
-			// Si il y a pas de délai
-			if (((BossBarMessage) message).getTimeNext() <= 0) {
-				this.taskNext();
-			// Il y a un délai
-			} else {
-				this.taskRemoveBossBar();
-			}
+		// Si il y a pas de délai
+		if (message.getNext() <= 0) {
+			this.next();
+		// Il y a un délai
 		} else {
-			// Si il y a pas de délai
-			if (message.getNext() <= 0) {
-				this.next();
-			// Il y a un délai
-			} else {
-				this.taskNext();
-			}
+			this.taskNext();
 		}
 	}
 	
@@ -153,41 +136,6 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 				.delay(message.getNext(), TimeUnit.MILLISECONDS)
 				.name("Connection : Next (type='" + this.type.name() + "')")
 				.submit(this.plugin);
-	}
-	
-	/**
-	 * Le temps avant la prochaine bossbar
-	 */
-	public void taskNextBossBar() {
-		if (this.getMessage() instanceof BossBarMessage) {
-			BossBarMessage message = ((BossBarMessage) this.getMessage());
-			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
-					.execute(() -> this.next())
-					.async()
-					.delay(message.getTimeNext(), TimeUnit.MILLISECONDS)
-					.name("Connection : NextBossBar (type='" + this.type.name() + "')")
-					.submit(this.plugin);
-		}
-	}
-	
-	/**
-	 * Si il y a un délai en 2 bossbars, il faut supprimer la première au bout d'un certain temps
-	 */
-	public void taskRemoveBossBar() {
-		if (this.getMessage() instanceof BossBarMessage) {
-			BossBarMessage message = ((BossBarMessage) this.getMessage());
-			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
-					.execute(() -> {
-						this.remove();
-						if (this.numero < this.messages.size() - 1) {
-							this.taskNextBossBar();
-						}
-					})
-					.async()
-					.delay(message.getNext(), TimeUnit.MILLISECONDS)
-					.name("Connection : RemoveBossBar (type='" + this.type.name() + "')")
-					.submit(this.plugin);
-		}
 	}
 	
 	public T getMessage() {
@@ -232,7 +180,7 @@ public class ConnectionOthers<T extends IMessage> extends Connection<T> {
 			this.plugin.getELogger().debug("Connection : RemoveBossbar (type='" + this.type.name() + "';priority='" + this.priority + "';message='" + message + "')");
 			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
 				if (!this.player.equals(player)) {
-					message.remove(IDENTIFIER_OTHERS, player);
+					message.remove(Priorities.CONNECTION_OTHERS, player);
 				}
 			}
 		}

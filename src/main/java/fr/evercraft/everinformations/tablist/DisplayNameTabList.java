@@ -27,6 +27,7 @@ import org.spongepowered.api.text.Text;
 
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.InformationService.Priorities;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.tablist.config.ConfigTabList;
 
@@ -123,7 +124,7 @@ public class DisplayNameTabList {
 	 * @param player
 	 */
 	public void sendTo(EPlayer player) {
-		if (this.enable && player.sendTabList(ManagerTabList.IDENTIFIER)) {
+		if (this.enable && player.sendTabList(Priorities.TABLIST)) {
 			for (EPlayer other : this.plugin.getEServer().getOnlineEPlayers()) {
 				// TabList du joueur
 				Optional<TabListEntry> optEntry = player.getTabList().getEntry(other.getUniqueId());
@@ -176,7 +177,7 @@ public class DisplayNameTabList {
 			
 			boolean vanish = player.isVanish();
 			Stream<EPlayer> players = this.plugin.getEServer().getOnlineEPlayers().stream()
-				.filter(other -> other.hasTabList(ManagerTabList.IDENTIFIER));
+				.filter(other -> other.hasTabList(Priorities.TABLIST));
 			
 			// Le joueur n'est pas en vanish
 			if (!vanish) {
@@ -243,6 +244,6 @@ public class DisplayNameTabList {
 	 * @param player
 	 */	
 	public void clearPlayer(EPlayer player) {
-		player.removeTabList(ManagerTabList.IDENTIFIER); 
+		player.removeTabList(Priorities.TABLIST); 
 	}
 }

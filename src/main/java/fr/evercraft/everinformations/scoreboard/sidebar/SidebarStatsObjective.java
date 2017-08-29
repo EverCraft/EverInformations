@@ -33,9 +33,9 @@ import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.registers.ScoreType;
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.InformationService.Priorities;
 import fr.evercraft.everinformations.EIMessage.EIMessages;
 import fr.evercraft.everinformations.EverInformations;
-import fr.evercraft.everinformations.scoreboard.ScoreBoard;
 import fr.evercraft.everinformations.scoreboard.objective.SidebarObjective;
 
 public class SidebarStatsObjective extends SidebarObjective {
@@ -79,7 +79,7 @@ public class SidebarStatsObjective extends SidebarObjective {
 	
 	@Override
 	public boolean remove(EPlayer player) {
-		return player.removeObjective(DisplaySlots.LIST, ScoreBoard.SIDEBAR_IDENTIFIER);
+		return player.removeObjective(DisplaySlots.LIST, Priorities.SCOREBOARD_SIDEBAR);
 	}
 	
 	@Override
@@ -96,7 +96,7 @@ public class SidebarStatsObjective extends SidebarObjective {
 	@Override
 	public void update() {
 		Objective objective = Objective.builder()
-				.name(ScoreBoard.SIDEBAR_IDENTIFIER)
+				.name(Priorities.SCOREBOARD_SIDEBAR)
 				.displayName(EChat.fixLength(this.getSidebarTitle().getTitle().toText(this.plugin.getChat().getReplaceAll()), 32))
 				.criterion(Criteria.DUMMY)
 				.build();

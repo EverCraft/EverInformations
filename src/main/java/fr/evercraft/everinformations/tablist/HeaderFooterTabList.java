@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import org.spongepowered.api.scheduler.Task;
 
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.InformationService.Priorities;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.tablist.config.ConfigTabList;
 
@@ -86,7 +87,7 @@ public class HeaderFooterTabList {
 		
 		if (this.enable) {
 			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				player.removeTabList(ManagerTabList.IDENTIFIER);
+				player.removeTabList(Priorities.TABLIST);
 			}
 		}
 	}

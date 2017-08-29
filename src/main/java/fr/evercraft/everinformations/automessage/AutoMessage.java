@@ -1,5 +1,5 @@
 /*
- * This file is part of EverInformations.
+z * This file is part of EverInformations.
  *
  * EverInformations is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import org.spongepowered.api.scheduler.Task;
 
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.InformationService.Priorities;
 import fr.evercraft.everapi.services.PriorityService;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.automessage.AutoMessage;
@@ -36,8 +37,6 @@ public class AutoMessage<T extends IMessage> {
     	BOSSBAR,
     	CHAT;
     }
-	
-	public final static String IDENTIFIER = "everinformations.automessages";
 	
 	private final EverInformations plugin;
 	
@@ -70,13 +69,13 @@ public class AutoMessage<T extends IMessage> {
 		stop();
 
 		// Priorité
-		this.priority = PriorityService.DEFAULT;
+		this.priority = PriorityService.PRIORITY_DEFAULT;
 		if (this.type.equals(Type.ACTION_BAR)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getActionBar(IDENTIFIER);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.ACTIONBAR, Priorities.AUTOMESSAGE);
 		} else if (this.type.equals(Type.TITLE)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getTitle(IDENTIFIER);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.TITLE, Priorities.AUTOMESSAGE);
 		} else if (this.type.equals(Type.BOSSBAR)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().getBossBar(IDENTIFIER);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.BOSSBAR, Priorities.AUTOMESSAGE);
 		}
 		
 		this.numero = 0;
@@ -121,22 +120,12 @@ public class AutoMessage<T extends IMessage> {
 	public void task() {
 		T message = this.getMessage();
 		
-		if (this.type.equals(Type.BOSSBAR)) {
-			// Si il y a pas de délai
-			if (((BossBarMessage) message).getTimeNext() <= 0) {
-				this.taskNext();
-			// Il y a un délai
-			} else {
-				this.taskRemoveBossBar();
-			}
+		// Si il y a pas de délai
+		if (message.getNext() <= 0) {
+			this.next();
+		// Il y a un délai
 		} else {
-			// Si il y a pas de délai
-			if (message.getNext() <= 0) {
-				this.next();
-			// Il y a un délai
-			} else {
-				this.taskNext();
-			}
+			this.taskNext();
 		}
 	}
 	
@@ -148,39 +137,6 @@ public class AutoMessage<T extends IMessage> {
 				.delay(message.getNext(), TimeUnit.MILLISECONDS)
 				.name("AutoMessages : Next (type='" + this.type.name() + "')")
 				.submit(this.plugin);
-	}
-	
-	/**
-	 * Le temps avant la prochaine bossbar
-	 */
-	public void taskNextBossBar() {
-		if (this.getMessage() instanceof BossBarMessage) {
-			BossBarMessage message = ((BossBarMessage) this.getMessage());
-			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
-					.execute(() -> this.next())
-					.async()
-					.delay(message.getTimeNext(), TimeUnit.MILLISECONDS)
-					.name("AutoMessages : NextBossBar (type='" + this.type.name() + "')")
-					.submit(this.plugin);
-		}
-	}
-	
-	/**
-	 * Si il y a un délai en 2 bossbars, il faut supprimer la première au bout d'un certain temps
-	 */
-	public void taskRemoveBossBar() {
-		if (this.getMessage() instanceof BossBarMessage) {
-			BossBarMessage message = ((BossBarMessage) this.getMessage());
-			this.task = this.plugin.getGame().getScheduler().createTaskBuilder()
-					.execute(() -> {
-						this.remove();
-						this.taskNextBossBar();
-					})
-					.async()
-					.delay(message.getNext(), TimeUnit.MILLISECONDS)
-					.name("AutoMessages : RemoveBossBar (type='" + this.type.name() + "')")
-					.submit(this.plugin);
-		}
 	}
 	
 	public void next() {		
@@ -197,7 +153,7 @@ public class AutoMessage<T extends IMessage> {
 			T message = this.getMessage();
 			this.plugin.getELogger().debug("AutoMessages (type='" + this.type.name() + "';priority='" + this.priority + "';actionBar='" + message + "')");
 			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				message.send(IDENTIFIER, this.priority, player);
+				message.send(Priorities.AUTOMESSAGE, this.priority, player);
 			}
 		}
 	}
@@ -208,7 +164,7 @@ public class AutoMessage<T extends IMessage> {
 	
 	public void addPlayer(EPlayer player) {
 		if (this.enable && this.getMessage() instanceof BossBarMessage) {
-			this.getMessage().send(IDENTIFIER, this.priority, player);
+			this.getMessage().send(Priorities.AUTOMESSAGE, this.priority, player);
 		}
 	}
 	
@@ -216,7 +172,7 @@ public class AutoMessage<T extends IMessage> {
 		if (this.enable && this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
 			for (EPlayer player : this.plugin.getEServer().getOnlineEPlayers()) {
-				message.remove(IDENTIFIER, player);
+				message.remove(Priorities.AUTOMESSAGE, player);
 			}
 		}
 	}
@@ -224,7 +180,7 @@ public class AutoMessage<T extends IMessage> {
 	public void removePlayer(EPlayer player) {
 		if (this.enable && this.getMessage() instanceof BossBarMessage) {
 			BossBarMessage message = ((BossBarMessage) this.getMessage());
-			message.remove(IDENTIFIER, player);
+			message.remove(Priorities.AUTOMESSAGE, player);
 		}
 	}
 }

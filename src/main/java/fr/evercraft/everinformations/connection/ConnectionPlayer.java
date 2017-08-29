@@ -28,9 +28,9 @@ import org.spongepowered.api.service.permission.SubjectReference;
 import org.spongepowered.api.text.Text;
 
 import fr.evercraft.everapi.server.player.EPlayer;
+import fr.evercraft.everapi.services.InformationService.Priorities;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.connection.config.IConfig;
-import fr.evercraft.everinformations.message.BossBarMessage;
 import fr.evercraft.everinformations.message.IMessage;
 
 public class ConnectionPlayer<T extends IMessage> extends Connection<T> {	
@@ -162,16 +162,8 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 				this.view();
 				
 				//Si il y a encore un message
-				if (this.numero < this.messages.size() - 1){
+				if (this.numero < this.messages.size() - 1) {
 					this.task();
-				} else if (this.connection.type.equals(Type.BOSSBAR_PLAYER)) {
-					// Si il y a pas de délai
-					if (((BossBarMessage) this.getMessage()).getNext() <= 0) {
-						this.remove();
-					// Il y a un délai
-					} else {
-						this.taskRemoveBossBar();
-					}
 				} else {
 					this.remove();
 				}
@@ -189,24 +181,24 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 					// Affiche le message à tous les autres joueurs
 					for (EPlayer player : this.connection.plugin.getEServer().getOnlineEPlayers()) {
 						if (!this.player.equals(player)) {
-							message.send(IDENTIFIER_PLAYER, this.connection.priority, player, this.player);
+							message.send(Priorities.CONNECTION_PLAYER, this.connection.priority, player, this.player);
 						}
 					}
 				} else {
 					// Affiche le message au joueur
-					message.send(IDENTIFIER_PLAYER, this.connection.priority, this.player);
+					message.send(Priorities.CONNECTION_PLAYER, this.connection.priority, this.player);
 				}
 			} else {
 				if (this.connection.type.equals(Type.CHAT_OTHERS)) {
 					// Affiche le message à tous les autres joueurs
 					for (EPlayer player : this.connection.plugin.getEServer().getOnlineEPlayers()) {
 						if (!this.player.equals(player)) {
-							message.send(IDENTIFIER_PLAYER, this.connection.priority, player, this.player, this.reason);
+							message.send(Priorities.CONNECTION_PLAYER, this.connection.priority, player, this.player, this.reason);
 						}
 					}
 				} else {
 					// Affiche le message au joueur
-					message.send(IDENTIFIER_PLAYER, this.connection.priority, this.player, this.reason);
+					message.send(Priorities.CONNECTION_PLAYER, this.connection.priority, this.player, this.reason);
 				}
 			}
 		}
@@ -214,22 +206,12 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 		public void task() {
 			T message = this.getMessage();
 			
-			if (this.connection.type.equals(Type.BOSSBAR_PLAYER)) {
-				// Si il y a pas de délai
-				if (((BossBarMessage) message).getTimeNext() <= 0) {
-					this.taskNext();
-				// Il y a un délai
-				} else {
-					this.taskRemoveBossBar();
-				}
+			// Si il y a pas de délai
+			if (message.getNext() <= 0) {
+				this.next();
+			// Il y a un délai
 			} else {
-				// Si il y a pas de délai
-				if (message.getNext() <= 0) {
-					this.next();
-				// Il y a un délai
-				} else {
-					this.taskNext();
-				}
+				this.taskNext();
 			}
 		}
 		
@@ -243,52 +225,11 @@ public class ConnectionPlayer<T extends IMessage> extends Connection<T> {
 					.submit(this.connection.plugin);
 		}
 		
-		/**
-		 * Le temps avant la prochaine bossbar
-		 */
-		public void taskNextBossBar() {
-			if (this.getMessage() instanceof BossBarMessage) {
-				BossBarMessage message = ((BossBarMessage) this.getMessage());
-				this.task = this.connection.plugin.getGame().getScheduler().createTaskBuilder()
-						.execute(() -> this.next())
-						.async()
-						.delay(message.getTimeNext(), TimeUnit.MILLISECONDS)
-						.name("Connection : NextBossBar (type='" + this.connection.type.name() + "')")
-						.submit(this.connection.plugin);
-			}
-		}
-		
-		/**
-		 * Si il y a un délai en 2 bossbars, il faut supprimer la première au bout d'un certain temps
-		 */
-		public void taskRemoveBossBar() {
-			if (this.getMessage() instanceof BossBarMessage) {
-				BossBarMessage message = ((BossBarMessage) this.getMessage());
-				this.task = this.connection.plugin.getGame().getScheduler().createTaskBuilder()
-						.execute(() -> {
-							this.remove();
-							if (this.numero < this.messages.size() - 1) {
-								this.taskNextBossBar();
-							}
-						})
-						.async()
-						.delay(message.getNext(), TimeUnit.MILLISECONDS)
-						.name("Connection : RemoveBossBar (type='" + this.connection.type.name() + "')")
-						.submit(this.connection.plugin);
-			}
-		}
-		
 		public T getMessage() {
 			return this.messages.get(this.numero);
 		}
 		
 		public void remove() {
-			if (this.messages != null && !this.messages.isEmpty() && this.getMessage() instanceof BossBarMessage) {
-				BossBarMessage message = ((BossBarMessage) this.getMessage());
-				
-				this.connection.plugin.getELogger().debug("Connection : RemoveBossbar (type='" + this.connection.type.name() + "';priority='" + this.connection.priority + "';message='" + message + "')");
-				message.remove(IDENTIFIER_PLAYER, this.player);
-			}
 			this.connection.players.remove(player.getUniqueId());
 		}
 		
