@@ -67,7 +67,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 			scores.put("&aBalance :", ScoreTypes.BALANCE.getName());
 			scores.put("&aPing :", ScoreTypes.PING.getName());
 			scores.put("&aFood :", ScoreTypes.FEED.getName());
-			scores.put("&aHealth :", ScoreTypes.HEALTH.getName());
+			scores.put("&aHealth :", ScoreTypes.HEALTH_HEARTS.getName());
 			scores.put("&aLevel :", ScoreTypes.LEVEL.getName());
 			scores.put("&aXP :", ScoreTypes.XP.getName());
 

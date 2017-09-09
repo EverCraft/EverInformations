@@ -38,13 +38,11 @@ public class ConfigChat extends EConfig<EverInformations> implements IConfig<Cha
 	@Override
 	protected void loadDefault() {
 		addDefault(Newbie.PLAYER + ".enable", true);
-		addDefault(Newbie.PLAYER + ".prefix", "");
 		if (this.get(Newbie.PLAYER + ".messages").isVirtual()) {
 			addDefault(Newbie.PLAYER + ".message", "&4Welcome &a" + EReplacesPlayer.DISPLAYNAME.getName() + " &4to the server!");
 		}
 		
 		addDefault(Newbie.OTHERS + ".enable", true);
-		addDefault(Newbie.OTHERS + ".prefix", "");
 		if (this.get(Newbie.OTHERS + ".messages").isVirtual()) {
 			addDefault(Newbie.OTHERS + ".message", "&a" + EReplacesPlayer.DISPLAYNAME.getName() + " &4is a new player.");
 		}

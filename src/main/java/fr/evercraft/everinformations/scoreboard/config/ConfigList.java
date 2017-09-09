@@ -23,6 +23,7 @@ import java.util.Optional;
 import ninja.leaping.configurate.ConfigurationNode;
 import fr.evercraft.everapi.plugin.file.EConfig;
 import fr.evercraft.everapi.registers.ScoreType;
+import fr.evercraft.everapi.registers.ScoreType.ScoreTypes;
 import fr.evercraft.everinformations.EverInformations;
 import fr.evercraft.everinformations.scoreboard.objective.ListObjective;
 
@@ -34,7 +35,7 @@ public class ConfigList extends EConfig<EverInformations> implements IConfig<Lis
 	@Override
 	protected void loadDefault() {
 		addDefault("enable", true);
-		addDefault("type", "HEALTH_INTEGER", "Type : HEALTH|HEALTH_INTEGER|DEATHS|PLAYER_KILLS|TOTAL_KILLS|BALANCE|PING|FOOD|LEVEL|XP");
+		addDefault("type", ScoreTypes.HEALTH.getName().toUpperCase() , "Type : HEALTH|HEALTH_INTEGER|DEATHS|PLAYER_KILLS|TOTAL_KILLS|BALANCE|PING|FOOD|LEVEL|XP");
 	}
 	
 	/*

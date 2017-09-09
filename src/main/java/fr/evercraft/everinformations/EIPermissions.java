@@ -23,10 +23,9 @@ import com.google.common.base.Preconditions;
 import fr.evercraft.everapi.plugin.EnumPermission;
 
 public enum EIPermissions implements EnumPermission {
-	EVERINFORMATIONS("command"),
-	
-	HELP("help"),
-	RELOAD("reload");
+	EVERINFORMATIONS("commands.execute"),
+	HELP("commands.help"),
+	RELOAD("commands.reload");
 	
 	private final static String prefix = "everinformations";
 	
