@@ -44,9 +44,9 @@ public class EIConfig extends EConfig<EverInformations> {
 	public void loadDefault() {
 		this.configDefault();
 		
-		addDefault("newbie-and-connection", false);
+		addDefault("newbie-and-connection", false, "Allows you to view welcome and login messages at the same time for new players");
 		
-		addDefault("vanish-connection-fake", true);
+		addDefault("vanish-connection-fake", true, "Allows to display false logout and logon messages when a player active or deserts his vanish");
 	}
 	
 	/**
