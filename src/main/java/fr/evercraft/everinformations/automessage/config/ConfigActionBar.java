@@ -33,7 +33,7 @@ public class ConfigActionBar extends EConfig<EverInformations> implements IConfi
 	
 	@Override
 	protected void loadDefault() {
-		addDefault("enable", true);
+		addDefault("enable", false);
 		addDefault("interval", 300, "Seconds");
 		addDefault("stay", 20, "Seconds");
 		addDefault("messages", Arrays.asList("&1Message 1 ......", "&bMessage 2 ......", "&cMessage 3 ......", "&aMessage 4 ......"));

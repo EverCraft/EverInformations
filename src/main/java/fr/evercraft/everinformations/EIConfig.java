@@ -16,8 +16,10 @@
  */
 package fr.evercraft.everinformations;
 
+import java.util.Arrays;
+import java.util.List;
+
 import fr.evercraft.everapi.plugin.file.EConfig;
-import fr.evercraft.everapi.plugin.file.EMessage;
 
 public class EIConfig extends EConfig<EverInformations> {
 
@@ -31,11 +33,18 @@ public class EIConfig extends EConfig<EverInformations> {
 	}
 	
 	@Override
+	public List<String> getHeader() {
+		return 	Arrays.asList(	"####################################################### #",
+								"               EverInformation (By rexbut)               #",
+								"    For more information : https://docs.evercraft.fr     #",
+								"####################################################### #");
+	}
+	
+	@Override
 	public void loadDefault() {
-		addDefault("DEBUG", false, "Displays plugin performance in the logs");
-		addDefault("LANGUAGE", EMessage.FRENCH, "Select language messages", "Examples : ", "  French : FR_fr", "  English : EN_en");
+		this.configDefault();
 		
-		addDefault("newbie-and-connection", true);
+		addDefault("newbie-and-connection", false);
 		
 		addDefault("vanish-connection-fake", true);
 	}
@@ -45,7 +54,7 @@ public class EIConfig extends EConfig<EverInformations> {
 	 * @return True si on affiche les deux messages
 	 */
 	public boolean isNewbieAndConnection() {
-		return this.get("player-newbie-and-connection").getBoolean(false);
+		return this.get("newbie-and-connection").getBoolean(false);
 	}
 
 	/**

@@ -33,7 +33,7 @@ public class ConfigTitle extends EConfig<EverInformations> implements IConfig<Ti
 	
 	@Override
 	protected void loadDefault() {
-		addDefault("enable", true);
+		addDefault("enable", false);
 		addDefault("interval", 360, "Seconds");
 		addDefault("stay", 20, "Seconds");
 		addDefault("fadeIn", 1, "Seconds");

@@ -32,13 +32,14 @@ public class ConfigTabList extends EConfig<EverInformations> {
 	@Override
 	protected void loadDefault() {
 		addDefault("enable", true, "There is no character limit for prefix and suffix values ​​in the TabList as opposed to NameTag");
-		addDefault("update", 20);
-		addDefault("header", "&4Header[RT]&aSubHeader");
-		addDefault("footer", "&4Footer[RT]&aSubFooter");
+		
+		if (this.get("tablists").isVirtual()) {
+			addDefault("header", "&4Header[RT]&aSubHeader");
+			addDefault("footer", "&4Footer[RT]&aSubFooter");
+		}
 		
 		addDefault("displayname.prefix", "prefix", "PermissionService : Option");
 		addDefault("displayname.suffix", "suffix", "PermissionService : Option");
-		addDefault("displayname.update", -1, "Seconds (-1 to disable updating)");
 	}
 	
 	/*
@@ -58,7 +59,7 @@ public class ConfigTabList extends EConfig<EverInformations> {
 	}
 	
 	public long getDisplayNameUpdate() {
-		return this.get("displayname.update").getLong(-1);
+		return this.get("displayname.update").getLong(this.get("update").getLong(-1));
 	}
 	
 	public List<TabListMessage> getTabLists() {
@@ -74,7 +75,7 @@ public class ConfigTabList extends EConfig<EverInformations> {
 			tablists.add(new TabListMessage((EverInformations) this.plugin, stay_default, update_default, header, footer));
 		// Liste d'objectives
 		} else {
-			for (ConfigurationNode config : this.get("objectives").getChildrenList()) {
+			for (ConfigurationNode config : this.get("tablists").getChildrenList()) {
 				double stay = config.getNode("stay").getDouble(stay_default);
 				double update = config.getNode("update").getDouble(update_default);
 				

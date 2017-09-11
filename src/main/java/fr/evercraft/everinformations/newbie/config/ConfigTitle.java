@@ -34,21 +34,17 @@ public class ConfigTitle extends EConfig<EverInformations> implements IConfig<Ti
 	
 	@Override
 	protected void loadDefault() {
-		addDefault(Newbie.PLAYER + ".enable", true);
+		addDefault(Newbie.PLAYER + ".enable", false);
 		addDefault(Newbie.PLAYER + ".interval", 0, "Seconds");
 		addDefault(Newbie.PLAYER + ".stay", 10, "Seconds");
-		addDefault(Newbie.PLAYER + ".fadeIn", 1, "Seconds");
-		addDefault(Newbie.PLAYER + ".fadeOut", 1, "Seconds");
 		if (this.get(Newbie.PLAYER + ".messages").isVirtual()) {
 			addDefault(Newbie.PLAYER + ".title", "&4Welcome");
 			addDefault(Newbie.PLAYER + ".subTitle", "&4Welcome &a" + EReplacesPlayer.DISPLAYNAME.getName() + " &4to the server!");
 		}
 		
-		addDefault(Newbie.OTHERS + ".enable", true);
+		addDefault(Newbie.OTHERS + ".enable", false);
 		addDefault(Newbie.OTHERS + ".interval", 0, "Seconds");
 		addDefault(Newbie.OTHERS + ".stay", 10, "Seconds");
-		addDefault(Newbie.OTHERS + ".fadeIn", 1, "Seconds");
-		addDefault(Newbie.OTHERS + ".fadeOut", 1, "Seconds");
 		
 		if (this.get(Newbie.OTHERS + ".messages").isVirtual()) {
 			addDefault(Newbie.OTHERS + ".title", "");

@@ -35,7 +35,10 @@ public class ConfigList extends EConfig<EverInformations> implements IConfig<Lis
 	@Override
 	protected void loadDefault() {
 		addDefault("enable", true);
-		addDefault("type", ScoreTypes.HEALTH.getName().toUpperCase() , "Type : HEALTH|HEALTH_INTEGER|DEATHS|PLAYER_KILLS|TOTAL_KILLS|BALANCE|PING|FOOD|LEVEL|XP");
+		
+		if (this.get("objectives").isVirtual()) {
+			addDefault("type", ScoreTypes.HEALTH.getName().toUpperCase() , "Type : HEALTH|HEALTH_INTEGER|DEATHS|PLAYER_KILLS|TOTAL_KILLS|BALANCE|PING|FOOD|LEVEL|XP");
+		}
 	}
 	
 	/*

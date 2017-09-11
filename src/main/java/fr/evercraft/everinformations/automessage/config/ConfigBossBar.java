@@ -39,7 +39,7 @@ public class ConfigBossBar extends EConfig<EverInformations> implements IConfig<
 	
 	@Override
 	protected void loadDefault() {
-		addDefault("enable", true);
+		addDefault("enable", false);
 		
 		addDefault("stay", 360, "Seconds");
 		addDefault("interval", 0, "Seconds");

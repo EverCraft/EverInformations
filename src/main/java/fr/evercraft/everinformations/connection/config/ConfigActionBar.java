@@ -38,14 +38,14 @@ public class ConfigActionBar extends EConfig<EverInformations> implements IConfi
 	}
 	
 	@Override
-	protected void loadDefault() {		
-		addDefault(Connection.PLAYER + ".enable", true);
+	protected void loadDefault() {
+		addDefault(Connection.PLAYER + ".enable", false);
 		if (this.get(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
 			addDefault(Connection.PLAYER + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".message", 
 					"&7&l[&2+&7&l] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7joined the game");
 		}
 		
-		addDefault(Connection.OTHERS + ".enable", true);
+		addDefault(Connection.OTHERS + ".enable", false);
 		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".messages").isVirtual()) {
 			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.JOIN.name() + ".message", 
 					"&7&l[&2+&7&l] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7joined the game");

@@ -37,8 +37,11 @@ public class ConfigBelowName extends EConfig<EverInformations> implements IConfi
 	@Override
 	protected void loadDefault() {
 		addDefault("enable", true);
-		addDefault("type", "HEALTH", "Type : HEALTH|DEATHS|KILLS|RATIO|TOTAL_KILLS|ONLINE_PLAYERS|BALANCE|PING|FOOD|LEVEL|XP");
-		addDefault("name", "&4❤");
+		
+		if (this.get("objectives").isVirtual()) {
+			addDefault("type", "HEALTH", "Type : HEALTH|DEATHS|KILLS|RATIO|TOTAL_KILLS|ONLINE_PLAYERS|BALANCE|PING|FOOD|LEVEL|XP");
+			addDefault("name", "&4❤");
+		}
 	}
 	
 	/*
