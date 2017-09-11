@@ -46,7 +46,7 @@ public class TabListMessage extends EObjective {
 		this.update = true;
 		
 		for (ScoreType score : this.plugin.getGame().getRegistry().getAllOf(ScoreType.class)) {
-			if (this.header.contains("<" + score.getName() + ">") || this.footer.contains("<" + score.getName() + ">")) {
+			if (this.header.contains("{" + score.getName() + "}") || this.footer.contains("{" + score.getName() + "}")) {
 				this.scores.add(score);
 				if (!score.isUpdate()) {
 					this.update = false;

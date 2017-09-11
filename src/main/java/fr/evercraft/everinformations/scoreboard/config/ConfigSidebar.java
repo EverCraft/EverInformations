@@ -102,7 +102,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 			message.put("title", "&6✖  Top eco ✖");
 			message.put("stay", 60);
 			message.put("type", Type.ECONOMY.name());
-			message.put("format", "&a<player>");
+			message.put("format", "&a{player}");
 			messages.add(message);
 			
 			// Stats
@@ -112,7 +112,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 			message.put("type", Type.STATS.name());
 			message.put("top", TypeTop.KILLS.name());
 			message.put("time", TypeTimes.MONTH.name());
-			message.put("format", "&a<player>");
+			message.put("format", "&a{player}");
 			messages.add(message);
 			
 			addDefault("objectives", messages, "Type : INFORMATIONS|NUMBERS|ECONOMY|STATS");
@@ -214,7 +214,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 					// Economy
 					} else if (type.equals(Type.ECONOMY)) {
 						if (this.plugin.getEverAPI().getManagerService().getTopEconomy().isPresent()) {
-							String format = config.getNode("format").getString("<player>");
+							String format = config.getNode("format").getString("{player}");
 							objectives.add(new SidebarEconomyObjective(this.plugin, stay, update, titles, format));
 						} else {
 							this.plugin.getELogger().warn("Error during the change of the scoreboard (type='ECONOMY') : There is no EverEconomy");
@@ -226,7 +226,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 								TypeTop top_type = TypeTop.valueOf(config.getNode("top").getString("").toUpperCase());
 								try {
 									TypeTimes time_type = TypeTimes.valueOf(config.getNode("time").getString("").toUpperCase());
-									String format = config.getNode("format").getString("<player>");
+									String format = config.getNode("format").getString("{player}");
 									
 									objectives.add(new SidebarStatsObjective(this.plugin, stay, titles, format, top_type, time_type));
 								} catch (IllegalArgumentException e) {

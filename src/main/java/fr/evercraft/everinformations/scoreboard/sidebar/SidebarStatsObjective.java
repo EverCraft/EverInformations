@@ -106,7 +106,7 @@ public class SidebarStatsObjective extends SidebarObjective {
 				Optional<User> user = this.plugin.getEServer().getUser(player.getKey());
 				// Si le User existe bien
 				if (user.isPresent()) {
-					objective.getOrCreateScore(EChat.of(this.message.replaceAll("<player>",user.get().getName()))).setScore(player.getValue().intValue());
+					objective.getOrCreateScore(EChat.of(this.message.replaceAll("{player}",user.get().getName()))).setScore(player.getValue().intValue());
 				}
 			}
 		} else {

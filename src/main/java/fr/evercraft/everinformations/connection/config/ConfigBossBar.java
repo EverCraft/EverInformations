@@ -62,7 +62,7 @@ public class ConfigBossBar extends EConfig<EverInformations> implements IConfig<
 		}
 		if (this.get(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".messages").isVirtual()) {
 			addDefault(Connection.OTHERS + "." + Connection.DEFAULT + "." + Connections.KICK.name() + ".message", 
-					"&7&l[&4-&7&l] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7has been kicked out of the game for <reason>");
+					"&7&l[&4-&7&l] " + EReplacesPlayer.DISPLAYNAME.getName() + " &7has been kicked out of the game for {reason}");
 		}
 	}
 	
