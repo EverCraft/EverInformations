@@ -63,7 +63,7 @@ public class ActionBarMessage implements IMessage {
 	public boolean send(String identifier, int priority, EPlayer player, Text reason) {
 		Map<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
 		replaces.putAll(player.getReplaces());
-		replaces.put(Pattern.compile("{reason}"), EReplace.of(reason));
+		replaces.put(Pattern.compile("\\{reason}"), EReplace.of(reason));
 		
 		return player.sendActionBar(identifier, priority, this.getStay(), EFormatString.of(this.message).toText(replaces));
 	}
@@ -77,7 +77,7 @@ public class ActionBarMessage implements IMessage {
 	public boolean send(String identifier, int priority, EPlayer player, EPlayer replace, Text reason) {
 		Map<Pattern, EReplace<?>> replaces = new HashMap<Pattern, EReplace<?>>();
 		replaces.putAll(replace.getReplaces());
-		replaces.put(Pattern.compile("{reason}"), EReplace.of(reason));
+		replaces.put(Pattern.compile("\\{reason}"), EReplace.of(reason));
 		
 		return player.sendActionBar(identifier, priority, this.getStay(), EFormatString.of(this.message).toText(replaces));
 	}
