@@ -31,15 +31,15 @@ public class EIMessage extends EMessage<EverInformations> {
 	}
 	
 	public enum EIMessages implements EnumMessage {
-		PREFIX("PREFIX", "[&4Ever&6&lInformations&f] "),
+		PREFIX("[&4Ever&6&lInformations&f] "),
 		
-		DESCRIPTION("description", "Gestion des informations"),
+		DESCRIPTION("Gestion des informations"),
 		
-		SCOREBOARD_EMPTY("scoreboardEmpty", "&aAucun joueur", "&aNo player"),
+		SCOREBOARD_EMPTY("&aAucun joueur", "&aNo player"),
 		
-		PERMISSIONS_COMMANDS_EXECUTE("permissionsCommandsExecute", ""),
-		PERMISSIONS_COMMANDS_HELP("permissionsCommandsHelp", ""),
-		PERMISSIONS_COMMANDS_RELOAD("permissionsCommandsReload", "");
+		PERMISSIONS_COMMANDS_EXECUTE(""),
+		PERMISSIONS_COMMANDS_HELP(""),
+		PERMISSIONS_COMMANDS_RELOAD("");
 		
 		private final String path;
 	    private final EMessageBuilder french;
@@ -47,24 +47,23 @@ public class EIMessage extends EMessage<EverInformations> {
 	    private EMessageFormat message;
 	    private EMessageBuilder builder;
 	    
-	    private EIMessages(final String path, final String french) {   	
-	    	this(path, EMessageFormat.builder().chat(new EFormatString(french), true));
+	    private EIMessages(final String french) {   	
+	    	this(EMessageFormat.builder().chat(new EFormatString(french), true));
 	    }
 	    
-	    private EIMessages(final String path, final String french, final String english) {   	
-	    	this(path, 
-	    		EMessageFormat.builder().chat(new EFormatString(french), true), 
+	    private EIMessages(final String french, final String english) {   	
+	    	this(EMessageFormat.builder().chat(new EFormatString(french), true), 
 	    		EMessageFormat.builder().chat(new EFormatString(english), true));
 	    }
 	    
-	    private EIMessages(final String path, final EMessageBuilder french) {   	
-	    	this(path, french, french);
+	    private EIMessages(final EMessageBuilder french) {   	
+	    	this(french, french);
 	    }
 	    
-	    private EIMessages(final String path, final EMessageBuilder french, final EMessageBuilder english) {
+	    private EIMessages(final EMessageBuilder french, final EMessageBuilder english) {
 	    	Preconditions.checkNotNull(french, "Le message '" + this.name() + "' n'est pas définit");
 	    	
-	    	this.path = path;	    	
+	    	this.path = this.resolvePath();	    	
 	    	this.french = french;
 	    	this.english = english;
 	    	this.message = french.build();
