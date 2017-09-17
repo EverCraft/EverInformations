@@ -29,6 +29,7 @@ import org.spongepowered.api.scoreboard.critieria.Criteria;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.api.scoreboard.objective.Objective;
 
+import fr.evercraft.everapi.message.format.EFormatString;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.registers.ScoreType;
@@ -56,13 +57,13 @@ public class SidebarStatsObjective extends SidebarObjective {
 
 	private final EPlugin<EverInformations> plugin;
 	private Objective objective;
-	private final String message;
+	private final EFormatString message;
 	
 	private final TypeTop score_type;
 	private final TypeTimes time_type;
 	
 	
-	public SidebarStatsObjective(final EverInformations plugin, final double stay, final List<SidebarTitle> titles, final String message, TypeTop top_type, TypeTimes time_type) {
+	public SidebarStatsObjective(final EverInformations plugin, final double stay, final List<SidebarTitle> titles, final EFormatString message, TypeTop top_type, TypeTimes time_type) {
 		super(plugin, stay,  0.0, Type.STATS, titles);
 		
 		this.plugin = plugin;
@@ -106,7 +107,7 @@ public class SidebarStatsObjective extends SidebarObjective {
 				Optional<User> user = this.plugin.getEServer().getUser(player.getKey());
 				// Si le User existe bien
 				if (user.isPresent()) {
-					objective.getOrCreateScore(EChat.of(this.message.replaceAll("{player}",user.get().getName()))).setScore(player.getValue().intValue());
+					objective.getOrCreateScore(this.message.toText("{player}", user.get().getName())).setScore(player.getValue().intValue());
 				}
 			}
 		} else {

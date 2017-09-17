@@ -215,7 +215,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 					} else if (type.equals(Type.ECONOMY)) {
 						if (this.plugin.getEverAPI().getManagerService().getTopEconomy().isPresent()) {
 							String format = config.getNode("format").getString("{player}");
-							objectives.add(new SidebarEconomyObjective(this.plugin, stay, update, titles, format));
+							objectives.add(new SidebarEconomyObjective(this.plugin, stay, update, titles, EFormatString.of(format)));
 						} else {
 							this.plugin.getELogger().warn("Error during the change of the scoreboard (type='ECONOMY') : There is no EverEconomy");
 						}
@@ -228,7 +228,7 @@ public class ConfigSidebar extends EConfig<EverInformations> implements IConfig<
 									TypeTimes time_type = TypeTimes.valueOf(config.getNode("time").getString("").toUpperCase());
 									String format = config.getNode("format").getString("{player}");
 									
-									objectives.add(new SidebarStatsObjective(this.plugin, stay, titles, format, top_type, time_type));
+									objectives.add(new SidebarStatsObjective(this.plugin, stay, titles, EFormatString.of(format), top_type, time_type));
 								} catch (IllegalArgumentException e) {
 									this.plugin.getELogger().warn("Error during the change of the scoreboard (type='STATS') : time='" + config.getNode("time").getString("") + "'");
 								}

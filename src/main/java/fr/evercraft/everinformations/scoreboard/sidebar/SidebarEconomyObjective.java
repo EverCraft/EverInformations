@@ -28,6 +28,7 @@ import org.spongepowered.api.scoreboard.critieria.Criteria;
 import org.spongepowered.api.scoreboard.displayslot.DisplaySlots;
 import org.spongepowered.api.scoreboard.objective.Objective;
 
+import fr.evercraft.everapi.message.format.EFormatString;
 import fr.evercraft.everapi.plugin.EChat;
 import fr.evercraft.everapi.plugin.EPlugin;
 import fr.evercraft.everapi.registers.ScoreType;
@@ -42,10 +43,10 @@ public class SidebarEconomyObjective extends SidebarObjective {
 
 	private final EPlugin<EverInformations> plugin;
 	private Objective objective;
-	private final String message;
+	private final EFormatString message;
 	
 	
-	public SidebarEconomyObjective(final EverInformations plugin, final double stay, final double update, final List<SidebarTitle> titles, final String message) {
+	public SidebarEconomyObjective(final EverInformations plugin, final double stay, final double update, final List<SidebarTitle> titles, final EFormatString message) {
 		super(plugin, stay,  update, Type.ECONOMY, titles);
 		
 		this.plugin = plugin;
@@ -86,7 +87,7 @@ public class SidebarEconomyObjective extends SidebarObjective {
 				Optional<User> user = this.plugin.getEServer().getUser(player.getKey());
 				// Si le User existe bien
 				if (user.isPresent()){
-					objective.getOrCreateScore(EChat.of(this.message.replaceAll("{player}",user.get().getName()))).setScore(player.getValue().intValue());
+					objective.getOrCreateScore(this.message.toText("{player}",user.get().getName())).setScore(player.getValue().intValue());
 				}
 			}
 		}

@@ -33,9 +33,13 @@ public class EIMessage extends EMessage<EverInformations> {
 	public enum EIMessages implements EnumMessage {
 		PREFIX("PREFIX", "[&4Ever&6&lInformations&f] "),
 		
-		DESCRIPTION("DESCRIPTION", "Gestion des informations"),
+		DESCRIPTION("description", "Gestion des informations"),
 		
-		SCOREBOARD_EMPTY("scoreboardEmpty", "&aAucun joueur", "&aNo player");
+		SCOREBOARD_EMPTY("scoreboardEmpty", "&aAucun joueur", "&aNo player"),
+		
+		PERMISSIONS_COMMANDS_EXECUTE("permissionsCommandsExecute", ""),
+		PERMISSIONS_COMMANDS_HELP("permissionsCommandsHelp", ""),
+		PERMISSIONS_COMMANDS_RELOAD("permissionsCommandsReload", "");
 		
 		private final String path;
 	    private final EMessageBuilder french;

@@ -16,32 +16,43 @@
  */
 package fr.evercraft.everinformations;
 
-import org.spongepowered.api.command.CommandSource;
-
-import com.google.common.base.Preconditions;
-
 import fr.evercraft.everapi.plugin.EnumPermission;
+import fr.evercraft.everapi.plugin.file.EnumMessage;
+import fr.evercraft.everinformations.EIMessage.EIMessages;
 
 public enum EIPermissions implements EnumPermission {
-	EVERINFORMATIONS("commands.execute"),
-	HELP("commands.help"),
-	RELOAD("commands.reload");
+	EVERINFORMATIONS("commands.execute", EIMessages.PERMISSIONS_COMMANDS_EXECUTE),
+	HELP("commands.help", EIMessages.PERMISSIONS_COMMANDS_HELP),
+	RELOAD("commands.reload", EIMessages.PERMISSIONS_COMMANDS_RELOAD);
 	
-	private final static String prefix = "everinformations";
+	private static final String PREFIX = "everinformations";
 	
 	private final String permission;
+	private final EnumMessage message;
+	private final boolean value;
     
-    private EIPermissions(final String permission) {   	
-    	Preconditions.checkNotNull(permission, "La permission '" + this.name() + "' n'est pas définit");
-    	
-    	this.permission = permission;
+    private EIPermissions(final String permission, final EnumMessage message) {
+    	this(permission, message, false);
+    }
+    
+    private EIPermissions(final String permission, final EnumMessage message, final boolean value) {   	    	
+    	this.permission = PREFIX + "." + permission;
+    	this.message = message;
+    	this.value = value;
     }
 
+    @Override
     public String get() {
-		return EIPermissions.prefix + "." + this.permission;
+    	return this.permission;
 	}
-    
-    public boolean has(CommandSource player) {
-    	return player.hasPermission(this.get());
-    }
+
+	@Override
+	public boolean getDefault() {
+		return this.value;
+	}
+
+	@Override
+	public EnumMessage getMessage() {
+		return this.message;
+	}
 }
