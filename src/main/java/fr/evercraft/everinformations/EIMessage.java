@@ -98,4 +98,9 @@ public class EIMessage extends EMessage<EverInformations> {
 			this.builder = message;
 		}
 	}
+	
+	@Override
+	public EnumMessage getPrefix() {
+		return EIMessages.PREFIX;
+	}
 }
