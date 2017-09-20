@@ -123,6 +123,10 @@ public class EverInformations extends EPlugin<EverInformations> {
 	public EIConfig getConfigs() {
 		return this.configs;
 	}
+	
+	public EIPermissions[] getPermissions() {
+		return EIPermissions.values();
+	}
 
 	public ManagerAutoMessage getAutoMessages() {
 		return this.automessages;
