@@ -68,9 +68,9 @@ public abstract class Newbie<T extends IMessage> {
 	protected void loadPriority() {
 		this.priority = PriorityService.PRIORITY_DEFAULT;
 		if (type.equals(Type.ACTION_BAR_PLAYER)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.NAMETAG, Priorities.NEWBIE_PLAYER);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.ACTIONBAR, Priorities.NEWBIE_PLAYER);
 		} else if (type.equals(Type.ACTION_BAR_OTHERS)) {
-			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.NAMETAG, Priorities.NEWBIE_OTHERS);
+			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.ACTIONBAR, Priorities.NEWBIE_OTHERS);
 		} else if (type.equals(Type.TITLE_PLAYER)) {
 			this.priority = this.plugin.getEverAPI().getManagerService().getPriority().get(PriorityService.TITLE, Priorities.NEWBIE_PLAYER);
 		} else if (type.equals(Type.TITLE_OTHERS)) {
