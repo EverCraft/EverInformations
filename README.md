@@ -18,6 +18,7 @@ EverInformations est un plugin de gestion des AutoMessages sur différents suppo
   * SideBar : Informations, Top économie
   * BelowName
   * List
+* [Pour plus d'informations](https://docs.evercraft.fr/everinformations/index.html)
 
 ## Liens ##
 * [Download](https://github.com/EverCraft/EverInformations/releases)
